@@ -1,3 +1,4 @@
+# Mapping of EEPs to Home Assistant Entities
 0xD2:
    0x01:
       0x0B:
@@ -37,6 +38,76 @@
               device_class: "energy"
               unit_of_measurement: "Wh"
               value_template: "{{ value_json.MV }}"
+         - component: "button"
+           name: "query_status"
+           config: # Only JSON allows this
+           config_json:
+              command_topic: "req"
+              payload_press: >
+                {"CMD":"3","IO":"30","send":"clear"}
+         - component: "button"
+           name: "query_meas"
+           config: # Only JSON allows this
+           config_json:
+              command_topic: "req"
+              payload_press: >
+                {"CMD":"6","qu":"0","IO":"30","send":"clear"}
+         - component: binary_sensor
+           name: "PF"
+           config:
+              state_topic: "PF"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "PFD"
+           config:
+              state_topic: "PFD"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "OC"
+           config:
+              state_topic: "OC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "LC"
+           config:
+              state_topic: "LC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.LC == 1 %}on{% else %}off{% endif %}
       0x0C:
          - component: "select"
            name: "mode"
@@ -87,6 +158,20 @@
               device_class: "energy"
               unit_of_measurement: "Wh"
               value_template: "{{ value_json.MV }}"
+         - component: "button"
+           name: "query_mode"
+           config: # Only JSON allows this
+           config_json:
+              command_topic: "req"
+              payload_press: >
+                {"CMD":"9","send":"clear"}
+         - component: "button"
+           name: "query_meas"
+           config: # Only JSON allows this
+           config_json:
+              command_topic: "req"
+              payload_press: >
+                {"CMD":"6","qu":"0","IO":"30","send":"clear"}
       0x0F:
          - component: "switch"
            name: "switch"
@@ -197,6 +282,99 @@
               tilt_command_template: >-
                  {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
 0xA5:
+   0x12:
+      0x00:
+         - component: "sensor"
+           name: "frequency"
+           config:
+              state_topic: "MR"
+              device_class: "frequency"
+              unit_of_measurement: "Hz"
+              availability:
+                 topic: "DT"
+                 payload_available: "1"
+                 payload_not_available: "0"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+              device_class: "frequency"
+              unit_of_measurement: "Hz"
+              availability:
+                 topic: ""
+                 value_template: "{{ value_json.DT }}"
+                 payload_available: "1"
+                 payload_not_available: "0"
+         - component: "sensor"
+           name: "counter"
+           config:
+              state_topic: "MR"
+              availability:
+                 topic: "DT"
+                 payload_available: "0"
+                 payload_not_available: "1"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+              availability:
+                 topic: ""
+                 value_template: "{{ value_json.DT }}"
+                 payload_available: "0"
+                 payload_not_available: "1"
+         - component: "sensor"
+           name: "channel"
+           config:
+              state_topic: "CH"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.CH }}"
+      0x01:
+         - component: "sensor"
+           name: "power"
+           config:
+              state_topic: "MR"
+              device_class: "power"
+              unit_of_measurement: "W"
+              availability:
+                 topic: "DT"
+                 payload_available: "1"
+                 payload_not_available: "0"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+              device_class: "power"
+              unit_of_measurement: "W"
+              availability:
+                 topic: ""
+                 value_template: "{{ value_json.DT }}"
+                 payload_available: "1"
+                 payload_not_available: "0"
+         - component: "sensor"
+           name: "energy"
+           config:
+              state_topic: "MR"
+              device_class: "energy"
+              unit_of_measurement: "kWh"
+              availability:
+                 topic: "DT"
+                 payload_available: "0"
+                 payload_not_available: "1"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+              device_class: "energy"
+              unit_of_measurement: "kWh"
+              availability:
+                 topic: ""
+                 value_template: "{{ value_json.DT }}"
+                 payload_available: "0"
+                 payload_not_available: "1"
+         - component: "sensor"
+           name: "tariff"
+           config:
+              state_topic: "TI"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.TI }}"
 0xF6:
    0x02:
       0x01:
@@ -349,3 +527,31 @@
               value_template: "{{ value_json.CO }}"
               payload_on: "0"
               payload_off: "1"
+# Below are mappings common to all EEPs
+common:
+   rssi:
+      - component: "sensor"
+        name: "rssi"
+        config:
+           state_topic: "RSSI"
+           unit_of_measurement: "dBm"
+           device_class: "signal_strength"
+           entity_category: "diagnostic"
+        config_json:
+           state_topic: ""
+           value_template: "{{ value_json.RSSI }}"
+           unit_of_measurement: "dBm"
+           device_class: "signal_strength"
+           entity_category: "diagnostic"
+
+# Mapping for system purpose (HA <-> enoceanmqtt configurations)
+system:
+   delete:
+      - system: "True"
+        component: "button"
+        name: "delete"
+        config:
+           command_topic: "__system"
+           payload_press: "delete"
+           icon: "mdi:delete"
+           entity_category: "config"

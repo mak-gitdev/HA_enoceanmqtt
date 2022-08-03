@@ -20,21 +20,29 @@ class HACommunicator(Communicator):
 
     def __init__(self, config, sensors):
         # Better to work with JSON in HA so force JSON usage
-        # Also force publish_rssi
+        # Also force publish_rssi and persistent
         for cur_sensor in sensors:
             if str(cur_sensor.get('ignore')) not in ("True", "true", "1"):
                 cur_sensor['publish_json'] = "True"
                 cur_sensor['publish_rssi'] = "True"
+                cur_sensor['persistent'] = "True"
 
-        super().__init__(config, sensors)
-        # Next step when we will try to support controllable learn
-        #self.enocean.teach_in = False
+        # Create device manager
+        self._devmgr = DeviceManager(config, sensors)
+
+        # Read mapping file
         mapping_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mapping.yaml')
         with open(mapping_file, 'r') as file:
             self.__ha_mapping = yaml.safe_load(file)
         logging.info("HA Mapping file correctly read")
-        self._devmgr = DeviceManager(config, sensors)
-        self._mqtt_discovery_prefix = config.get('mqtt_discovery_prefix', 'enocean/discovery')
+
+        # Retrieve MQTT discovery prefix from configuration and make sure there is a trailing '/'
+        self._mqtt_discovery_prefix = config.get('mqtt_discovery_prefix', 'enocean/discovery/')
+        if self._mqtt_discovery_prefix[-1] != '/':
+            self._mqtt_discovery_prefix += '/'
+
+        # Init
+        super().__init__(config, sensors)
 
 
     #=============================================================================================
@@ -46,9 +54,9 @@ class HACommunicator(Communicator):
             logging.info("Succesfully connected to MQTT broker.")
             # listen to enocean send requests
             for cur_sensor in self.sensors:
-                # logging.debug("MQTT subscribing: %s", cur_sensor['name']+'/req/#')
                 mqtt_client.subscribe(cur_sensor['name']+'/req/#')
 
+            # listen to HA system requests
             for cur_sensor in self._devmgr.db.all():
                 mqtt_client.subscribe(cur_sensor['name']+'/__system/#')
         else:
@@ -82,7 +90,7 @@ class HACommunicator(Communicator):
         _type = sensor['type']
         _eep_dash = f'{_rorg:02X}'+'-'+f'{_func:02X}'+'-'+f'{_type:02X}'
 
-        # If the device supported, retrieve the device mapping
+        # If the device is supported, retrieve the device mapping
         device_map = None
         try:
             device_map = copy.deepcopy(self.__ha_mapping[_rorg][_func][_type])
@@ -93,39 +101,11 @@ class HACommunicator(Communicator):
             logging.warning('Device %s not supported yet. Only RSSI sensor will be available', _eep_dash)
             device_map = []
 
-        # RSSI sensor in HA
-        rssi_map = {
-            "component": "sensor",
-            "name": "rssi",
-            "config": {
-                "state_topic": "RSSI",
-                "unit_of_measurement": "dBm",
-                "device_class": "signal_strength",
-                "entity_category": "diagnostic"
-                },
-            "config_json": {
-                "state_topic": "",
-                "value_template": "{{ value_json.RSSI }}",
-                "unit_of_measurement": "dBm",
-                "device_class": "signal_strength",
-                "entity_category": "diagnostic"
-                }
-            }
-        device_map.append(rssi_map)
+        # Add RSSI sensor in HA
+        device_map += copy.deepcopy(self.__ha_mapping['common']['rssi'])
 
-        # Per device delete button in HA
-        delete_map = {
-            "system": "True",
-            "component": "button",
-            "name": "delete",
-            "config": {
-                "command_topic": "__system",
-                "payload_press": "delete",
-                "icon": "mdi:delete",
-                "entity_category": "config"
-                }
-            }
-        device_map.append(delete_map)
+        # Add Per device delete button in HA
+        device_map += copy.deepcopy(self.__ha_mapping['system']['delete'])
 
         _eep = format((_rorg<<16)+(_func<<8)+_type, '06X')
         _address = format(sensor['address'],'08X')
@@ -159,7 +139,7 @@ class HACommunicator(Communicator):
             devcfg['device']['manufacturer'] = "EnOcean"
 
             # The configuration topic defined for MQTT Discovery
-            cfgtopic = f"{self._mqtt_discovery_prefix}/{entity['component']}/{uid}/config"
+            cfgtopic = f"{self._mqtt_discovery_prefix}{entity['component']}/{uid}/config"
             # List of entities configuration topics for later component deletion
             _sys.append(cfgtopic)
 
@@ -171,10 +151,11 @@ class HACommunicator(Communicator):
                     else:
                         devcfg[key] = sensor['name']
 
-            # Suscribe to system message topic
-            self.mqtt.subscribe(sensor['name']+'/__system/#')
             # Publish the device configuration to MQTT for discovery
             self.mqtt.publish(cfgtopic, json.dumps(devcfg), retain=True)
+
+        # Subscribe to system message topic (per-device)
+        self.mqtt.subscribe(sensor['name']+'/__system/#')
 
         # Add device to the database
         if self._devmgr._db_add_device(sensor, _sys):
@@ -189,101 +170,3 @@ class HACommunicator(Communicator):
 
         # Publish the packet
         super()._publish_mqtt(sensor, channel_id, channel_value, mqtt_json)
-
-    #def _read_packet(self, packet):
-        #'''interpret packet, read properties and publish to MQTT'''
-        #mqtt_json = {}
-        ## loop through all configured devices
-        #for cur_sensor in self.sensors:
-            ## does this sensor match?
-            #if enocean.utils.combine_hex(packet.sender) == cur_sensor['address']:
-                ## found sensor configured in config file
-
-                ## Handle enocean library decision to set learn to True by default
-                ## Only 1BS and 4BS are correctly handled by the enocean library
-                #if cur_sensor['rorg'] == RORG.VLD and packet.rorg != RORG.UTE:
-                    #packet.learn = False
-                #elif cur_sensor['rorg'] == RORG.RPS:
-                    #packet.learn = False
-
-                ## Shall the packet be published to MQTT ?
-                #if not packet.learn or str(cur_sensor.get('log_learn')) in ("True", "true", "1"):
-                    ## Store RSSI
-                    #mqtt_json['RSSI'] = packet.dBm
-
-                    ## Handling received data packet
-                    #[found_property, channel_id, channel_value] = self._handle_data_packet(
-                        #packet, cur_sensor, mqtt_json)
-                    #if not found_property:
-                        #logging.warning("message not interpretable: %s", cur_sensor['name'])
-                    #else:
-                        #self._publish_mqtt(cur_sensor, channel_id, channel_value, mqtt_json)
-                #else:
-                    ## learn request received
-                    #logging.info("learn request not emitted to mqtt")
-
-                ## The packet has been handled
-                #break
-
-
-    ##=============================================================================================
-    ## LOW LEVEL FUNCTIONS
-    ##=============================================================================================
-    #def _process_radio_packet(self, packet):
-        ## first, look whether we have this sensor configured
-        #found_sensor = False
-        #for cur_sensor in self.sensors:
-            #if 'address' in cur_sensor and \
-                    #enocean.utils.combine_hex(packet.sender) == cur_sensor['address']:
-                #found_sensor = cur_sensor
-
-        ## skip ignored sensors
-        #if found_sensor and 'ignore' in found_sensor and found_sensor['ignore']:
-            #return
-
-        ## log packet, if not disabled
-        #if str(self.conf.get('log_packets')) in ("True", "true", "1"):
-            #logging.info("received: %s", packet)
-
-        ## abort loop if sensor not found
-        #if not found_sensor:
-            #logging.info("unknown sensor: %s", enocean.utils.to_hex_string(packet.sender))
-
-            ## Next step when we will try to remove enoceanmqtt.conf
-            ## Device auto-detection and report to HA
-            ##sensor = {}
-            ##sensor['address'] = copy.deepcopy(enocean.utils.combine_hex(packet.sender))
-
-            ##if packet.learn and packet.rorg == RORG.UTE:
-                ##sensor['rorg'] = copy.deepcopy(packet.rorg_of_eep)
-            ##else:
-                ##sensor['rorg'] = copy.deepcopy(packet.rorg)
-            ##sensor['func'] = copy.deepcopy(packet.rorg_func)
-            ##sensor['type'] = copy.deepcopy(packet.rorg_type)
-
-            ### logging.info("New sensor (@ = %s / EEP = %s-%s-%s)",
-                             ### f'{sensor["address"]:08X}',
-                             ### f'{sensor["rorg"]:02X}',
-                             ### f'{sensor["func"]:02X}',
-                             ### f'{sensor["type"]:02X}')
-
-            ##logging.info("New sensor: %s", sensor)
-
-            ##sensor['name'] = "dev_enocean_"+format((sensor['rorg']<<16)+(sensor['func']<<8)+sensor['type'], '06X')+\
-                      ##"_"+format(sensor['address'],'08X')
-            ##if sensor['rorg'] == RORG.VLD:
-                ##sensor['command'] = "CMD"
-            ##sensor['publish_rssi'] = 1
-            ##sensor['publish_json'] = 1
-
-            ##self._mqtt_discovery(sensor)
-
-            #return
-
-
-        ## interpret packet, read properties and publish to MQTT
-        #self._read_packet(packet)
-
-        ## check for neccessary reply
-        #if str(found_sensor.get('answer')) in ("True", "true", "1"):
-            #self._reply_packet(packet, found_sensor)
