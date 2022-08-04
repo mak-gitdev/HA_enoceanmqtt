@@ -114,7 +114,7 @@ class Communicator:
             mqtt_payload = msg.payload
 
         if isinstance(mqtt_payload, dict):
-            found_topic = self._mqtt_message_json(msg)
+            found_topic = self._mqtt_message_json(msg.topic, mqtt_payload)
         else:
             found_topic = self._mqtt_message_normal(msg)
 
@@ -166,21 +166,19 @@ class Communicator:
 
         return found_topic
 
-    def _mqtt_message_json(self, msg):
+    def _mqtt_message_json(self, mqtt_topic, mqtt_json_payload):
         '''Handle received PUBLISH message from the MQTT server as a JSON payload.'''
         found_topic = False
         for cur_sensor in self.sensors:
-            if cur_sensor['name'] in msg.topic:
+            if cur_sensor['name'] in mqtt_topic:
                 # get message topic
-                prop = msg.topic[len(cur_sensor['name']+"/"):]
+                prop = mqtt_topic[len(cur_sensor['name']+"/"):]
                 # JSON payload shall be sent to '/req' topic
                 if prop == "req":
                     found_topic = True
                     send = False
                     clear = False
 
-                    # Convert payload from JSON to dictionary
-                    mqtt_json_payload = json.loads(msg.payload)
                     # do we face a send request?
                     if "send" in mqtt_json_payload.keys():
                         send = True

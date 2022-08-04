@@ -37,7 +37,7 @@ class HACommunicator(Communicator):
         logging.info("HA Mapping file correctly read")
 
         # Retrieve MQTT discovery prefix from configuration and make sure there is a trailing '/'
-        self._mqtt_discovery_prefix = config.get('mqtt_discovery_prefix', 'enocean/discovery/')
+        self._mqtt_discovery_prefix = config.get('mqtt_discovery_prefix', 'homeassistant/')
         if self._mqtt_discovery_prefix[-1] != '/':
             self._mqtt_discovery_prefix += '/'
 

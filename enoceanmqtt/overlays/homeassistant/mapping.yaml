@@ -40,17 +40,23 @@
               value_template: "{{ value_json.MV }}"
          - component: "button"
            name: "query_status"
-           config: # Only JSON allows this
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
            config_json:
               command_topic: "req"
-              payload_press: >
+              payload_press: >-
                 {"CMD":"3","IO":"30","send":"clear"}
          - component: "button"
            name: "query_meas"
-           config: # Only JSON allows this
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"6","qu":"0","IO":"30","send":"clear"}
            config_json:
               command_topic: "req"
-              payload_press: >
+              payload_press: >-
                 {"CMD":"6","qu":"0","IO":"30","send":"clear"}
          - component: binary_sensor
            name: "PF"
@@ -160,18 +166,90 @@
               value_template: "{{ value_json.MV }}"
          - component: "button"
            name: "query_mode"
-           config: # Only JSON allows this
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"9","send":"clear"}
            config_json:
               command_topic: "req"
-              payload_press: >
+              payload_press: >-
                 {"CMD":"9","send":"clear"}
          - component: "button"
            name: "query_meas"
-           config: # Only JSON allows this
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"6","qu":"0","IO":"30","send":"clear"}
            config_json:
               command_topic: "req"
-              payload_press: >
+              payload_press: >-
                 {"CMD":"6","qu":"0","IO":"30","send":"clear"}
+         - component: "button"
+           name: "query_status"
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
+           config_json:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
+         - component: binary_sensor
+           name: "PF"
+           config:
+              state_topic: "PF"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "PFD"
+           config:
+              state_topic: "PFD"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "OC"
+           config:
+              state_topic: "OC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "LC"
+           config:
+              state_topic: "LC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.LC == 1 %}on{% else %}off{% endif %}
       0x0F:
          - component: "switch"
            name: "switch"
@@ -196,6 +274,72 @@
               payload_off: >
                 {"CMD":"1","OV":"0","send":"clear"}
               device_class: outlet
+         - component: "button"
+           name: "query_status"
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
+           config_json:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
+         - component: binary_sensor
+           name: "PF"
+           config:
+              state_topic: "PF"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "PFD"
+           config:
+              state_topic: "PFD"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "OC"
+           config:
+              state_topic: "OC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "LC"
+           config:
+              state_topic: "LC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.LC == 1 %}on{% else %}off{% endif %}
       0x12:
          - component: "light"
            name: "IO0"
@@ -206,9 +350,9 @@
                 {% if value == "0" %}off{% else %}on{% endif %}
               command_topic: "req"
               command_on_template: >-
-                {"CMD":"1","IO":"0","OV":"100","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"0","OV":"100","send":"clear"}
               command_off_template: >-
-                {"CMD":"1","IO":"0","OV":"0","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"0","OV":"0","send":"clear"}
            config_json:
               schema: "template"
               state_topic: "IO0"
@@ -216,9 +360,75 @@
                 {% if value_json.OV == 0 %}off{% else %}on{% endif %}
               command_topic: "req"
               command_on_template: >-
-                {"CMD":"1","IO":"0","OV":"100","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"0","OV":"100","send":"clear"}
               command_off_template: >-
-                {"CMD":"1","IO":"0","OV":"0","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"0","OV":"0","send":"clear"}
+         - component: "button"
+           name: "query_status_IO0"
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"0","send":"clear"}
+           config_json:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"0","send":"clear"}
+         - component: binary_sensor
+           name: "IO0_PF"
+           config:
+              state_topic: "IO0/PF"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO0"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "IO0_PFD"
+           config:
+              state_topic: "IO0/PFD"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO0"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "IO0_OC"
+           config:
+              state_topic: "IO0/OC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO0"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "IO0_LC"
+           config:
+              state_topic: "IO0/LC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO0"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.LC == 1 %}on{% else %}off{% endif %}
          - component: "light"
            name: "IO1"
            config:
@@ -228,9 +438,9 @@
                 {% if value == "0" %}off{% else %}on{% endif %}
               command_topic: "req"
               command_on_template: >-
-                {"CMD":"1","IO":"1","OV":"100","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"1","OV":"100","send":"clear"}
               command_off_template: >-
-                {"CMD":"1","IO":"1","OV":"0","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"1","OV":"0","send":"clear"}
            config_json:
               schema: "template"
               state_topic: "IO1"
@@ -238,9 +448,85 @@
                 {% if value_json.OV == 0 %}off{% else %}on{% endif %}
               command_topic: "req"
               command_on_template: >-
-                {"CMD":"1","IO":"1","OV":"100","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"1","OV":"100","send":"clear"}
               command_off_template: >-
-                {"CMD":"1","IO":"1","OV":"0","send":"clear"}
+                {"CMD":"1","DV":"0","IO":"1","OV":"0","send":"clear"}
+         - component: "button"
+           name: "query_status_IO1"
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"1","send":"clear"}
+           config_json:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"1","send":"clear"}
+         - component: binary_sensor
+           name: "IO1_PF"
+           config:
+              state_topic: "IO1/PF"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "IO1_PFD"
+           config:
+              state_topic: "IO1/PFD"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "IO1_OC"
+           config:
+              state_topic: "IO1/OC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "IO1_LC"
+           config:
+              state_topic: "IO1/LC"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: "IO1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value_json.LC == 1 %}on{% else %}off{% endif %}
+         - component: "button"
+           name: "query_status_all"
+           config:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
+           config_json:
+              command_topic: "req"
+              payload_press: >-
+                {"CMD":"3","IO":"30","send":"clear"}
    0x05:
       0x00:
          - component: "cover"
@@ -248,9 +534,9 @@
            config:
               command_topic: "req"
               payload_open: >-
-                 {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
-              payload_close: >-
                  {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              payload_close: >-
+                 {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
               payload_stop: >-
                  {"CMD":"2","CHN":"0","send":"clear"}
               position_topic: "POS"
@@ -266,9 +552,9 @@
            config_json:
               command_topic: "req"
               payload_open: >-
-                 {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
-              payload_close: >-
                  {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              payload_close: >-
+                 {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
               payload_stop: >-
                  {"CMD":"2","CHN":"0","send":"clear"}
               position_topic: ""

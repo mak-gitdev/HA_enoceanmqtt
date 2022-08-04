@@ -10,17 +10,28 @@ For the moment, to install it, perform the following actions:
 ### 1- Install enoceanmqtt
  - `pip install enocean-mqtt`
 
-### 2- Install TinyDB
+### 2- Install pyyaml
+ - `pip install pyyaml`
+
+### 3- Install TinyDB
  - `pip install tinydb`
 
-### 3- Install the Home Assistant overlay
+### 4- Install the Home Assistant overlay
  - Copy the *__`enoceanmqtt/overlays`__* folder to enoceanmqtt
  - Replace *__`enoceanmqtt/enoceanmqtt.py`__*
 
 ## Configuration
 `enoceanmqtt.conf` is used as usual, except that:
 - *`overlay = HA`* shall be added in the config section to indicate that the HA overlay is to be used.
-- *`mqtt_discovery_topic = <topic>`* shall also be added in the config section, where *`<topic>`* is the MQTT topic used for discovery and configured in the Home Assistant MQTT integration.
+- *`mqtt_discovery_prefix = <prefix>`* shall also be added in the config section, where *`<prefix>`* is the MQTT prefix used for discovery and configured in the Home Assistant MQTT integration as follow:
+ ```yaml
+ mqtt:
+   broker: <broker>
+   username: <username>
+   password: <password>
+   discovery_prefix: <prefix>
+ ```
+If you have other HA integrations using MQTT discovery (e.g. zigbee2mqtt, etc.), `<prefix>` should be set to `homeassistant/` as it seems to be the one used in general.
 
 ## Usage
 
@@ -57,3 +68,11 @@ Note: If your device is not supported yet, please feel free to ask me for adding
  - [ ] `A5-12-01` (not tested)
 
 For devices not yet supported, only the RSSI sensor is created in Home Assistant.
+
+## Developers
+
+### Modify mapping.yaml only
+If you want to make modifications only affecting the *__`mapping.yaml`__* file, please first remove the to-be-affected devices from HA using the aforementioned method and then rerun enoceanmqtt with your modified *__`mapping.yaml`__*.
+
+### Other modifications
+If you want to modify any other files of this overlay, please first delete all your devices from HA using the aforementioned method, then delete the `device_db.json` file created in `enoceanmqtt/overlays/homeassistant`, and finally rerun enoceanmqtt with your modifications.

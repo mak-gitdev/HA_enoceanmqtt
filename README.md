@@ -1,3 +1,8 @@
+# Home Assistant Overlay for enoceanmqtt
+
+Please have a look [here](./enoceanmqtt/overlays/homeassistant/README.md).  
+
+
 # EnOcean to MQTT Forwarder #
 
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/enocean-mqtt.svg)](https://pypi.python.org/pypi/enocean-mqtt/) [![PyPI status](https://img.shields.io/pypi/status/enocean-mqtt.svg)](https://pypi.python.org/pypi/enocean-mqtt/) [![PyPI version shields.io](https://img.shields.io/pypi/v/enocean-mqtt.svg)](https://pypi.python.org/pypi/enocean-mqtt/) [![PyPI download total](https://img.shields.io/pypi/dm/enocean-mqtt.svg)](https://pypi.python.org/pypi/enocean-mqtt/)
