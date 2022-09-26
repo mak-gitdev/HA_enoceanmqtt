@@ -1,0 +1,13 @@
+bin
+include
+lib
+local
+share
+*.pyc
+*.log
+*.egg-info
+build
+man
+MANIFEST
+dist
+*.priv

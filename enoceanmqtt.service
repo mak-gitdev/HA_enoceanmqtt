@@ -1,0 +1,14 @@
+[Unit]
+Description=EnOcean MQTT Forwarder
+After=mosquitto.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/enoceanmqtt
+Restart=always
+RestartSec=300
+WorkingDirectory=/home/pi/enoceanmqtt
+User=pi
+
+[Install]
+WantedBy=multi-user.target

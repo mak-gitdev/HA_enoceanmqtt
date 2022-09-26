@@ -1,0 +1,351 @@
+0xD2:
+   0x01:
+      0x0B:
+         - component: "switch"
+           name: "switch"
+           config:
+              state_topic: "OV"
+              state_on: "100"
+              state_off: "0"
+              command_topic: "req"
+              payload_on: >
+                {"CMD":"1","OV":"100","send":"clear"}
+              payload_off: >
+                {"CMD":"1","OV":"0","send":"clear"}
+              device_class: outlet
+           config_json:
+              state_topic: ""
+              state_on: "100"
+              state_off: "0"
+              value_template: "{{ value_json.OV }}"
+              command_topic: "req"
+              payload_on: >
+                {"CMD":"1","OV":"100","send":"clear"}
+              payload_off: >
+                {"CMD":"1","OV":"0","send":"clear"}
+              device_class: outlet
+         - component: "sensor"
+           name: "energy"
+           config:
+              state_topic: "MV"
+              state_class: "measurement"
+              device_class: "energy"
+              unit_of_measurement: "Wh"
+           config_json:
+              state_topic: ""
+              state_class: "measurement"
+              device_class: "energy"
+              unit_of_measurement: "Wh"
+              value_template: "{{ value_json.MV }}"
+      0x0C:
+         - component: "select"
+           name: "mode"
+           config:
+              options:
+                 - "Off"
+                 - "Comfort"
+                 - "Eco"
+                 - "Anti-freeze"
+                 - "Comfort-1"
+                 - "Comfort-2"
+              command_topic: "req"
+              command_template: >-
+                {% set modes = {"Off": "0", "Comfort": "1", "Eco": "2", "Anti-freeze": "3", "Comfort-1": "4", "Comfort-2": "5"} %}
+                {"CMD":"8","PM":"{{modes[value]}}","send":"clear"}
+              state_topic: "PM"
+              value_template: >-
+                {% set modes = {"0": "Off", "1": "Comfort", "2": "Eco", "3": "Anti-freeze", "4": "Comfort-1", "5": "Comfort-2"} %}
+                {{modes[value]}}
+              icon: "mdi:radiator"
+           config_json:
+              options:
+                 - "Off"
+                 - "Comfort"
+                 - "Eco"
+                 - "Anti-freeze"
+                 - "Comfort-1"
+                 - "Comfort-2"
+              command_topic: "req"
+              command_template: >-
+                {% set modes = {"Off": "0", "Comfort": "1", "Eco": "2", "Anti-freeze": "3", "Comfort-1": "4", "Comfort-2": "5"} %}
+                {"CMD":"8","PM":"{{modes[value]}}","send":"clear"}
+              state_topic: ""
+              value_template: >-
+                {% set modes = {0: "Off", 1: "Comfort", 2: "Eco", 3: "Anti-freeze", 4: "Comfort-1", 5: "Comfort-2"} %}
+                {{modes[value_json.PM]}}
+              icon: "mdi:radiator"
+         - component: "sensor"
+           name: "energy"
+           config:
+              state_topic: "MV"
+              state_class: "measurement"
+              device_class: "energy"
+              unit_of_measurement: "Wh"
+           config_json:
+              state_topic: ""
+              state_class: "measurement"
+              device_class: "energy"
+              unit_of_measurement: "Wh"
+              value_template: "{{ value_json.MV }}"
+      0x0F:
+         - component: "switch"
+           name: "switch"
+           config:
+              state_topic: "OV"
+              state_on: "100"
+              state_off: "0"
+              command_topic: "req"
+              payload_on: >
+                {"CMD":"1","OV":"100","send":"clear"}
+              payload_off: >
+                {"CMD":"1","OV":"0","send":"clear"}
+              device_class: outlet
+           config_json:
+              state_topic: ""
+              state_on: "100"
+              state_off: "0"
+              value_template: "{{ value_json.OV }}"
+              command_topic: "req"
+              payload_on: >
+                {"CMD":"1","OV":"100","send":"clear"}
+              payload_off: >
+                {"CMD":"1","OV":"0","send":"clear"}
+              device_class: outlet
+      0x12:
+         - component: "light"
+           name: "IO0"
+           config:
+              schema: "template"
+              state_topic: "IO0/OV"
+              state_template: >-
+                {% if value == "0" %}off{% else %}on{% endif %}
+              command_topic: "req"
+              command_on_template: >-
+                {"CMD":"1","IO":"0","OV":"100","send":"clear"}
+              command_off_template: >-
+                {"CMD":"1","IO":"0","OV":"0","send":"clear"}
+           config_json:
+              schema: "template"
+              state_topic: "IO0"
+              state_template: >-
+                {% if value_json.OV == 0 %}off{% else %}on{% endif %}
+              command_topic: "req"
+              command_on_template: >-
+                {"CMD":"1","IO":"0","OV":"100","send":"clear"}
+              command_off_template: >-
+                {"CMD":"1","IO":"0","OV":"0","send":"clear"}
+         - component: "light"
+           name: "IO1"
+           config:
+              schema: "template"
+              state_topic: "IO1/OV"
+              state_template: >-
+                {% if value == "0" %}off{% else %}on{% endif %}
+              command_topic: "req"
+              command_on_template: >-
+                {"CMD":"1","IO":"1","OV":"100","send":"clear"}
+              command_off_template: >-
+                {"CMD":"1","IO":"1","OV":"0","send":"clear"}
+           config_json:
+              schema: "template"
+              state_topic: "IO1"
+              state_template: >-
+                {% if value_json.OV == 0 %}off{% else %}on{% endif %}
+              command_topic: "req"
+              command_on_template: >-
+                {"CMD":"1","IO":"1","OV":"100","send":"clear"}
+              command_off_template: >-
+                {"CMD":"1","IO":"1","OV":"0","send":"clear"}
+   0x05:
+      0x00:
+         - component: "cover"
+           name: "cover"
+           config:
+              command_topic: "req"
+              payload_open: >-
+                 {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              payload_close: >-
+                 {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              payload_stop: >-
+                 {"CMD":"2","CHN":"0","send":"clear"}
+              position_topic: "POS"
+              position_template: "{{ value }}"
+              set_position_topic: "req"
+              set_position_template: >-
+                 {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              tilt_status_topic: "ANG"
+              tilt_status_template: "{{ value }}"
+              tilt_command_topic: "req"
+              tilt_command_template: >-
+                 {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+           config_json:
+              command_topic: "req"
+              payload_open: >-
+                 {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              payload_close: >-
+                 {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              payload_stop: >-
+                 {"CMD":"2","CHN":"0","send":"clear"}
+              position_topic: ""
+              position_template: "{{ value_json.POS }}"
+              set_position_topic: "req"
+              set_position_template: >-
+                 {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+              tilt_status_topic: ""
+              tilt_status_template: "{{ value_json.ANG }}"
+              tilt_command_topic: "req"
+              tilt_command_template: >-
+                 {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+0xA5:
+0xF6:
+   0x02:
+      0x01:
+         - component: binary_sensor
+           name: "pressed"
+           config:
+              state_topic: "EB"
+              payload_on: "1"
+              payload_off: "0"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.EB }}"
+              payload_on: "1"
+              payload_off: "0"
+         - component: binary_sensor
+           name: "AI_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "0" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 0) or (value_json.SA and value_json.R2 == 0) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "AO_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 1) or (value_json.SA and value_json.R2 == 1) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "BI_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "2" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "BO_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "3" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+      0x02:
+         - component: binary_sensor
+           name: "pressed"
+           config:
+              state_topic: "EB"
+              payload_on: "1"
+              payload_off: "0"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.EB }}"
+              payload_on: "1"
+              payload_off: "0"
+         - component: binary_sensor
+           name: "AI_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "0" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 0) or (value_json.SA and value_json.R2 == 0) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "AO_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "1" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 1) or (value_json.SA and value_json.R2 == 1) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "BI_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "2" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "BO_pressed"
+           config:
+              state_topic: "R1"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                 {% if value == "3" %}on{% else %}off{% endif %}
+           config_json:
+              state_topic: ""
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+0xD5:
+   0x00:
+      0x01:
+         - component: binary_sensor
+           name: "contact"
+           config:
+              state_topic: "CO"
+              payload_on: "0"
+              payload_off: "1"
+           config_json:
+              state_topic: ""
+              value_template: "{{ value_json.CO }}"
+              payload_on: "0"
+              payload_off: "1"
