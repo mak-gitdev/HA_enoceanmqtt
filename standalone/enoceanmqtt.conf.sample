@@ -2,24 +2,25 @@
 [CONFIG]
 enocean_port    = /dev/enocean
 log_packets     = 1
+overlay         = HA
+
+## the discovery prefix is used by MQTT discovery in Home Assistant
+mqtt_discovery_prefix = homeassistant/
 
 mqtt_host       = localhost
 mqtt_port       = 1883
-mqtt_client_id  = enocean   # ensure that this is unique if you use multiple clients
+mqtt_client_id  = enocean_gateway   # ensure that this is unique if you use multiple clients
 
 ## setting mqtt_keepalive = 0 sets the timeout to infinitive but does not work reliably
 ## due to an upstream issue https://github.com/eclipse/paho.mqtt.python/issues/473
 mqtt_keepalive  = 60
 
 ## the prefix is used for the mqtt value names; this is extended by the sensor name
-mqtt_prefix     = enocean/
+mqtt_prefix     = enoceanmqtt/
 
-## publish received packets as single MQTT message with a JSON payload
-# mqtt_publish_json = true
-
-## optionally also set mqtt_user and mqtt_pwd (don't use quotes).
-# mqtt_user       = mqtt
-# mqtt_pwd        = password
+# Set mqtt_user and mqtt_pwd (don't use quotes).
+mqtt_user       = mqtt
+mqtt_pwd        = password
 
 ## enable SSL on MQTT connection
 ## Ensure that mqtt_host matches one of the hostnames contained in the broker's
@@ -38,55 +39,37 @@ mqtt_prefix     = enocean/
 # mqtt_ssl_keyfile  = /path/client_key.pem
 # mqtt_ssl_insecure = true
 
-## Enable MQTT debugging. Requires --debug on the command line.
-# mqtt_debug      = true
+## Enable/Disable MQTT debugging. Requires --debug on the command line.
+mqtt_debug      = false
+
 
 ## all other sections define the sensors to monitor
 
-[switch]
-address         = 0xfefee192
-rorg            = 0xf6   # BS1
+[rocker_1]
+address         = 0xBABECAFE
+rorg            = 0xF6
 func            = 0x02
 type            = 0x02
-log_learn       = 1
-publish_rssi    = 1
 
-[temperature]
-address         = 0x01823FFA
+[smoke_detector]
+address         = 0xABADC0DE
 rorg            = 0xA5
 func            = 0x02
 type            = 0x05
-persistent      = 1
 
 [shutter]
-# this sensor is used for sending data
-# address is the destination address then
-address         = 0x051C1FB7
+address         = 0x12345678
 rorg            = 0xD2
 func            = 0x05
 type            = 0x00
 
-[radiator]
+[pilotwire]
 address         = 0xDEADBEEF
-rorg            = 0xD2   # VLD
+rorg            = 0xD2
 func            = 0x01
 type            = 0x0C
-log_learn       = 1
-command         = CMD
-# use a specific sender address when sending packets to this device
-sender          = 0xFFDC1711
-
-[hvac_actuator]
-address = 0xFFDC9500
-rorg            = 0xA5   # BS4
-func            = 0x20
-type            = 0x01
-direction       = 1
-answer          = 1
-# when sending, this is the data default that can be customized via MQTT
-default_data    = 0x32790008
 
 [non_interesting]
-address         = 0xFFD05085
-# received messages from this sensor will not appear as warnings in the log file
+address         = 0xBAAAAAAD
+# This sensor will be ignored
 ignore          = 1

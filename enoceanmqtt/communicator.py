@@ -258,19 +258,17 @@ class Communicator:
         profile = packet.eep.find_profile(
             packet._bit_data, sensor['rorg'], sensor['func'], sensor['type'])
 
-        if not profile:
+        if profile:
+            # Loop over profile contents
+            for source in profile.contents:
+               if not source.name:
+                   continue
+               # Check the current shortcut matches the command shortcut
+               if source['shortcut'] == sensor.get('command'):
+                   return packet.eep._get_raw(source, packet._bit_data)
+        else:
+            # If not found, return None for default handling of the packet
             return None
-
-        # Loop over profile contents
-        for source in profile.contents:
-            if not source.name:
-                continue
-            # Check the current shortcut matches the command shortcut
-            if source['shortcut'] == sensor.get('command'):
-                return packet.eep._get_raw(source, packet._bit_data)
-
-        # If not found, return None for default handling of the packet
-        return None
 
     def _publish_mqtt(self, sensor, mqtt_json):
         '''Publish decoded packet content to MQTT'''

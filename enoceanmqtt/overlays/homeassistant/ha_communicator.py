@@ -213,7 +213,7 @@ class HACommunicator(Communicator):
             # A name should be defined in mapping. If not, generate one.
             if str(entity.get('name')).lower() in ("none", ""):
                 entity['name'] = str(int(time.time()))
-            # Select the device configuration
+            # Select the entity configuration
             cfg = entity['config']
 
             # Create a unique ID for the entity
@@ -299,9 +299,9 @@ class HACommunicator(Communicator):
     #=============================================================================================
     def _publish_mqtt(self, sensor, mqtt_json):
         '''Publish decoded packet content to MQTT'''
-        # Present the device to HA if it is the first time it is seen
-        if not self._devmgr.db_search_device_by_address(sensor['address']):
-            self._mqtt_discovery_sensor(sensor)
+        ## Present the device to HA if it is the first time it is seen
+        #if not self._devmgr.db_search_device_by_address(sensor['address']):
+            #self._mqtt_discovery_sensor(sensor)
 
         # Publish the packet
         super()._publish_mqtt(sensor, mqtt_json)
