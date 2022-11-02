@@ -10,7 +10,7 @@ It is based on MQTT discovery from the Home Assistant MQTT integration.
 EnOceanMQTT is the core of HA_enoceanmqtt. It manages the EnOcean protocol through the USB300 dongle thanks to the [Python EnOcean library](https://github.com/kipe/enocean).  
 
 The Python EnOcean library is based on an EEP.xml file which contains the definition of the supported EnOcean EEPs.  
-As for EnOcean-MQTT, it needs a configuration file in which are indicated among other things the MQTT prefix for MQTT topics as well as the EnOcean devices to manage.  
+As for EnOceanMQTT, it needs a configuration file in which are indicated among other things the MQTT parameters as well as the EnOcean devices to manage.  
 The Home Assistant overlay is in charge of creating automatically and managing MQTT devices in Home Assistant. It maps an EnOcean device to one or more MQTT devices in HA thanks to a mapping file.  
 
 ## Standalone Installation
@@ -35,23 +35,26 @@ For the moment, to install it, perform the following actions:
 
 ### Configuration
 - adapt the `standalone/enoceanmqtt.conf.sample` file and put it to /etc/enoceanmqtt.conf:
-   - set the enocean interface port
+   - Set the enocean interface port. Follow [these instructions](https://github.com/embyt/enocean-mqtt#define-persistant-device-name-for-enocean-interface) if you want to set a persistent device name for your enocean interface.
    - *`overlay = HA`* shall be added in the config section to indicate that the HA overlay is to be used.
-   - *`mqtt_discovery_prefix = <prefix>`* shall also be added in the config section, where *`<prefix>`* is the MQTT prefix used for discovery and configured in the Home Assistant MQTT integration as follow:
+   - *`mqtt_discovery_prefix = <prefix>`* shall also be added in the config section. where *`<prefix>`* is the MQTT prefix used for discovery. It defaults to `homeassistant` and can be configured in the Home Assistant MQTT integration as follow:
      ```yaml
      mqtt:
        discovery_prefix: <prefix>
      ```
-     If you have other HA integrations using MQTT discovery (e.g. zigbee2mqtt, etc.), `<prefix>` should be set to `homeassistant/` as it seems to be the one used in general.
-   - define the MQTT broker parameters
-   - define the sensors to monitor
+     If you have other HA integrations using MQTT discovery (e.g. zigbee2mqtt, etc.), `<prefix>` should be set to `homeassistant` as it seems to be the one used in general.
+   - Define the MQTT broker parameters
+   - Define the `mqtt_prefix`. This is the prefix which will be used to interact with your EnOcean devices.  
+     EnOceanMQTT will interact with EnOcean devices through the device root topic `<mqtt_prefix>/<device_name>`.
+   - Define the devices to monitor. You only need to specify the device name, address, rorg, func and type.  
+     **Tip**: Your device name can contain `/` e.g. `[lights/livingroom]`. This allows you to group your devices by type when exploring MQTT messages.
  - ensure that the MQTT broker is running
  - run `enoceanmqtt`
 
 
 #### Setup as a daemon ####
 Assuming you want this tool to run as a daemon, which gets automatically started by systemd:
- - copy the `standalone/enoceanmqtt.service` to `/etc/systemd/system/`
+ - Adapt and copy the `standalone/enoceanmqtt.service` to `/etc/systemd/system/`
  - `systemctl enable enoceanmqtt`
  - `systemctl start enoceanmqtt`
 
@@ -75,7 +78,8 @@ HA_enoceanmqtt can also be installed as a Home Assistant addon.
 
 ### Configuration
 1. Click on **Configuration**
-    - Adapt the `addon/enoceanmqtt.devices.sample` and put it to your Home Assistant **/config** directory. You can use the Home Assistant **File Editor**.
+    - Adapt the `addon/enoceanmqtt.devices.sample` and put it to your Home Assistant **/config** directory. You can use the Home Assistant **File Editor**.  
+     **Tip**: Your device name can contain `/` e.g. `[lights/livingroom]`. This allows you to group your devices by type when exploring MQTT messages.
     - Indicate the location of your device file under the **device_file** entry.
     - Indicate your preferred location for the log file under the **log_file** entry. It shall be in your Home Assistant **/config** directory.
     - Select the serial interface of your EnOcean dongle in the list of detected serial ports. When using yaml configuration, the format is for example:
@@ -95,7 +99,8 @@ HA_enoceanmqtt can also be installed as a Home Assistant addon.
           discovery_prefix: <prefix>
         ```
      If you have other HA integrations using MQTT discovery (e.g. zigbee2mqtt, etc.), **mqtt_discovery_prefix** should be set to `homeassistant/` as it seems to be the one used in general.
-    - Indicate the `mqtt_prefix` under the **mqtt_prefix** entry. This is the prefix which will be used to interact with your EnOcean devices.
+    - Indicate the `mqtt_prefix` under the **mqtt_prefix** entry. This is the prefix which will be used to interact with your EnOcean devices.  
+      EnOceanMQTT will interact with EnOcean devices through the device root topic `<mqtt_prefix>/<device_name>`.
     - Turn on the **debug** switch if you want a very verbose log file.
     - Other settings can be kept to their default values.
     - Click **Save**
@@ -113,21 +118,19 @@ Turn off the __`LEARN`__ switch once pairing is completed.
 
 1. ### Normal usage
 Enoceanmqtt works as usual.  
-The Home Assistant overlay is only in charge of creating automatically nd managing MQTT devices in Home Assistant.  
+The Home Assistant overlay is only in charge of creating automatically and managing MQTT devices in Home Assistant.  
 At startup, all specified devices are created or updated in Home Assistant such that the user can directly interact with the device.  
 Your devices will be available in Home Assistant under the MQTT integration's devices and entities.  
 
 1. ### Delete your device from Home Assistant
 If you want to delete your device from Home Assistant:
- - Remove your device from the enoceanmqtt device configuration file
+ - Remove your device from the enoceanmqtt device configuration file. You can at this stage, restart the addon and not follow the next steps. Follow the next steps if you don't want to restart the addon
  - Browse to the devices of MQTT integration
  - Click on your device
  - Click on the delete button in the configuration section
- 
-You can then rediscover your device again as aforementioned.
 
 ## Supported Devices
-Note: If your device is not supported yet, please feel free to ask me for adding your device or feel free to add it to *__`mapping.yaml`__* and make a pull request.
+**Note**: If your device is not supported yet, please feel free to ask me for adding your device through the discussion panel. Or feel free to add it to *__`mapping.yaml`__* and make a pull request (see [adding new devices](https://github.com/mak-gitdev/HA_enoceanmqtt#adding-new-devices) for more details).
  - [x] `D2-01-0B` 
  - [x] `D2-01-0C`
  - [ ] `D2-01-0F` (not tested)
@@ -171,26 +174,29 @@ This indicates that the EnOcean device with EEP D5-00-01 will be mapped in Home 
 - `entities` is a list of the Home Assistant entities of the device.
   - `component` is the type of the entity
   - `name` defines the suffix that will be added after the device name to identify the entity.
-    The entity name is of the form `e2m_<sensor_name>_<suffix>` where `<sensor_name>` is the name of the device set by the user in the device configuration file.
+    The entity name is of the form `e2m_<device_name>_<name>` where `<device_name>` is the name of the device set by the user in the device configuration file.
   - `config` defines the MQTT discovery configuration for the entity. Refer to the [MQTT Discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/) to properly set this field.
-    You will also need the [EEP documentation](http://tools.enocean-alliance.org/EEPViewer) to correctly set topics and values. 
-    As enoceanmqtt interacts with the device message under the topic `<mqtt_prefix>/<sensor_name>`, configuration topics are defined from this device root topic.  
-    Hence, `state_topic = ""`  indicates that the `state_topic` to be used is the device root topic.
+    You will also need the [EEP documentation](http://tools.enocean-alliance.org/EEPViewer) to correctly set topics and values.  
+    As enoceanmqtt interacts with the device through the device root topic `<mqtt_prefix>/<device_name>`, MQTT entities topics are derived from this device root topic.  
+    Hence, `state_topic = ""`  indicates that the `state_topic` to be used is the device root topic.  
+    `state_topic = "<topic>"` would have indicated that the `state_topic` to be used is `<mqtt_prefix>/<device_name>/<topic>`.
 - `device_config` indicates the enoceanmqtt parameters that should be used for this EEP. Refer to the [enoceanmqtt documentation](https://github.com/embyt/enocean-mqtt) to properly set this field.
 
 Considering a user adds a D5-00-01 device in the device configuration file as follow:
 ```
-[sensor_name]
+[door_sensors/myD50001]
 address = 0xBABECAFE
 rorg = 0xD5
 func = 0x00
 type = 0x01
 ```
 
-Then the user will have in Home Assistant, a device named `e2m_<sensor_name>` with 3 new entities:
+Then the user will have in Home Assistant, a device named `e2m_door_sensors_myD50001` with 3 new entities:
 ```
-e2m_<sensor_name>
-   e2m_<sensor_name>_contact
-   e2m_<sensor_name>_rssi (automatically generated entity for the device RSSI)
-   e2m_<sensor_name>_delete (automatically generated entity to delete the device from Home Assistant)
+e2m_door_sensors_myD50001
+   e2m_door_sensors_myD50001_contact
+   e2m_door_sensors_myD50001_rssi (automatically generated entity for the device RSSI)
+   e2m_door_sensors_myD50001_delete (automatically generated entity to delete the device from Home Assistant)
 ```
+
+**Note**: Do not forget to make a pull request to integrate your changes.
