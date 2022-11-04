@@ -384,7 +384,7 @@
       0x00:
          device_config:
             command: "CMD"
-            channel: ""
+            channel: "CMD"
             log_learn: ""
          entities:
             - component: "cover"
