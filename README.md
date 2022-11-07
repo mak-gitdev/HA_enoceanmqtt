@@ -109,20 +109,20 @@ HA_enoceanmqtt can also be installed as a Home Assistant addon.
 1. Wait till HA_enoceanmqtt starts and press **Log** to verify HA_enoceanmqtt started correctly.
 
 ## Usage
-1. ### Pairing your device
+### 1- Pairing your device
 If pairing is needed, please follow the instruction of your device regarding pairing.  
 Enoceanmqtt supports pairing through the Python EnOcean library.  
 Once your device is in pairing mode, go to `Devices and Services` in HA, select the __`ENOCEANMQTT`__ device and turn on the __`LEARN`__ switch.  
 The pairing response will be submitted automatically.  
 Turn off the __`LEARN`__ switch once pairing is completed.  
 
-1. ### Normal usage
+### 2- Normal usage
 Enoceanmqtt works as usual.  
 The Home Assistant overlay is only in charge of creating automatically and managing MQTT devices in Home Assistant.  
 At startup, all specified devices are created or updated in Home Assistant such that the user can directly interact with the device.  
 Your devices will be available in Home Assistant under the MQTT integration's devices and entities.  
 
-1. ### Delete your device from Home Assistant
+### 3- Delete your device from Home Assistant
 If you want to delete your device from Home Assistant:
  - Remove your device from the enoceanmqtt device configuration file. You can at this stage, restart the addon and not follow the next steps. Follow the next steps if you don't want to restart the addon
  - Browse to the devices of MQTT integration
@@ -130,12 +130,11 @@ If you want to delete your device from Home Assistant:
  - Click on the delete button in the configuration section
 
 ## Supported Devices
-**Note**: If your device is not supported yet, please feel free to ask me for adding your device through the discussion panel. Or feel free to add it to *__`mapping.yaml`__* and make a pull request (see [adding new devices](https://github.com/mak-gitdev/HA_enoceanmqtt#adding-new-devices) for more details).
  - [x] `D2-01-0B` 
  - [x] `D2-01-0C`
  - [ ] `D2-01-0F` (not tested)
  - [x] `D2-01-12`
- - [ ] `D2-05-00` (not tested)
+ - [x] `D2-05-00`
  - [x] `F6-02-01`
  - [x] `F6-02-02`
  - [x] `F6-05-02`
@@ -143,7 +142,9 @@ If you want to delete your device from Home Assistant:
  - [ ] `A5-12-00` (not tested)
  - [x] `A5-12-01`
 
-For devices not yet supported, only the RSSI sensor is created in Home Assistant.
+For devices not yet supported, only the RSSI sensor is created in Home Assistant.  
+
+**Note**: If your device is not supported yet, please feel free to ask me for adding your device through the discussion panel. Or feel free to add it to *__`mapping.yaml`__* and make a pull request (see [adding new devices](https://github.com/mak-gitdev/HA_enoceanmqtt#adding-new-devices) for more details).
 
 ## Adding new devices
 You can modify the *__`mapping.yaml`__* file to add new devices or new entities to already supported devices.  

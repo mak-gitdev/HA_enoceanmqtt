@@ -287,7 +287,7 @@ class HACommunicator(Communicator):
                 # Handle delete sensor request
                 if action == "delete":
                     # Remove all sensor's entities
-                    for cfgtopic in sensor['__system']:
+                    for cfgtopic in sensor['cfgtopics']:
                         self.mqtt.publish(f"{self._mqtt_discovery_prefix}{cfgtopic}",
                                            "", retain=True)
                     # Remove the sensor from the database

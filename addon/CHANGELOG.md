@@ -1,3 +1,6 @@
+## 0.1.20
+- Fix sensor delete button not working
+
 ## 0.1.19
 - Correction of D2-05-00 no position error
 
