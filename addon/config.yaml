@@ -1,7 +1,7 @@
 name: "EnOcean MQTT"
 description: "EnOcean to MQTT bridge for Home Assistant"
 url: "https://github.com/mak-gitdev/HA_enoceanmqtt"
-version: "0.1.20"
+version: "0.1.21"
 slug: "ha_enoceanmqtt"
 stage: "experimental"
 init: false
@@ -19,6 +19,7 @@ arch:
   - i386
 options:
   device_file: ""
+  mapping_file: ""
   log_file: "/config/enoceanmqtt.log"
   enocean_port: ""
   debug: false
@@ -30,6 +31,7 @@ options:
   mqtt_keepalive: 60
 schema:
   device_file: "str"
+  mapping_file: "str?"
   log_file: "str?"
   enocean_port: "device(subsystem=tty)"
   debug: "bool?"

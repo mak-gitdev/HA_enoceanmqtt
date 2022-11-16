@@ -81,6 +81,7 @@ HA_enoceanmqtt can also be installed as a Home Assistant addon.
     - Adapt the `addon/enoceanmqtt.devices.sample` and put it to your Home Assistant **/config** directory. You can use the Home Assistant **File Editor**.  
      **Tip**: Your device name can contain `/` e.g. `[lights/livingroom]`. This allows you to group your devices by type when exploring MQTT messages.
     - Indicate the location of your device file under the **device_file** entry.
+    - Indicate the location of your mapping file under the **mapping_file** entry. Useful for people wanting to add support for new devices. Leave empty to use the default mapping file.
     - Indicate your preferred location for the log file under the **log_file** entry. It shall be in your Home Assistant **/config** directory.
     - Select the serial interface of your EnOcean dongle in the list of detected serial ports. When using yaml configuration, the format is for example:
         ```yaml
@@ -139,6 +140,7 @@ If you want to delete your device from Home Assistant:
  - [x] `F6-02-02`
  - [x] `F6-05-02`
  - [x] `D5-00-01`
+ - [ ] `A5-04-03` (not tested)
  - [ ] `A5-12-00` (not tested)
  - [x] `A5-12-01`
 

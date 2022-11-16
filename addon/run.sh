@@ -9,9 +9,8 @@ export CONFIG_FILE="/data/enoceanmqtt.conf"
 export DB_FILE="/data/enoceanmqtt_db.json"
 export DEVICE_FILE="$(bashio::config 'device_file')"
 export LOG_FILE="$(bashio::config 'log_file')"
+export MAPPING_FILE="$(bashio::config 'mapping_file')"
 bashio::log.blue "Retrieved devices file: $DEVICE_FILE"
-
-bashio::log.blue "$(bashio::config 'devices')"
 
 # Retrieve MQTT connection parameters
 if bashio::config.is_empty 'mqtt_broker'; then
@@ -53,6 +52,7 @@ echo "enocean_port          = $(bashio::config 'enocean_port')"          >> $CON
 echo "log_packets           = $(bashio::config 'log_packets')"           >> $CONFIG_FILE
 echo "overlay               = HA"                                        >> $CONFIG_FILE
 echo "db_file               = $DB_FILE"                                  >> $CONFIG_FILE
+echo "mapping_file          = $MAPPING_FILE"                             >> $CONFIG_FILE
 echo "mqtt_discovery_prefix = $(bashio::config 'mqtt_discovery_prefix')" >> $CONFIG_FILE
 echo "mqtt_host             = $MQTT_HOST"                                >> $CONFIG_FILE
 echo "mqtt_port             = $MQTT_PORT"                                >> $CONFIG_FILE

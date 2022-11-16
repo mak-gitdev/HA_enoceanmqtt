@@ -1,3 +1,8 @@
+## 0.1.21
+- Add configurable mapping file location
+- Add initial support for A5-04-03 (not tested)
+- Change A5-12-00 entities configuration
+
 ## 0.1.20
 - Fix sensor delete button not working
 

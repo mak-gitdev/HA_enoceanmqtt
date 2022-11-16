@@ -408,35 +408,48 @@
                  tilt_command_template: >-
                     {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
 0xA5:
-   0x12:
-      0x00:
+   0x04:
+      0x03:
          device_config:
             command: ""
             channel: ""
             log_learn: ""
          entities:
             - component: "sensor"
-              name: "frequency"
+              name: "temperature"
               config:
                  state_topic: ""
+                 value_template: "{{ value_json.TMP }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "humidity"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+   0x12:
+      0x00:
+         device_config:
+            command: ""
+            channel: "DT"
+            log_learn: ""
+         entities:
+            - component: "sensor"
+              name: "frequency"
+              config:
+                 state_class: "measurement"
+                 state_topic: "DT1"
                  value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
                  device_class: "frequency"
                  unit_of_measurement: "Hz"
-                 availability:
-                    topic: ""
-                    value_template: "{{ value_json.DT }}"
-                    payload_available: "1"
-                    payload_not_available: "0"
             - component: "sensor"
               name: "counter"
               config:
-                 state_topic: ""
+                 state_topic: "DT0"
+                 state_class: "total"
                  value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
-                 availability:
-                    topic: ""
-                    value_template: "{{ value_json.DT }}"
-                    payload_available: "0"
-                    payload_not_available: "1"
             - component: "sensor"
               name: "channel"
               config:

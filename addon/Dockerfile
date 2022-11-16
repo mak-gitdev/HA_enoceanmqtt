@@ -17,9 +17,9 @@ RUN apk add --no-cache python3 py3-pip git && \
        https://raw.githubusercontent.com/mak-gitdev/enocean/master/enocean/protocol/EEP.xml && \
     git clone https://github.com/mak-gitdev/HA_enoceanmqtt.git && \
        cp -rf HA_enoceanmqtt/enoceanmqtt enocean-mqtt
+       rm -rf HA_enoceanmqtt
 
 # Copy data for add-on
-# COPY enoceanmqtt enocean-mqtt/enoceanmqtt
 COPY run.sh .
 RUN chmod a+x run.sh
 

@@ -22,7 +22,9 @@ class HACommunicator(Communicator):
 
     def __init__(self, config, sensors):
         # Read mapping file
-        mapping_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mapping.yaml')
+        mapping_file = config.get('mapping_file')
+        if not mapping_file:
+            mapping_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mapping.yaml')
         with open(mapping_file, 'r', encoding="utf-8") as file:
             self._ha_mapping = yaml.safe_load(file)
         logging.info("HA Mapping file correctly read")
