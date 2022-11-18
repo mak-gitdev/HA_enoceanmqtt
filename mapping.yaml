@@ -1,0 +1,668 @@
+# Mapping of EEPs to Home Assistant Entities
+0xD2:
+   0x01:
+      0x0B:
+         device_config:
+            command: "CMD"
+            channel: "CMD"
+            log_learn: ""
+         entities:
+            - component: "switch"
+              name: "switch"
+              config:
+                 state_topic: "CMD4"
+                 state_on: "100"
+                 state_off: "0"
+                 value_template: "{{ value_json.OV }}"
+                 command_topic: "req"
+                 payload_on: >
+                   {"CMD":"1","OV":"100","send":"clear"}
+                 payload_off: >
+                   {"CMD":"1","OV":"0","send":"clear"}
+                 device_class: outlet
+            - component: "sensor"
+              name: "energy"
+              config:
+                 state_topic: "CMD7"
+                 state_class: "total_increasing"
+                 device_class: "energy"
+                 unit_of_measurement: "Wh"
+                 value_template: >-
+                   {% if value_json.UN == 1 %}
+                     {{ value_json.MV }}
+                   {% elif value_json.UN == 2 %}
+                     {{ value_json.MV|int * 1000 }}
+                   {% else %}
+                     {{ states(entity_id) }}
+                   {% endif %}
+            - component: "sensor"
+              name: "power"
+              config:
+                 state_topic: "CMD7"
+                 state_class: "measurement"
+                 device_class: "power"
+                 unit_of_measurement: "W"
+                 value_template: >-
+                   {% if value_json.UN == 3 %}
+                     {{ value_json.MV }}
+                   {% elif value_json.UN == 4 %}
+                     {{ value_json.MV|int * 1000 }}
+                   {% else %}
+                     {{ states(entity_id) }}
+                   {% endif %}
+            - component: "button"
+              name: "query_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"30","send":"clear"}
+            - component: "button"
+              name: "query_energy"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"6","qu":"0","IO":"30","send":"clear"}
+            - component: "button"
+              name: "query_power"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"6","qu":"1","IO":"30","send":"clear"}
+            - component: binary_sensor
+              name: "PF"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "PFD"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "OC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "LC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.LC == 1 %}on{% else %}off{% endif %}
+      0x0C:
+         device_config:
+            command: "CMD"
+            channel: "CMD"
+            log_learn: ""
+         entities:
+            - component: "select"
+              name: "mode"
+              config:
+                 options:
+                    - "Off"
+                    - "Comfort"
+                    - "Eco"
+                    - "Anti-freeze"
+                    - "Comfort-1"
+                    - "Comfort-2"
+                 command_topic: "req"
+                 command_template: >-
+                   {% set modes = {"Off": "0", "Comfort": "1", "Eco": "2", "Anti-freeze": "3", "Comfort-1": "4", "Comfort-2": "5"} %}
+                   {"CMD":"8","PM":"{{modes[value]}}","send":"clear"}
+                 state_topic: "CMD10"
+                 value_template: >-
+                   {% set modes = {0: "Off", 1: "Comfort", 2: "Eco", 3: "Anti-freeze", 4: "Comfort-1", 5: "Comfort-2"} %}
+                   {{modes[value_json.PM]}}
+                 icon: "mdi:radiator"
+            - component: "sensor"
+              name: "energy"
+              config:
+                 state_topic: "CMD7"
+                 state_class: "total_increasing"
+                 device_class: "energy"
+                 unit_of_measurement: "Wh"
+                 value_template: >-
+                   {% if value_json.UN == 1 %}
+                     {{ value_json.MV }}
+                   {% elif value_json.UN == 2 %}
+                     {{ value_json.MV|int * 1000 }}
+                   {% else %}
+                     {{ states(entity_id) }}
+                   {% endif %}
+            - component: "sensor"
+              name: "power"
+              config:
+                 state_topic: "CMD7"
+                 state_class: "measurement"
+                 device_class: "power"
+                 unit_of_measurement: "W"
+                 value_template: >-
+                   {% if value_json.UN == 3 %}
+                     {{ value_json.MV }}
+                   {% elif value_json.UN == 4 %}
+                     {{ value_json.MV|int * 1000 }}
+                   {% else %}
+                     {{ states(entity_id) }}
+                   {% endif %}
+            - component: "button"
+              name: "query_mode"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"9","send":"clear"}
+            - component: "button"
+              name: "query_energy"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"6","qu":"0","IO":"30","send":"clear"}
+            - component: "button"
+              name: "query_power"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"6","qu":"1","IO":"30","send":"clear"}
+            - component: "button"
+              name: "query_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"30","send":"clear"}
+            - component: binary_sensor
+              name: "PF"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "PFD"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "OC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "LC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.LC == 1 %}on{% else %}off{% endif %}
+      0x0F:
+         device_config:
+            command: "CMD"
+            channel: "CMD"
+            log_learn: ""
+         entities:
+            - component: "switch"
+              name: "switch"
+              config:
+                 state_topic: "CMD4"
+                 state_on: "100"
+                 state_off: "0"
+                 value_template: "{{ value_json.OV }}"
+                 command_topic: "req"
+                 payload_on: >
+                   {"CMD":"1","OV":"100","send":"clear"}
+                 payload_off: >
+                   {"CMD":"1","OV":"0","send":"clear"}
+                 device_class: outlet
+            - component: "button"
+              name: "query_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"30","send":"clear"}
+            - component: binary_sensor
+              name: "PF"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "PFD"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "OC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "LC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.LC == 1 %}on{% else %}off{% endif %}
+      0x12:
+         device_config:
+            command: "CMD"
+            channel: "IO/CMD"
+            log_learn: ""
+         entities:
+            - component: "light"
+              name: "IO0"
+              config:
+                 schema: "template"
+                 state_topic: "IO0/CMD4"
+                 state_template: >-
+                   {% if value_json.OV == 0 %}off{% else %}on{% endif %}
+                 command_topic: "req"
+                 command_on_template: >-
+                   {"CMD":"1","DV":"0","IO":"0","OV":"100","send":"clear"}
+                 command_off_template: >-
+                   {"CMD":"1","DV":"0","IO":"0","OV":"0","send":"clear"}
+            - component: "button"
+              name: "query_status_IO0"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"0","send":"clear"}
+            - component: binary_sensor
+              name: "IO0_PF"
+              config:
+                 state_topic: "IO0/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "IO0_PFD"
+              config:
+                 state_topic: "IO0/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "IO0_OC"
+              config:
+                 state_topic: "IO0/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "IO0_LC"
+              config:
+                 state_topic: "IO0/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.LC == 1 %}on{% else %}off{% endif %}
+            - component: "light"
+              name: "IO1"
+              config:
+                 schema: "template"
+                 state_topic: "IO1/CMD4"
+                 state_template: >-
+                   {% if value_json.OV == 0 %}off{% else %}on{% endif %}
+                 command_topic: "req"
+                 command_on_template: >-
+                   {"CMD":"1","DV":"0","IO":"1","OV":"100","send":"clear"}
+                 command_off_template: >-
+                   {"CMD":"1","DV":"0","IO":"1","OV":"0","send":"clear"}
+            - component: "button"
+              name: "query_status_IO1"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"1","send":"clear"}
+            - component: binary_sensor
+              name: "IO1_PF"
+              config:
+                 state_topic: "IO1/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PF == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "IO1_PFD"
+              config:
+                 state_topic: "IO1/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.PFD == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "IO1_OC"
+              config:
+                 state_topic: "IO1/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.OC == 1 %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "IO1_LC"
+              config:
+                 state_topic: "IO1/CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.LC == 1 %}on{% else %}off{% endif %}
+            - component: "button"
+              name: "query_status_all"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"30","send":"clear"}
+   0x05:
+      0x00:
+         device_config:
+            command: "CMD"
+            channel: "CMD"
+            log_learn: ""
+         entities:
+            - component: "cover"
+              name: "cover"
+              config:
+                 command_topic: "req"
+                 payload_open: >-
+                    {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                 payload_close: >-
+                    {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                 payload_stop: >-
+                    {"CMD":"2","CHN":"0","send":"clear"}
+                 position_topic: "CMD4"
+                 position_template: "{{ value_json.POS }}"
+                 set_position_topic: "req"
+                 set_position_template: >-
+                    {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                 tilt_status_topic: "CMD4"
+                 tilt_status_template: "{{ value_json.ANG }}"
+                 tilt_command_topic: "req"
+                 tilt_command_template: >-
+                    {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+0xA5:
+   0x04:
+      0x03:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: "sensor"
+              name: "temperature"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "humidity"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+   0x12:
+      0x00:
+         device_config:
+            command: ""
+            channel: "DT"
+            log_learn: ""
+         entities:
+            - component: "sensor"
+              name: "frequency"
+              config:
+                 state_class: "measurement"
+                 state_topic: "DT1"
+                 value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+                 device_class: "frequency"
+                 unit_of_measurement: "Hz"
+            - component: "sensor"
+              name: "counter"
+              config:
+                 state_topic: "DT0"
+                 state_class: "total"
+                 value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+            - component: "sensor"
+              name: "channel"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.CH }}"
+      0x01:
+         device_config:
+            command: ""
+            channel: "DT"
+            log_learn: ""
+         entities:
+            - component: "sensor"
+              name: "power"
+              config:
+                 state_class: "measurement"
+                 state_topic: "DT1"
+                 value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+                 device_class: "power"
+                 unit_of_measurement: "W"
+            - component: "sensor"
+              name: "energy"
+              config:
+                 state_topic: "DT0"
+                 state_class: "total"
+                 value_template: "{{ value_json.MR/(10**value_json.DIV) }}"
+                 device_class: "energy"
+                 unit_of_measurement: "kWh"
+            - component: "sensor"
+              name: "tariff"
+              config:
+                 state_topic: "DT1"
+                 value_template: "{{ value_json.TI }}"
+0xF6:
+   0x02:
+      0x01:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: binary_sensor
+              name: "pressed"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.EB }}"
+                 payload_on: "1"
+                 payload_off: "0"
+            - component: binary_sensor
+              name: "AI_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 0) or (value_json.SA and value_json.R2 == 0) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "AO_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 1) or (value_json.SA and value_json.R2 == 1) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "BI_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "BO_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+      0x02:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: binary_sensor
+              name: "pressed"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.EB }}"
+                 payload_on: "1"
+                 payload_off: "0"
+            - component: binary_sensor
+              name: "AI_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 0) or (value_json.SA and value_json.R2 == 0) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "AO_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 1) or (value_json.SA and value_json.R2 == 1) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "BI_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "BO_pressed"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+   0x05:
+      0x02:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: binary_sensor
+              name: "alarm"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if value_json.SMO == 16 %}on{% else %}off{% endif %}
+                 device_class: smoke
+            - component: binary_sensor
+              name: "battery"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if value_json.SMO == 48 %}on{% else %}off{% endif %}
+                 device_class: battery
+   0x10:
+      0x00:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: binary_sensor
+              name: "state_2p"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.WIN == 3 %}off{% else %}on{% endif %}
+            - component: sensor
+              name: "state_3p"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.WIN == 3 %}closed{% elif value_json.WIN == 1 %}tilt{% else %}open{% endif %}
+0xD5:
+   0x00:
+      0x01:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: binary_sensor
+              name: "contact"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.CO }}"
+                 payload_on: "0"
+                 payload_off: "1"
+
+# Below are mappings common to all EEPs
+common:
+   rssi:
+      - component: "sensor"
+        name: "rssi"
+        config:
+           state_topic: ""
+           value_template: "{{ value_json.RSSI }}"
+           unit_of_measurement: "dBm"
+           device_class: "signal_strength"
+           entity_category: "diagnostic"
+
+# Mapping for system purpose (HA <-> enoceanmqtt configurations)
+system:
+   delete:
+      - system: "True"
+        component: "button"
+        name: "delete"
+        config:
+           command_topic: "__system"
+           payload_press: "delete"
+           icon: "mdi:delete"
+           entity_category: "config"
+   learn:
+      - system: "True"
+        component: "switch"
+        name: "ENOCEAN_LEARN"
+        config:
+           state_topic: "learn"
+           command_topic: "learn/req"
+           icon: "mdi:home-plus"
+           entity_category: "config"
