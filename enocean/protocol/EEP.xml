@@ -1207,6 +1207,40 @@
       </profile>
     </profiles>
     <profiles func="0x12" description="Atomated Meter Reading (AMR)">
+      <profile type="0x00" description="Counter">
+        <data>
+          <value shortcut="MR" description="Current value in or cumulative counter value" offset="0" size="24" unit="">
+            <range>
+              <min>0</min>
+              <max>16777215</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>16777215</max>
+            </scale>
+          </value>
+          <value shortcut="CH" description="Measurement channel" offset="24" size="4" unit="">
+            <range>
+              <min>0</min>
+              <max>15</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>15</max>
+            </scale>
+          </value>
+          <enum shortcut="DT" description="Current value or cumulative counter value" offset="29" size="1">
+            <item description="Cumulative value" value="0" />
+            <item description="Current value" value="1" />
+          </enum>
+          <enum shortcut="DIV" description="Divisor for value" offset="30" size="2">
+            <item description="x/1" value="0" />
+            <item description="x/10" value="1" />
+            <item description="x/100" value="2" />
+            <item description="x/1000" value="3" />
+          </enum>
+        </data>
+      </profile>
       <profile type="0x01" description="Electricity">
         <data>
           <value shortcut="MR" description="current value in W or cumulative value in kWh" offset="0" size="24" unit="">
@@ -2291,32 +2325,29 @@
           </enum>
         </data>
         <data command="4" bits="4">
-          <enum description="Vertical position" shortcut="POS" offset="1" size="7">
+          <enum description="Current vertical position" shortcut="POS" offset="1" size="7">
             <rangeitem description="Output position {value}%" start="0" end="100" />
-            <item description="Do not change" value="127" />
+            <item description="Position unknown, will be known after the next goto cmd" value="127" />
           </enum>
-          <enum description="Rotation angle" shortcut="ANG" offset="9" size="7">
+          <enum description="Current rotation angle" shortcut="ANG" offset="9" size="7">
             <rangeitem description="Output angle {value}%" start="0" end="100" />
-            <item description="Do not change" value="127" />
+            <item description="Angle unknown, will be known after the next goto cmd" value="127" />
           </enum>
-          <enum description="Repositioning" shortcut="REPO" offset="17" size="3">
-            <item description="Go directly to POS/ANG" value="0" />
-            <item description="Go up (0%), then to POS/ANG" value="1" />
-            <item description="Go down (100%), then to POS/ANG" value="2" />
-            <item description="Reserved" value="3" />
-          </enum>
-          <enum description="Locking modes" shortcut="LOCK" offset="21" size="3">
-            <item description="Do not change" value="0" />
-            <item description="Set blockage mode" value="1" />
-            <item description="Set alarm mode" value="2" />
+          <enum description="Current locking mode" shortcut="LOCK" offset="21" size="3">
+            <item description="Normal (no lock)" value="0" />
+            <item description="Blockage mode" value="1" />
+            <item description="Alarm mode" value="2" />
             <item description="Reserved" value="3" />
             <item description="Reserved" value="4" />
             <item description="Reserved" value="5" />
             <item description="Reserved" value="6" />
-            <item description="Deblockage" value="7" />
+            <item description="Reserved" value="7" />
           </enum>
           <enum description="Channel" shortcut="CHN" offset="24" size="4">
             <item description="Channel 1" value="0" />
+            <item description="Channel 2" value="1" />
+            <item description="Channel 3" value="2" />
+            <item description="Channel 4" value="3" />
           </enum>
           <enum description="Command Id" shortcut="CMD" offset="28" size="4">
             <rangeitem description="Command ID {value}" start="0" end="5" />
