@@ -83,14 +83,6 @@ class HACommunicator(Communicator):
 
             # MQTT operations at startup only
             if self._first_mqtt_connect:
-                # Add LEARN button in HA
-                self._mqtt_discovery_system('learn')
-
-                # LEARN status
-                self.mqtt.publish(self._system_status_topic['learn'],
-                                  'ON' if self.enocean.teach_in else 'OFF',
-                                  retain=True)
-
                 # Get all device addresses in DB
                 known_addresses = self._devmgr.db_list_from_fields('address')
 
@@ -119,6 +111,14 @@ class HACommunicator(Communicator):
                     # Remove the device from the database
                     self._devmgr.db_remove_device_by_address(address)
 
+                # Add LEARN button in HA
+                self._mqtt_discovery_system('learn')
+
+                # LEARN status
+                self.mqtt.publish(self._system_status_topic['learn'],
+                                  'ON' if self.enocean.teach_in else 'OFF',
+                                  retain=True)
+
                 # First MQTT connection is done
                 self._first_mqtt_connect = False
         else:
@@ -143,11 +143,20 @@ class HACommunicator(Communicator):
         device_map = copy.deepcopy(self._ha_mapping['system'][attr])
         for entity in device_map:
             cfg = entity['config']
+            # Wait for the transmitter ID
+            while True:
+                try:
+                    if self.enocean_sender is not None:
+                        break
+                except AttributeError:
+                    pass
+                time.sleep(1);
+                logging.info("Waiting for device base ID");
+
             # Create a unique ID for the entity based on the transmitter ID
-            if self.enocean_sender is None:
-                self.enocean_sender = self.enocean.base_id
             sender = enocean.utils.combine_hex(self.enocean_sender)
-            uid = 'enoceanmqtt_'+attr+'_'+format(sender, '08X')
+            sender_hex = format(sender, '08X')
+            uid = 'enoceanmqtt_'+attr+'_'+sender_hex
             cfg['unique_id'] = uid
 
             # The entity name to be displayed in HA
@@ -156,8 +165,8 @@ class HACommunicator(Communicator):
             # Associate all entities to the device in HA
             cfg['device'] = {}
             cfg['device']['name'] = 'ENOCEANMQTT'
-            cfg['device']['identifiers'] = format(sender, '08X')
-            cfg['device']['model'] = 'Virtual'
+            cfg['device']['identifiers'] = sender_hex
+            cfg['device']['model'] = 'Virtual @'+sender_hex
             cfg['device']['manufacturer'] = 'https://github.com/mak-gitdev/HA_enoceanmqtt'
 
             # The configuration topic defined for MQTT Discovery

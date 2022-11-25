@@ -266,9 +266,10 @@ class Communicator:
                # Check the current shortcut matches the command shortcut
                if source['shortcut'] == sensor.get('command'):
                    return packet.eep._get_raw(source, packet._bit_data)
-        else:
-            # If not found, return None for default handling of the packet
-            return None
+
+        # If profile or command shortcut not found,
+        # return None for default handling of the packet
+        return None
 
     def _publish_mqtt(self, sensor, mqtt_json):
         '''Publish decoded packet content to MQTT'''

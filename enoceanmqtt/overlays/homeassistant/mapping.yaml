@@ -409,12 +409,26 @@
                     {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
 0xA5:
    0x04:
-      0x03:
+      0x01:
          device_config:
             command: ""
             channel: ""
             log_learn: ""
          entities:
+            - component: "sensor"
+              name: "humidity"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "hum"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM | round(1) }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
             - component: "sensor"
               name: "temperature"
               config:
@@ -423,12 +437,154 @@
                  device_class: "temperature"
                  unit_of_measurement: "°C"
             - component: "sensor"
+              name: "tempC"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempF"
+              config:
+                 state_topic: ""
+                 value_template: "{{ (value_json.TMP * 9 / 5 + 32) | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°F"
+            - component: binary_sensor
+              name: "status"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.TSN == 0 %}off{% else %}on{% endif %}
+      0x02:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: "sensor"
               name: "humidity"
               config:
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
                  unit_of_measurement: "%"
+            - component: "sensor"
+              name: "hum"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM | round(1) }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "temperature"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempC"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempF"
+              config:
+                 state_topic: ""
+                 value_template: "{{ (value_json.TMP * 9 / 5 + 32) | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°F"
+            - component: binary_sensor
+              name: "status"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.TSN == 0 %}off{% else %}on{% endif %}
+      0x03:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: "sensor"
+              name: "humidity"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "hum"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM | round(1) }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "temperature"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempC"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempF"
+              config:
+                 state_topic: ""
+                 value_template: "{{ (value_json.TMP * 9 / 5 + 32) | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°F"
+      0x04:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: "sensor"
+              name: "humidity"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "hum"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM | round(1) }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "temperature"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempC"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "tempF"
+              config:
+                 state_topic: ""
+                 value_template: "{{ (value_json.TMP * 9 / 5 + 32) | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°F"
    0x12:
       0x00:
          device_config:
@@ -599,6 +755,26 @@
                  value_template: >-
                    {% if value_json.SMO == 48 %}on{% else %}off{% endif %}
                  device_class: battery
+   0x10:
+      0x00:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+         entities:
+            - component: binary_sensor
+              name: "state_2p"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.WIN == 3 %}OFF{% else %}ON{% endif %}
+                 device_class: "window"
+            - component: sensor
+              name: "state_3p"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.WIN == 3 %}off{% elif value_json.WIN == 1 %}tilt{% else %}on{% endif %}
 0xD5:
    0x00:
       0x01:
