@@ -131,17 +131,23 @@ If you want to delete your device from Home Assistant:
  - Click on the delete button in the configuration section
 
 ## Supported Devices
+An unchecked box means that the device has not been tested.
+
  - [x] `D2-01-0B` 
  - [x] `D2-01-0C`
- - [ ] `D2-01-0F` (not tested)
+ - [ ] `D2-01-0F`
  - [x] `D2-01-12`
  - [x] `D2-05-00`
  - [x] `F6-02-01`
  - [x] `F6-02-02`
  - [x] `F6-05-02`
+ - [x] `F6-10-00`
  - [x] `D5-00-01`
- - [ ] `A5-04-03` (not tested)
- - [ ] `A5-12-00` (not tested)
+ - [ ] `A5-04-01`
+ - [ ] `A5-04-02`
+ - [ ] `A5-04-03`
+ - [ ] `A5-04-04`
+ - [ ] `A5-12-00`
  - [x] `A5-12-01`
 
 For devices not yet supported, only the RSSI sensor is created in Home Assistant.  
