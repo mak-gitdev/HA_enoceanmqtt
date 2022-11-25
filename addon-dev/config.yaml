@@ -1,0 +1,47 @@
+name: "EnOcean MQTT (dev)"
+description: "EnOcean to MQTT bridge"
+url: "https://github.com/mak-gitdev/HA_enoceanmqtt"
+version: "dev"
+slug: "ha_enoceanmqtt_dev"
+stage: "experimental"
+init: false
+uart: true
+startup: "application"
+services:
+  - "mqtt:need"
+map:
+  - "config:rw"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+options:
+  device_file: ""
+  mapping_file: ""
+  log_file: "/config/enoceanmqtt.log"
+  enocean_port: ""
+  debug: false
+  log_packets: false
+  mqtt_broker: {}
+  mqtt_discovery_prefix: "homeassistant/"
+  mqtt_prefix: "enoceanmqtt/"
+  mqtt_client_id: "enocean_gateway"
+  mqtt_keepalive: 60
+schema:
+  device_file: "str"
+  mapping_file: "str?"
+  log_file: "str?"
+  enocean_port: "device(subsystem=tty)"
+  debug: "bool?"
+  log_packets: "bool?"
+  mqtt_broker:
+    host: "str?"
+    port: "str?"
+    user: "str?"
+    pwd: "password?"
+  mqtt_discovery_prefix: "str?"
+  mqtt_prefix: "str?"
+  mqtt_client_id: "str?"
+  mqtt_keepalive: "int?"
