@@ -150,8 +150,8 @@ class HACommunicator(Communicator):
                         break
                 except AttributeError:
                     pass
-                time.sleep(1);
-                logging.info("Waiting for device base ID");
+                time.sleep(1)
+                logging.info("Waiting for device base ID")
 
             # Create a unique ID for the entity based on the transmitter ID
             sender = enocean.utils.combine_hex(self.enocean_sender)

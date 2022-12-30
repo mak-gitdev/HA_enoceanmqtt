@@ -668,9 +668,59 @@
               <max>5.000000</max>
             </scale>
           </value>
-          <enum description="PIR Status" shortcut="PIR" offset="16" size="1">
-            <item description="off" value="0" />
-            <item description="on" value="1" />
+          <enum description="PIR Status" shortcut="PIRS" offset="16" size="1">
+            <item description="PIR off" value="0" />
+            <item description="PIR on" value="1" />
+          </enum>
+          <enum description="Supply voltage availability" shortcut="SVA" offset="31" size="1">
+            <item description="Supply voltage is not supported" value="0" />
+            <item description="Supply voltage is supported" value="1" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x02" description="Occupancy with Supply voltage monitor">
+        <data>
+          <value shortcut="SVC" description="Supply voltage (REQUIRED)" offset="0" size="8" unit="V">
+            <range>
+              <min>0</min>
+              <max>250</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>5.000000</max>
+            </scale>
+          </value>
+          <enum description="PIR Status" shortcut="PIRS" offset="24" size="1">
+            <item description="Uncertain of occupancy status" value="0" />
+            <item description="Motion detected" value="1" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x03" description="Occupancy with Supply voltage monitor">
+        <data>
+          <value shortcut="SVC" description="Supply voltage (REQUIRED)" offset="0" size="8" unit="V">
+            <range>
+              <min>0</min>
+              <max>250</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>5.000000</max>
+            </scale>
+          </value>
+          <value description="Illumination" shortcut="ILL" offset="8" size="10" unit="lx">
+            <range>
+              <min>0</min>
+              <max>1000</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>1000.000000</max>
+            </scale>
+          </value>
+          <enum description="PIR Status" shortcut="PIRS" offset="24" size="1">
+            <item description="Uncertain of occupancy status" value="0" />
+            <item description="Motion detected" value="1" />
           </enum>
         </data>
       </profile>
@@ -1074,6 +1124,123 @@
         </data>
       </profile>
     </profiles>
+    <profiles func="0x12" description="Atomated Meter Reading (AMR)">
+      <profile type="0x00" description="Counter">
+        <data>
+          <value shortcut="MR" description="Current value in or cumulative counter value" offset="0" size="24" unit="">
+            <range>
+              <min>0</min>
+              <max>16777215</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>16777215</max>
+            </scale>
+          </value>
+          <value shortcut="CH" description="Measurement channel" offset="24" size="4" unit="">
+            <range>
+              <min>0</min>
+              <max>15</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>15</max>
+            </scale>
+          </value>
+          <enum shortcut="DT" description="Current value or cumulative counter value" offset="29" size="1">
+            <item description="Cumulative value" value="0" />
+            <item description="Current value" value="1" />
+          </enum>
+          <enum shortcut="DIV" description="Divisor for value" offset="30" size="2">
+            <item description="x/1" value="0" />
+            <item description="x/10" value="1" />
+            <item description="x/100" value="2" />
+            <item description="x/1000" value="3" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x01" description="Electricity">
+        <data>
+          <value shortcut="MR" description="current value in W or cumulative value in kWh" offset="0" size="24" unit="">
+            <range>
+              <min>0</min>
+              <max>16777215</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>16777215</max>
+            </scale>
+          </value>
+          <value shortcut="TI" description="Tariff info" offset="24" size="4" unit="">
+            <range>
+              <min>0</min>
+              <max>15</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>15</max>
+            </scale>
+          </value>
+          <enum shortcut="DT" description="Current value or cumulative value" offset="29" size="1">
+            <item description="kWh" value="0" />
+            <item description="W" value="1" />
+          </enum>
+          <enum shortcut="DIV" description="Divisor for value" offset="30" size="2">
+            <item description="x/1" value="0" />
+            <item description="x/10" value="1" />
+            <item description="x/100" value="2" />
+            <item description="x/1000" value="3" />
+          </enum>
+        </data>
+      </profile>
+    </profiles>
+    <profiles func="0x13" description="Environmental Applications">
+      <profile type="0x01" description="Weather Station">
+        <data>
+          <value description="Dawn sensor" shortcut="DWS" offset="0" size="8" unit="lx">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>999</max>
+            </scale>
+          </value>
+          <value description="Temperature" shortcut="TMP" offset="8" size="8" unit="°C">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>-40</min>
+              <max>+80</max>
+            </scale>
+          </value>
+          <value description="Wind speed" shortcut="WND" offset="16" size="8" unit="m/s">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>70</max>
+            </scale>
+          </value>
+          <enum description="Identifier" shortcut="ID" offset="24" size="4">
+            <rangeitem description="Identifier {value}" start="0" end="15" />
+          </enum>
+          <enum description="Day / Night" shortcut="DN" offset="29" size="1">
+            <item description="Day" value="0" />
+            <item description="Night" value="1" />
+          </enum>
+          <enum description="Rain Indication" shortcut="RAN" offset="30" size="1">
+            <item description="No Rain" value="0" />
+            <item description="Rain" value="1" />
+          </enum>
+        </data>
+      </profile>
+    </profiles>
     <profiles func="0x14" description="Multi-Func Sensor">
       <profile type="0x01" description="Single Input Contact (Window/Door), Supply voltage monitor">
         <data>
@@ -1202,76 +1369,6 @@
           <enum shortcut="RCU" description="Select function" offset="23" size="1">
             <item description="RCU" value="0" />
             <item description="service on" value="1" />
-          </enum>
-        </data>
-      </profile>
-    </profiles>
-    <profiles func="0x12" description="Atomated Meter Reading (AMR)">
-      <profile type="0x00" description="Counter">
-        <data>
-          <value shortcut="MR" description="Current value in or cumulative counter value" offset="0" size="24" unit="">
-            <range>
-              <min>0</min>
-              <max>16777215</max>
-            </range>
-            <scale>
-              <min>0.000000</min>
-              <max>16777215</max>
-            </scale>
-          </value>
-          <value shortcut="CH" description="Measurement channel" offset="24" size="4" unit="">
-            <range>
-              <min>0</min>
-              <max>15</max>
-            </range>
-            <scale>
-              <min>0</min>
-              <max>15</max>
-            </scale>
-          </value>
-          <enum shortcut="DT" description="Current value or cumulative counter value" offset="29" size="1">
-            <item description="Cumulative value" value="0" />
-            <item description="Current value" value="1" />
-          </enum>
-          <enum shortcut="DIV" description="Divisor for value" offset="30" size="2">
-            <item description="x/1" value="0" />
-            <item description="x/10" value="1" />
-            <item description="x/100" value="2" />
-            <item description="x/1000" value="3" />
-          </enum>
-        </data>
-      </profile>
-      <profile type="0x01" description="Electricity">
-        <data>
-          <value shortcut="MR" description="current value in W or cumulative value in kWh" offset="0" size="24" unit="">
-            <range>
-              <min>0</min>
-              <max>16777215</max>
-            </range>
-            <scale>
-              <min>0.000000</min>
-              <max>16777215</max>
-            </scale>
-          </value>
-          <value shortcut="TI" description="Tariff info" offset="24" size="4" unit="">
-            <range>
-              <min>0</min>
-              <max>15</max>
-            </range>
-            <scale>
-              <min>0</min>
-              <max>15</max>
-            </scale>
-          </value>
-          <enum shortcut="DT" description="Current value or cumulative value" offset="29" size="1">
-            <item description="kWh" value="0" />
-            <item description="W" value="1" />
-          </enum>
-          <enum shortcut="DIV" description="Divisor for value" offset="30" size="2">
-            <item description="x/1" value="0" />
-            <item description="x/10" value="1" />
-            <item description="x/100" value="2" />
-            <item description="x/1000" value="3" />
           </enum>
         </data>
       </profile>
@@ -2265,6 +2362,30 @@
           </enum>
         </data>
 -->
+      </profile>
+    </profiles>
+    <profiles func="0x03" description="Light, Switching + Blind Control">
+      <profile type="0x0A" description="Push Button – Single Button">
+        <data>
+          <value description="Battery Autonomy" shortcut="BATT" offset="0" size="8" unit="%">
+            <range>
+              <min>1</min>
+              <max>100</max>
+            </range>
+            <scale>
+              <min>1</min>
+              <max>100</max>
+            </scale>
+          </value>
+          <enum description="Button Action" shortcut="BA" offset="8" size="8">
+            <item description="Reserved" value="0" />
+            <item description="Simple press" value="1" />
+            <item description="Double press" value="2" />
+            <item description="Long press" value="3" />
+            <item description="Long press released" value="4" />
+            <rangeitem description="Reserved" start="5" end="255" />
+          </enum>
+        </data>
       </profile>
     </profiles>
     <profiles func="0x05" description="Blinds Control for Position and Angle">

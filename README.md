@@ -33,6 +33,9 @@ For the moment, to install it, perform the following actions:
 #### 4- Install the Home Assistant overlay
  - Copy the *__`enoceanmqtt/`__* folder to enoceanmqtt
 
+#### 5- Add latest device support file for Python EnOcean
+ - `cp -rf HA_enoceanmqtt/enocean/protocol/EEP.xml $(find / -path ./HA_enoceanmqtt -prune -o -name "EEP.xml" -print -quit 2>/dev/null)`
+
 ### Configuration
 - adapt the `standalone/enoceanmqtt.conf.sample` file and put it to /etc/enoceanmqtt.conf:
    - Set the enocean interface port. Follow [these instructions](https://github.com/embyt/enocean-mqtt#define-persistant-device-name-for-enocean-interface) if you want to set a persistent device name for your enocean interface.
@@ -70,44 +73,8 @@ HA_enoceanmqtt can also be installed as a Home Assistant addon.
 <img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/master/.github/images/install_addon.svg" alt="Install Addon" width="75%"/>
 <br/><br/>
 
-### Installation
-1. If you don't have a MQTT broker yet; in Home Assistant go to **Settings → Add-ons → Add-on store** and install the **Mosquitto broker** addon.
-1. Go back to the **Add-on store**, click **⋮ → Repositories**, fill in</br>  `https://github.com/mak-gitdev/HA_enoceanmqtt` and click **Add → Close**.
-1. Click on the addon and press **Install** and wait until the addon is installed.
-
-
-### Configuration
-1. Click on **Configuration**
-    - Adapt the `addon/enoceanmqtt.devices.sample` and put it to your Home Assistant **/config** directory. You can use the Home Assistant **File Editor**.  
-     **Tip**: Your device name can contain `/` e.g. `[lights/livingroom]`. This allows you to group your devices by type when exploring MQTT messages.
-    - Indicate the location of your device file under the **device_file** entry.
-    - Indicate the location of your mapping file under the **mapping_file** entry. Useful for people wanting to add support for new devices. Leave empty to use the default mapping file.
-    - Indicate your preferred location for the log file under the **log_file** entry. It shall be in your Home Assistant **/config** directory.
-    - Select the serial interface of your EnOcean dongle in the list of detected serial ports. When using yaml configuration, the format is for example:
-        ```yaml
-        enocean_port: /dev/ttyUSB0
-        ```
-    - If you are **not** using the Mosquitto broker addon, fill in your MQTT details. Otherwise, leave empty the MQTT broker configuration. The format is for example:
-        ```yaml
-        host: localhost
-        port: 1883
-        user: my_user
-        pwd: my_password
-        ```
-    - Indicate the `mqtt_discovery_prefix` under the **mqtt_discovery_prefix** entry. This is the MQTT prefix used for MQTT device discovery. It defaults to `homeassistant` and can be configured in the Home Assistant MQTT integration as follow:
-        ```yaml
-        mqtt:
-          discovery_prefix: <prefix>
-        ```
-     If you have other HA integrations using MQTT discovery (e.g. zigbee2mqtt, etc.), **mqtt_discovery_prefix** should be set to `homeassistant/` as it seems to be the one used in general.
-    - Indicate the `mqtt_prefix` under the **mqtt_prefix** entry. This is the prefix which will be used to interact with your EnOcean devices.  
-      EnOceanMQTT will interact with EnOcean devices through the device root topic `<mqtt_prefix>/<device_name>`.
-    - Turn on the **debug** switch if you want a very verbose log file.
-    - Other settings can be kept to their default values.
-    - Click **Save**
-    - **Tip:** it is possible to refer to variables in the Home Assistant `secrets.yaml` file by using e.g. `pwd: !secret mqtt_pwd`
-1. Start the addon by going to **Info** and click **Start**
-1. Wait till HA_enoceanmqtt starts and press **Log** to verify HA_enoceanmqtt started correctly.
+**Important: The addon has been moved to a separate repository and the one in this repository is DEPRECATED!!**  
+See [HA_enoceanmqtt-addon](https://github.com/mak-gitdev/HA_enoceanmqtt-addon) for more details on how to migrate to the new repository or install the addon.
 
 ## Usage
 ### 1- Pairing your device
@@ -129,30 +96,6 @@ If you want to delete your device from Home Assistant:
  - Browse to the devices of MQTT integration
  - Click on your device
  - Click on the delete button in the configuration section
-
-## Supported Devices
-An unchecked box means that the device has not been tested.
-
- - [x] `D2-01-0B` 
- - [x] `D2-01-0C`
- - [ ] `D2-01-0F`
- - [x] `D2-01-12`
- - [x] `D2-05-00`
- - [x] `F6-02-01`
- - [x] `F6-02-02`
- - [x] `F6-05-02`
- - [x] `F6-10-00`
- - [x] `D5-00-01`
- - [ ] `A5-04-01`
- - [ ] `A5-04-02`
- - [ ] `A5-04-03`
- - [ ] `A5-04-04`
- - [ ] `A5-12-00`
- - [x] `A5-12-01`
-
-For devices not yet supported, only the RSSI sensor is created in Home Assistant.  
-
-**Note**: If your device is not supported yet, please feel free to ask me for adding your device through the discussion panel. Or feel free to add it to *__`mapping.yaml`__* and make a pull request (see [adding new devices](https://github.com/mak-gitdev/HA_enoceanmqtt#adding-new-devices) for more details).
 
 ## Adding new devices
 You can modify the *__`mapping.yaml`__* file to add new devices or new entities to already supported devices.  
@@ -209,3 +152,93 @@ e2m_door_sensors_myD50001
 ```
 
 **Note**: Do not forget to make a pull request to integrate your changes.
+
+## Supported Devices
+An unchecked box means that the device has not been tested.
+
+<details><summary>A5</summary><blockquote>
+  <details><summary>02</summary><blockquote>
+    <ul><li>[ ] A5-02-01</li></ul>
+    <ul><li>[ ] A5-02-02</li></ul>
+    <ul><li>[ ] A5-02-03</li></ul>
+    <ul><li>[ ] A5-02-04</li></ul>
+    <ul><li>[ ] A5-02-05</li></ul>
+    <ul><li>[ ] A5-02-06</li></ul>
+    <ul><li>[ ] A5-02-07</li></ul>
+    <ul><li>[ ] A5-02-08</li></ul>
+    <ul><li>[ ] A5-02-09</li></ul>
+    <ul><li>[ ] A5-02-0A</li></ul>
+    <ul><li>[ ] A5-02-0B</li></ul>
+    <ul><li>[ ] A5-02-10</li></ul>
+    <ul><li>[ ] A5-02-11</li></ul>
+    <ul><li>[ ] A5-02-12</li></ul>
+    <ul><li>[ ] A5-02-13</li></ul>
+    <ul><li>[ ] A5-02-14</li></ul>
+    <ul><li>[ ] A5-02-15</li></ul>
+    <ul><li>[ ] A5-02-16</li></ul>
+    <ul><li>[ ] A5-02-17</li></ul>
+    <ul><li>[ ] A5-02-18</li></ul>
+    <ul><li>[ ] A5-02-19</li></ul>
+    <ul><li>[ ] A5-02-1A</li></ul>
+    <ul><li>[ ] A5-02-1B</li></ul>
+    <ul><li>[ ] A5-02-20</li></ul>
+    <ul><li>[ ] A5-02-30</li></ul>
+  </blockquote></details>
+  <details><summary>04</summary><blockquote>
+    <ul><li>[ ] A5-04-01</li></ul>
+    <ul><li>[x] A5-04-02</li></ul>
+    <ul><li>[ ] A5-04-03</li></ul>
+    <ul><li>[ ] A5-04-04</li></ul>
+  </blockquote></details>
+  <details><summary>06</summary><blockquote>
+    <ul><li>[ ] A5-06-01</li></ul>
+    <ul><li>[ ] A5-06-02</li></ul>
+  </blockquote></details>
+  <details><summary>07</summary><blockquote>
+    <ul><li>[ ] A5-07-01</li></ul>
+    <ul><li>[ ] A5-07-02</li></ul>
+    <ul><li>[ ] A5-07-03</li></ul>
+  </blockquote></details>
+  <details><summary>12</summary><blockquote>
+    <ul><li>[ ] A5-12-00</li></ul>
+    <ul><li>[x] A5-12-01</li></ul>
+  </blockquote></details>
+  <details><summary>13</summary><blockquote>
+    <ul><li>[ ] A5-13-01</li></ul>
+  </blockquote></details>
+</blockquote></details>
+
+<details><summary>D2</summary><blockquote>
+  <details><summary>01</summary><blockquote>
+    <ul><li>[x] D2-01-0B</li></ul>
+    <ul><li>[x] D2-01-0C</li></ul>
+    <ul><li>[ ] D2-01-0F</li></ul>
+    <ul><li>[x] D2-01-12</li></ul>
+  </blockquote></details>
+  <details><summary>03</summary><blockquote>
+    <ul><li>[ ] D2-03-0A</li></ul>
+  </blockquote></details>
+  <details><summary>05</summary><blockquote>
+    <ul><li>[x] D2-05-00</li></ul>
+  </blockquote></details>
+</blockquote></details>
+
+<details><summary>D5</summary><blockquote>
+  <details><summary>00</summary><blockquote>
+    <ul><li>[x] D5-00-01</li></ul>
+  </blockquote></details>
+</blockquote></details>
+
+<details><summary>F6</summary><blockquote>
+  <details><summary>02</summary><blockquote>
+    <ul><li>[x] F6-02-01</li></ul>
+    <ul><li>[x] F6-02-02</li></ul>
+  </blockquote></details>
+  <details><summary>10</summary><blockquote>
+    <ul><li>[x] F6-10-00</li></ul>
+  </blockquote></details>
+</blockquote></details>
+
+For devices not yet supported, only the RSSI sensor is created in Home Assistant.  
+
+**Note**: If your device is not supported yet, please feel free to ask me for adding your device through the discussion panel. Or feel free to add it to *__`mapping.yaml`__* and make a pull request (see [adding new devices](https://github.com/mak-gitdev/HA_enoceanmqtt#adding-new-devices) for more details).
