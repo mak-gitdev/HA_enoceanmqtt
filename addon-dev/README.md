@@ -1,4 +1,8 @@
-# Home Assistant Add-on: EnOcean to MQTT Bridge (development version)
+# Home Assistant Add-on: EnOcean to MQTT Bridge (development version) ******* DEPRECATED *******
+
+**Important: The addon has been moved to a separate repository and this one is DEPRECATED!!**  
+**This version will be deleted by January 31, 2023**  
+See [HA_enoceanmqtt-addon](https://github.com/mak-gitdev/HA_enoceanmqtt-addon) for more details on how to migrate to the new repository.
 
 EnOcean to MQTT Bridge
 

@@ -1,9 +1,9 @@
-name: "EnOcean MQTT"
-description: "EnOcean to MQTT bridge for Home Assistant"
-url: "https://github.com/mak-gitdev/HA_enoceanmqtt"
+name: "EnOcean MQTT (******* DEPRECATED *******)"
+description: "EnOcean to MQTT bridge for Home Assistant. ** ADDON REPOSITORY CHANGED **"
+url: "https://github.com/mak-gitdev/HA_enoceanmqtt#home-assistant-addon-installation"
 version: "0.1.21"
 slug: "ha_enoceanmqtt"
-stage: "experimental"
+stage: "deprecated"
 init: false
 uart: true
 startup: "application"

@@ -70,44 +70,8 @@ HA_enoceanmqtt can also be installed as a Home Assistant addon.
 <img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/master/.github/images/install_addon.svg" alt="Install Addon" width="75%"/>
 <br/><br/>
 
-### Installation
-1. If you don't have a MQTT broker yet; in Home Assistant go to **Settings → Add-ons → Add-on store** and install the **Mosquitto broker** addon.
-1. Go back to the **Add-on store**, click **⋮ → Repositories**, fill in</br>  `https://github.com/mak-gitdev/HA_enoceanmqtt` and click **Add → Close**.
-1. Click on the addon and press **Install** and wait until the addon is installed.
-
-
-### Configuration
-1. Click on **Configuration**
-    - Adapt the `addon/enoceanmqtt.devices.sample` and put it to your Home Assistant **/config** directory. You can use the Home Assistant **File Editor**.  
-     **Tip**: Your device name can contain `/` e.g. `[lights/livingroom]`. This allows you to group your devices by type when exploring MQTT messages.
-    - Indicate the location of your device file under the **device_file** entry.
-    - Indicate the location of your mapping file under the **mapping_file** entry. Useful for people wanting to add support for new devices. Leave empty to use the default mapping file.
-    - Indicate your preferred location for the log file under the **log_file** entry. It shall be in your Home Assistant **/config** directory.
-    - Select the serial interface of your EnOcean dongle in the list of detected serial ports. When using yaml configuration, the format is for example:
-        ```yaml
-        enocean_port: /dev/ttyUSB0
-        ```
-    - If you are **not** using the Mosquitto broker addon, fill in your MQTT details. Otherwise, leave empty the MQTT broker configuration. The format is for example:
-        ```yaml
-        host: localhost
-        port: 1883
-        user: my_user
-        pwd: my_password
-        ```
-    - Indicate the `mqtt_discovery_prefix` under the **mqtt_discovery_prefix** entry. This is the MQTT prefix used for MQTT device discovery. It defaults to `homeassistant` and can be configured in the Home Assistant MQTT integration as follow:
-        ```yaml
-        mqtt:
-          discovery_prefix: <prefix>
-        ```
-     If you have other HA integrations using MQTT discovery (e.g. zigbee2mqtt, etc.), **mqtt_discovery_prefix** should be set to `homeassistant/` as it seems to be the one used in general.
-    - Indicate the `mqtt_prefix` under the **mqtt_prefix** entry. This is the prefix which will be used to interact with your EnOcean devices.  
-      EnOceanMQTT will interact with EnOcean devices through the device root topic `<mqtt_prefix>/<device_name>`.
-    - Turn on the **debug** switch if you want a very verbose log file.
-    - Other settings can be kept to their default values.
-    - Click **Save**
-    - **Tip:** it is possible to refer to variables in the Home Assistant `secrets.yaml` file by using e.g. `pwd: !secret mqtt_pwd`
-1. Start the addon by going to **Info** and click **Start**
-1. Wait till HA_enoceanmqtt starts and press **Log** to verify HA_enoceanmqtt started correctly.
+**Important: The addon has been moved to a separate repository and the one in this repository is DEPRECATED!!**  
+See [HA_enoceanmqtt-addon](https://github.com/mak-gitdev/HA_enoceanmqtt-addon) for more details on how to migrate to the new repository or install the addon.
 
 ## Usage
 ### 1- Pairing your device
