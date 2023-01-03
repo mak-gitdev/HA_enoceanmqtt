@@ -1512,7 +1512,6 @@
             command: ""
             channel: ""
             log_learn: ""
-            default_data: "0xE0400D80"
          entities:
             - component: "switch"
               name: "switch"
