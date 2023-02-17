@@ -40,7 +40,7 @@ def load_config_file(config_files):
     global_config = {}
 
     for conf_file in config_files:
-        config_parser = ConfigParser(inline_comment_prefixes=('#', ';'))
+        config_parser = ConfigParser(inline_comment_prefixes=('#', ';'), interpolation=None)
         if not os.path.isfile(conf_file):
             logging.warning("Config file %s does not exist, skipping", conf_file)
             continue

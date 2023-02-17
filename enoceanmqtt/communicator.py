@@ -276,6 +276,9 @@ class Communicator:
         # Publish using JSON format ?
         mqtt_publish_json = str(sensor.get('publish_json')) in ("True", "true", "1")
 
+        # Publish RSSI ?
+        mqtt_publish_rssi = str(sensor.get('publish_rssi')) in ("True", "true", "1")
+
         # Retain the to-be-published message ?
         retain = str(sensor.get('persistent')) in ("True", "true", "1")
 
@@ -283,16 +286,33 @@ class Communicator:
         channel_id = sensor.get('channel')
         channel_id = channel_id.split('/') if channel_id not in (None, '') else []
 
-        # Handling device RSSI
-        if str(sensor.get('publish_rssi')) in ("True", "true", "1"):
+        # Handling Auxiliary data RSSI
+        aux_data = {}
+        if mqtt_publish_rssi:
             if mqtt_publish_json:
-                # Keep RSSI out of groups
+                # Keep _RSSI_ out of groups
                 if channel_id:
-                    self.mqtt.publish(sensor['name'], json.dumps({"RSSI": mqtt_json['RSSI']}), retain=retain)
-                    del mqtt_json['RSSI']
+                    aux_data.update({"_RSSI_": mqtt_json['_RSSI_']})
             else:
-                self.mqtt.publish(sensor['name']+"/RSSI", mqtt_json['RSSI'], retain=retain)
-                del mqtt_json['RSSI']
+                self.mqtt.publish(sensor['name']+"/_RSSI_", mqtt_json['_RSSI_'], retain=retain)
+        # Delete RSSI if already handled
+        if channel_id or not mqtt_publish_json or not mqtt_publish_rssi:
+            del mqtt_json['_RSSI_']
+
+        # Handling Auxiliary data _DATE_
+        if str(sensor.get('publish_date')) in ("True", "true", "1"):
+            # Publish _DATE_ both at device and group levels
+            if channel_id:
+                if mqtt_publish_json:
+                    aux_data.update({"_DATE_": mqtt_json['_DATE_']})
+                else:
+                    self.mqtt.publish(sensor['name']+"/_DATE_", mqtt_json['_DATE_'], retain=retain)
+        else:
+            del mqtt_json['_DATE_']
+
+        # Publish auxiliary data
+        if aux_data:
+            self.mqtt.publish(sensor['name'], json.dumps(aux_data), retain=retain)
 
         # Determine MQTT topic
         topic = sensor['name']
@@ -323,7 +343,14 @@ class Communicator:
                 # Shall the packet be published to MQTT ?
                 if not packet.learn or str(cur_sensor.get('log_learn')) in ("True", "true", "1"):
                     # Store RSSI
-                    mqtt_json['RSSI'] = packet.dBm
+                    # Use underscore so that it is unique and doesn't
+                    # match a potential future EnOcean EEP field.
+                    mqtt_json['_RSSI_'] = packet.dBm
+
+                    # Store receive date
+                    # Use underscore so that it is unique and doesn't
+                    # match a potential future EnOcean EEP field.
+                    mqtt_json['_DATE_'] = packet.received.isoformat()
 
                     # Handling received data packet
                     found_property = self._handle_data_packet( packet, cur_sensor, mqtt_json)
