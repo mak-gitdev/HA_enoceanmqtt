@@ -141,7 +141,7 @@ class HACommunicator(Communicator):
     def _on_mqtt_message(self, _mqtt_client, _userdata, msg):
         '''the callback for when a PUBLISH message is received from the MQTT server.'''
         # Intercept system messages
-        if msg.topic.endswith('/__system'):
+        if '/__system' in msg.topic:
             self._handle_system_msg(msg)
         # Intercept MQTT delete requests
         elif msg.topic.startswith(self._mqtt_discovery_prefix) and msg.topic.endswith('/config'):

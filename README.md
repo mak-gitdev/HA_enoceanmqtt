@@ -4,7 +4,7 @@ This is a [Home Assistant](https://www.home-assistant.io/) overlay for [enoceanm
 It allows to easily have access to EnOcean devices in Home Assistant through MQTT.  
 It is based on MQTT discovery from the Home Assistant MQTT integration.  
 
-<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/master/.github/images/diagram.svg" alt="Diagram" width="75%"/>
+<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/develop/.github/images/diagram.svg" alt="Diagram" width="75%"/>
 <br/><br/>
 
 EnOceanMQTT is the core of HA_enoceanmqtt. It manages the EnOcean protocol through the USB300 dongle thanks to the [Python EnOcean library](https://github.com/kipe/enocean).  
@@ -17,7 +17,7 @@ The Home Assistant overlay is in charge of creating automatically and managing M
 
 HA_enoceanmqtt can be installed as a standard python application on a Linux system.
 
-<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/master/.github/images/install_supervised.svg" alt="Install Supervised" width="75%"/>
+<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/develop/.github/images/install_supervised.svg" alt="Install Supervised" width="75%"/>
 <br/><br/>
 
 See [Standalone installation](https://github.com/mak-gitdev/HA_enoceanmqtt/wiki/Standalone-Installation) for more details.
@@ -26,7 +26,7 @@ See [Standalone installation](https://github.com/mak-gitdev/HA_enoceanmqtt/wiki/
 
 HA_enoceanmqtt is also available as a docker image.  
 
-<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/master/.github/images/install_docker.svg" alt="Install Docker" width="75%"/>
+<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/develop/.github/images/install_docker.svg" alt="Install Docker" width="75%"/>
 <br/><br/>
 
 This installation will mainly suits users of Home Assistant container.  
@@ -36,7 +36,7 @@ See [Docker Installation](https://github.com/mak-gitdev/HA_enoceanmqtt/wiki/Dock
 
 HA_enoceanmqtt can also be installed as a Home Assistant addon.  
 
-<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/master/.github/images/install_addon.svg" alt="Install Addon" width="75%"/>
+<img src="https://raw.githubusercontent.com/mak-gitdev/HA_enoceanmqtt/develop/.github/images/install_addon.svg" alt="Install Addon" width="75%"/>
 <br/><br/>
 
 This installation suits all Home Assistant installations with Supervisor.  
