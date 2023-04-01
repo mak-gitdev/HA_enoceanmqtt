@@ -2108,6 +2108,46 @@
                  state_topic: ""
                  value_template: >-
                     {% if value_json.SLSW == 1 %}OFF{% else %}ON{% endif %}
+         virtual:
+            - component: "number"
+              name: "setpoint"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "255"
+                 step: "1"
+                 mode: "box"
+            - component: "number"
+              name: "temperature"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "40"
+                 step: "0.1"
+                 mode: "box"
+                 unit_of_measurement: "°C"
+                 icon: "mdi:thermometer"
+            - component: "switch"
+              name: "slide_switch"
+              config:
+                 command_topic: "__trash"
+            - component: "button"
+              name: "send"
+              config:
+                 command_topic: "req"
+                 command_template: >-
+                   {% set ns = namespace() %}
+                   {% for entity in device_entities(device_id(entity_id)) %}
+                     {% if entity is search('_slide_switch$',ignorecase=True) %}
+                       {% if is_state(entity, "on") %}{% set ns.SLSW = 1 %}{% else %}{% set ns.SLSW = 0 %}{% endif %}
+                     {% elif entity is search('_setpoint$',ignorecase=True) %}
+                       {% set ns.SP = (states(entity)|int)|int(default=128) %}
+                     {% elif entity is search('_temperature$',ignorecase=True) %}
+                       {% set ns.TMP = (40-(states(entity)|float(default=20))*255/40)|int %}
+                     {% endif %}
+                   {% endfor %}
+                   {"SP":"{{ns.SP}}","TMP":"{{ns.TMP}}","SLSW":"{{ns.SLSW}}","send":"clear"}
+                 icon: "mdi:send"
       0x10:
          device_config:
             command: ""
@@ -2568,6 +2608,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.CV }}"
                  device_class: "power_factor"
+                 unit_of_measurement: "%"
                  icon: "mdi:valve"
             - component: "binary_sensor"
               name: "SO"
