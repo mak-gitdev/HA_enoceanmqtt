@@ -3,6 +3,7 @@
 enocean_port    = /dev/enocean
 log_packets     = 1
 overlay         = HA
+enocean_sender  =
 
 ## the discovery prefix is used by MQTT discovery in Home Assistant
 mqtt_discovery_prefix = homeassistant/

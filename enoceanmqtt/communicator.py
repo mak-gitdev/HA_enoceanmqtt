@@ -67,8 +67,12 @@ class Communicator:
         # setup enocean communication
         self.enocean = SerialCommunicator(self.conf['enocean_port'])
         self.enocean.start()
-        # sender will be automatically determined
-        self.enocean_sender = None
+
+        # Use defined sender_id if any
+        try:
+            self.enocean_sender = int(self.conf.get('enocean_sender'), 0)
+        except:
+            self.enocean_sender = None
 
     def __del__(self):
         if self.enocean is not None and self.enocean.is_alive():
