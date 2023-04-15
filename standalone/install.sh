@@ -65,7 +65,7 @@ printf "\nInstall Home Assistant overlay\n"
 printf "==================================================\n\n"
 if [ "${VERSION}" = "--dev" ]; then
     printf "Installing latest development version\n"
-    git clone -b develop --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git
+    git clone -b support-fgw14-usb --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git
 else
     printf "Installing latest stable version\n"
     git clone -b master --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git
