@@ -69,7 +69,7 @@ class Communicator:
 
         # Use defined sender_id if any
         try:
-            self.enocean_sender = from_hex_string(self.conf.get('enocean_sender'))
+            self.enocean_sender = enocean.utils.from_hex_string(self.conf.get('enocean_sender'))
         except:
             self.enocean_sender = None
         
