@@ -16,7 +16,9 @@ usage ()
 
 package_install()
 {
-    printf "\nCheck if %s is installed ... " $1
+    printf "\nInstall %s\n" $1
+    printf "==================================================\n\n"
+    printf "\nCheck if %s is already installed ... " $1
     pip3 show $1 > /dev/null 2>&1
     if [ $? -eq 1 ]; then
         printf "NO\n"
@@ -31,6 +33,7 @@ package_install()
 
 if [ $# -eq 0 ]; then
     usage
+    exit 0
 fi
 
 CALL_DIR=$(pwd)
@@ -52,9 +55,16 @@ cd ${INSTALL_DIR}
 
 package_install pyyaml
 package_install tinydb
+package_install pip-autoremove
+
+printf "\nInstall Python EnOcean Library\n"
+printf "==================================================\n\n"
+pip-autoremove enocean -y
+pip3 install --user git+https://github.com/mak-gitdev/enocean.git
 
 printf "\nClone enocean-mqtt\n"
 printf "==================================================\n\n"
+rm -rf enocean-mqtt
 git clone https://github.com/embyt/enocean-mqtt.git
 
 printf "\nInstall enocean-mqtt\n"
@@ -71,7 +81,6 @@ else
     git clone -b master --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git
 fi
 cp -rf HA_enoceanmqtt/enoceanmqtt enocean-mqtt
-cp -rf HA_enoceanmqtt/enocean/protocol/EEP.xml $(find / -path ./HA_enoceanmqtt -prune -o -name "EEP.xml" -print -quit 2>/dev/null)
 rm -rf HA_enoceanmqtt
 
 cd ${CALL_DIR}

@@ -458,7 +458,10 @@ class Communicator:
             if 'data' in sensor:
                 # override with specific data settings
                 logging.debug("sensor data: %s", sensor['data'])
+                # Set packet data payload
                 packet.set_eep(sensor['data'])
+                # Set packet status bits
+                packet.data[-1] = packet.status
                 packet.parse_eep()  # ensure that the logging output of packet is updated
             else:
                 # what to do if we have no data to send yet?
