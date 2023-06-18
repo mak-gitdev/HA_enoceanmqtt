@@ -1,0 +1,82 @@
+# Inspired from https://github.com/home-assistant/core/blob/dev/.github/ISSUE_TEMPLATE/bug_report.yml
+name: Report an issue with HA_enoceanmqtt
+description: Report an issue with HA_enoceanmqtt.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for reporting bugs only!
+
+        If you have a question or a feature/enhancement request, please use the [discussion panel][dp].
+
+        [dp]: https://github.com/mak-gitdev/HA_enoceanmqtt/discussions
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The problem
+      description: >-
+        Describe the issue you are experiencing here. Tell what you were trying to do and what happened.
+
+        Provide a clear and concise description of what the problem is.
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: What type of installation are you running?
+      description: >
+        Your installation of HA_enoceanmqtt
+      options:
+        - Standalone
+        - Docker
+        - Addon
+  - type: input
+    id: version
+    validations:
+      required: false
+    attributes:
+      label: What version of HA_enoceanmqtt has the issue?
+      placeholder:
+      description: >
+        Your version of HA_enoceanmqtt where you found the bug
+  - type: input
+    attributes:
+      label: What was the last working version of HA_enoceanmqtt?
+      placeholder:
+      description: >
+        If known, otherwise leave blank.
+  - type: dropdown
+    validations:
+      required: false
+    attributes:
+      label: What type of Home Assitant installation are you running?
+      description: >
+        Can be found in: [Settings ⇒ System ⇒ Repairs ⇒ Three Dots in Upper Right ⇒ System information](https://my.home-assistant.io/redirect/system_health/).
+
+        [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
+      options:
+        - Home Assistant OS
+        - Home Assistant Container
+        - Home Assistant Supervised
+        - Home Assistant Core
+
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Anything in the logs that might be useful to solve the issue? (Strongly recommended if applicable)
+      description: |
+        If applicable, please provide the logs of HA_enoceanmqtt to help solve the issue faster.
+        Do not forget to mask all sensitive data.
+      render: txt
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information, use the field below.
