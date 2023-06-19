@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussion Panel
+    url: https://github.com/mak-gitdev/HA_enoceanmqtt/discussions
+    about: Please report there for feature/enhancement requests as well as asking questions.
