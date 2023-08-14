@@ -1,6 +1,41 @@
 # Mapping of EEPs to Home Assistant Entities
 0xD2:
    0x01:
+      0x01:
+         device_config:
+            command: "CMD"
+            channel: "CMD"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "switch"
+              name: "switch"
+              config:
+                 state_topic: "CMD4"
+                 state_on: "100"
+                 state_off: "0"
+                 value_template: "{{ value_json.OV }}"
+                 command_topic: "req"
+                 payload_on: >
+                   {"CMD":"1","DV":"0","IO":"0","OV":"100","send":"clear"}
+                 payload_off: >
+                   {"CMD":"1","DV":"0","IO":"0","OV":"0","send":"clear"}
+                 device_class: outlet
+            - component: "button"
+              name: "query_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"CMD":"3","IO":"30","send":"clear"}
+            - component: binary_sensor
+              name: "LC"
+              config:
+                 state_topic: "CMD4"
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                    {% if value_json.LC == 1 %}on{% else %}off{% endif %}
       0x0A:
          device_config:
             command: "CMD"
@@ -2019,8 +2054,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_raw"
               config:
@@ -2049,8 +2082,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_raw"
               config:
@@ -2085,8 +2116,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_raw"
               config:
@@ -2161,8 +2190,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "h_raw"
               config:
@@ -2212,8 +2239,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "h_raw"
               config:
@@ -2529,8 +2554,8 @@
             command: ""
             channel: ""
             log_learn: ""
-            direction: "1"
-            answer: "1"
+            direction: ""
+            answer: ""
          entities:
             - component: "sensor"
               name: "v_raw"
@@ -2538,6 +2563,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2545,6 +2571,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "contact"
               config:
@@ -2557,8 +2584,8 @@
             command: ""
             channel: ""
             log_learn: ""
-            direction: "1"
-            answer: "1"
+            direction: ""
+            answer: ""
          entities:
             - component: "sensor"
               name: "v_raw"
@@ -2566,6 +2593,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2573,6 +2601,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
               config:
@@ -2833,7 +2862,7 @@
             answer: ""
          entities:
             - component: "switch"
-              name: "switch"
+              name: "switch_COM1"
               config:
                  command_topic: "req"
                  payload_on: >
@@ -2843,7 +2872,7 @@
                  device_class: outlet
                  enabled_by_default: "false"
             - component: "light"
-              name: "cmd"
+              name: "light_COM1"
               config:
                  schema: "template"
                  command_topic: "req"
@@ -2856,7 +2885,22 @@
               config:
                  command_topic: "req"
                  payload_press: >-
-                   {"send":"clear"}
+                   {"COM":"1","raw_data":"E0:40:0D:87","send":"clear+learn+raw_data"}
+            - component: "button"
+              name: "pairing2"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"COM":"255","DB3":"224","DB2":"64","DB1":"13","DB0":"135","send":"clear+learn"}
+            - component: "light"
+              name: "light_COM2"
+              config:
+                 schema: "template"
+                 command_topic: "req"
+                 command_on_template: >-
+                   {"COM":"2","EDIM":"100","RMP":"1","EDIMR":"0","STR":"0","SW":"1","send":"clear"}
+                 command_off_template: >-
+                   {"COM":"2","EDIM":"0","RMP":"1","EDIMR":"0","STR":"0","SW":"0","send":"clear"}
 0xF6:
    0x02:
       0x01:
@@ -3071,6 +3115,63 @@
                  value_template: "{{ value_json.CO }}"
                  payload_on: "0"
                  payload_off: "1"
+
+# Mapping of Eltako devices using non-standard or universal EEPs to Home Assistant Entities
+eltako:
+   FSB14:
+      control:
+         device_config:
+            rorg: "0xA5"
+            func: "0x3F"
+            type: "0x7F"
+            command: ""
+            channel: ""
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "button"
+              name: "pairing"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"raw_data":"FF:F8:0D:80","send":"clear+learn+raw_data"}
+      status:
+         device_config:
+            - rorg: "0xF6"
+              func: "0x02"
+              type: "0x01"
+              command: ""
+              channel: ""
+              log_learn: ""
+              direction: ""
+              answer: ""
+            - rorg: "0xA5"
+              func: "0x3F"
+              type: "0x7F"
+              command: ""
+              channel: ""
+              log_learn: ""
+              direction: ""
+              answer: ""
+         entities:
+            - component: binary_sensor
+              name: "end_bottom"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+            - component: binary_sensor
+              name: "end_top"
+              config:
+                 state_topic: ""
+                 payload_on: "on"
+                 payload_off: "off"
+                 value_template: >-
+                   {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+
 
 # Below are mappings common to all EEPs
 common:
