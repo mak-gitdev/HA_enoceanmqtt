@@ -1,3 +1,5 @@
+# Author: Marc Alexandre K. <marcalexandrek-developer@yahoo.fr>
+
 # Mapping of EEPs to Home Assistant Entities
 0xD2:
    0x01:
@@ -3116,6 +3118,7 @@
                  payload_on: "0"
                  payload_off: "1"
 
+
 # Mapping of Eltako devices using non-standard or universal EEPs to Home Assistant Entities
 eltako:
    FSB14:
@@ -3171,6 +3174,7 @@ eltako:
                  payload_off: "off"
                  value_template: >-
                    {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+
 
 
 # Below are mappings common to all EEPs

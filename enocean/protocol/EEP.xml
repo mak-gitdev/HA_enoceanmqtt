@@ -935,7 +935,7 @@
     <profiles func="0x10" description="Room Operating Panel">
       <profile type="0x03" description="Temperature Sensor and Set Point">
         <data>
-          <value shortcut="SP" description="Set Point (linear)" offset="8" size="8" unit="%">
+          <value shortcut="SP" description="Set Point (linear)" offset="8" size="8" unit="">
             <range>
               <min>0</min>
               <max>255</max>
@@ -959,7 +959,7 @@
       </profile>
       <profile type="0x05" description="Temperature Sensor, Set Point and Occupancy Control">
         <data>
-          <value shortcut="SP" description="Set Point (linear)" offset="8" size="8" unit="%">
+          <value shortcut="SP" description="Set Point (linear)" offset="8" size="8" unit="">
             <range>
               <min>0</min>
               <max>255</max>
@@ -987,7 +987,7 @@
       </profile>
       <profile type="0x06" description="Temperature Sensor, Set Point and Day/Night Control">
         <data>
-          <value shortcut="SP" description="Set Point (linear)" offset="8" size="8" unit="%">
+          <value shortcut="SP" description="Set Point (linear)" offset="8" size="8" unit="">
             <range>
               <min>0</min>
               <max>255</max>
@@ -1208,7 +1208,7 @@
         </data>
       </profile>
     </profiles>
-    <profiles func="0x12" description="Atomated Meter Reading (AMR)">
+    <profiles func="0x12" description="Automated Meter Reading (AMR)">
       <profile type="0x00" description="Counter">
         <data>
           <value shortcut="MR" description="Current value in or cumulative counter value" offset="0" size="24" unit="">
@@ -1864,8 +1864,8 @@
           </value>
           <value shortcut="TMP" description="Temperature from RCU" offset="8" size="8" unit="°C">
             <range>
-              <min>0</min>
-              <max>255</max>
+              <min>255</min>
+              <max>0</max>
             </range>
             <scale>
               <min>0</min>
@@ -2111,6 +2111,7 @@
         <command description="Command ID" shortcut="COM" offset="0" size="8">
           <item description="Switching" value="1" />
           <item description="Dimming" value="2" />
+          <item description="Raw Data" value="255" />
         </command>
         <data command="1">
           <enum shortcut="COM" description="Command ID" offset="0" size="8">
@@ -2176,6 +2177,52 @@
             <item description="Off" value="0" />
             <item description="On" value="1" />
           </enum>
+        </data>
+      </profile>
+    </profiles>
+    <profiles func="0x3F" description="Universal">
+      <profile type="0x7F" description="Universal">
+        <data>
+          <value shortcut="DB3" description="Data Byte 3" offset="0" size="8" unit="">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
+          <value shortcut="DB2" description="Data Byte 2" offset="8" size="8" unit="">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
+          <value shortcut="DB1" description="Data Byte 1" offset="16" size="8" unit="">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
+          <value shortcut="DB0" description="Data Byte 0" offset="24" size="8" unit="">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
         </data>
       </profile>
     </profiles>
