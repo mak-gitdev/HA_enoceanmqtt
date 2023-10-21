@@ -57,4 +57,5 @@ For devices not yet supported, only the RSSI sensor is created in Home Assistant
 # Additional Information
 
 The [Wiki](https://github.com/mak-gitdev/HA_enoceanmqtt/wiki) page is filled with useful information.  
-A discussion panel is also available. Do not hesitate to read it and use it.  
+A [discussion](https://github.com/mak-gitdev/HA_enoceanmqtt/discussions) panel is also available. Do not hesitate to read it and use it.  
+You can also take a closer look at the work in progress on this [page](https://github.com/users/mak-gitdev/projects/1).

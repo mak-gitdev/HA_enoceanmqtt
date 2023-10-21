@@ -132,7 +132,7 @@ class Communicator:
         '''Handle received PUBLISH message from the MQTT server as a normal payload.'''
         found_topic = False
         for cur_sensor in self.sensors:
-            if cur_sensor['name'] in msg.topic:
+            if cur_sensor['name']+"/" in msg.topic:
                 # get message topic
                 prop = msg.topic[len(cur_sensor['name']+"/req/"):]
                 # do we face a send request?
@@ -169,7 +169,7 @@ class Communicator:
         '''Handle received PUBLISH message from the MQTT server as a JSON payload.'''
         found_topic = False
         for cur_sensor in self.sensors:
-            if cur_sensor['name'] in mqtt_topic:
+            if cur_sensor['name']+"/" in mqtt_topic:
                 # get message topic
                 prop = mqtt_topic[len(cur_sensor['name']+"/"):]
                 # JSON payload shall be sent to '/req' topic
