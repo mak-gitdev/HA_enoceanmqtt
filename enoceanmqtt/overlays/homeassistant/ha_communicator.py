@@ -6,6 +6,8 @@ import copy
 import os
 import time
 import json
+from typing import Dict, Any
+
 import yaml
 
 import enocean.utils
@@ -27,6 +29,12 @@ class HACommunicator(Communicator):
             mapping_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mapping.yaml')
         with open(mapping_file, 'r', encoding="utf-8") as file:
             self._ha_mapping = yaml.safe_load(file)
+        extra_mapping_file = config.get('extra_mapping_file')
+        if extra_mapping_file:
+            with open(extra_mapping_file, 'r', encoding="utf-8") as file:
+                extra_mapping = yaml.safe_load(file)
+                self._ha_mapping = custom_merge(self._ha_mapping, extra_mapping)
+
         logging.info("Mapping file correctly read: %s", mapping_file)
 
         # Overwrite some of the user-defined device configuration
@@ -376,3 +384,28 @@ class HACommunicator(Communicator):
 
         # Publish the packet
         super()._publish_mqtt(sensor, mqtt_json)
+
+
+def custom_merge(mapping_dict: Dict[int, Any], extra_mapping_dict: Dict[int, Any]) -> Dict[int, Any]:
+    """
+    Add extra mapping information to existing mapping.
+
+    :param mapping_dict: existing mapping
+    :param extra_mapping_dict: extra mapping
+    :return: merged mapping
+    """
+    mapping_copy = copy.deepcopy(mapping_dict)
+    for rorg, val_rorg in extra_mapping_dict.items():
+        for func, val_func in val_rorg.items():
+            for type_, val_type in val_func.items():
+                if 'entities' in val_type:
+                    for operation, entities_list in val_type['entities'].items():
+                        if operation == 'add':
+                            mapping_copy[rorg][func][type_]['entities'] = mapping_copy[rorg][func][type_]['entities'] + entities_list
+                        elif operation == 'remove':
+                            to_remove = [(entity['component'], entity['name']) for entity in entities_list]
+                            mapping_copy[rorg][func][type_]['entities'] = list(
+                                filter(
+                                lambda entity: (entity['component'], entity['name']) not in to_remove, mapping_copy[rorg][func][type_]['entities'])
+                            )
+    return mapping_copy
