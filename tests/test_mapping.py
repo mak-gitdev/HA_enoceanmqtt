@@ -84,6 +84,20 @@ class MappingTestCase(unittest.TestCase):
         print(merged_mapping[0xD2][0x05][0x00]['entities'])
         self.assertTrue(entity_to_remove not in merged_mapping[0xD2][0x05][0x00]['entities'])  # add assertion here
 
+    def test_file_mapping(self):
+        mapping_path = Path(__file__).parent.parent / 'enoceanmqtt' / 'overlays' / 'homeassistant' / 'mapping.yaml'
+        extra_mapping_path = Path(__file__).parent / 'resources' / 'extra_mapping.yaml'
+        with open(mapping_path, 'r', encoding='utf-8') as mapping_file:
+            mapping = yaml.safe_load(mapping_file)
+        with open(extra_mapping_path, 'r', encoding='utf-8') as mapping_file:
+            extra_mapping = yaml.safe_load(mapping_file)
+        merged_mapping = custom_merge(mapping, extra_mapping)
+        print(mapping[0xD2][0x01][0x01]['entities'])
+        print(merged_mapping[0xD2][0x01][0x01]['entities'])
+        names = [entity['name'] for entity in merged_mapping[0xD2][0x01][0x01]['entities']]
+        self.assertTrue("switch2" in names)
+        self.assertTrue("query_status" not in names)
+
 
 if __name__ == '__main__':
     unittest.main()
