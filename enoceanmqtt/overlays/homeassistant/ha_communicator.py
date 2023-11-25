@@ -399,13 +399,14 @@ def custom_merge(mapping_dict: Dict[int, Any], extra_mapping_dict: Dict[int, Any
         for func, val_func in val_rorg.items():
             for type_, val_type in val_func.items():
                 if 'entities' in val_type:
-                    for operation, entities_list in val_type['entities'].items():
-                        if operation == 'add':
-                            mapping_copy[rorg][func][type_]['entities'] = mapping_copy[rorg][func][type_]['entities'] + entities_list
-                        elif operation == 'remove':
-                            to_remove = [(entity['component'], entity['name']) for entity in entities_list]
+                    for element in val_type['entities']:
+                        if 'state' not in element or element['state'] == 'present':
+                            element.pop('state', None)
+                            mapping_copy[rorg][func][type_]['entities'].append(element)
+                        elif element['state'] == 'absent':
                             mapping_copy[rorg][func][type_]['entities'] = list(
                                 filter(
-                                lambda entity: (entity['component'], entity['name']) not in to_remove, mapping_copy[rorg][func][type_]['entities'])
+                                    lambda entity: (entity['component'], entity['name']) != (element['component'], element['name']),
+                                    mapping_copy[rorg][func][type_]['entities'])
                             )
     return mapping_copy

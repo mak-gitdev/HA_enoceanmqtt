@@ -19,12 +19,10 @@ class MappingTestCase(unittest.TestCase):
             0xD2: {
                 0x05: {
                     0x00: {
-                        'entities': {
-                            'add':
+                        'entities':
                             [
                                 entity_to_add,
                             ]
-                        }
                     }
                 }
             }
@@ -35,22 +33,22 @@ class MappingTestCase(unittest.TestCase):
         self.assertTrue(entity_to_add in merged_mapping[0xD2][0x05][0x00]['entities'])  # add assertion here
         self.assertTrue(entity_to_add not in mapping[0xD2][0x05][0x00]['entities'])
 
-    def test_remove_mapping(self):
+    def test_add_mapping_2(self):
         mapping_path = Path(__file__).parent.parent / 'enoceanmqtt' / 'overlays' / 'homeassistant' / 'mapping.yaml'
         with open(mapping_path, 'r', encoding='utf-8') as mapping_file:
             mapping = yaml.safe_load(mapping_file)
         entity_to_add = {'component': "cover",
-                         'name': "cover"}
+                         'name': "cover2",
+                         'config': {},
+                         'state': 'present'}
         extra_mapping = {
             0xD2: {
                 0x05: {
                     0x00: {
-                        'entities': {
-                            'remove':
-                                [
-                                    entity_to_add,
-                                ]
-                        }
+                        'entities':
+                            [
+                                entity_to_add,
+                            ]
                     }
                 }
             }
@@ -58,7 +56,33 @@ class MappingTestCase(unittest.TestCase):
         merged_mapping = custom_merge(mapping, extra_mapping)
         print(mapping[0xD2][0x05][0x00]['entities'])
         print(merged_mapping[0xD2][0x05][0x00]['entities'])
-        self.assertTrue(entity_to_add not in merged_mapping[0xD2][0x05][0x00]['entities'])  # add assertion here
+        self.assertTrue(entity_to_add in merged_mapping[0xD2][0x05][0x00]['entities'])  # add assertion here
+        self.assertTrue(entity_to_add not in mapping[0xD2][0x05][0x00]['entities'])
+        self.assertTrue('state' not in merged_mapping[0xD2][0x05][0x00]['entities'][-1])
+
+    def test_remove_mapping(self):
+        mapping_path = Path(__file__).parent.parent / 'enoceanmqtt' / 'overlays' / 'homeassistant' / 'mapping.yaml'
+        with open(mapping_path, 'r', encoding='utf-8') as mapping_file:
+            mapping = yaml.safe_load(mapping_file)
+        entity_to_remove = {'component': "cover",
+                            'name': "cover",
+                            'state': 'absent'}
+        extra_mapping = {
+            0xD2: {
+                0x05: {
+                    0x00: {
+                        'entities':
+                            [
+                                entity_to_remove,
+                            ]
+                    }
+                }
+            }
+        }
+        merged_mapping = custom_merge(mapping, extra_mapping)
+        print(mapping[0xD2][0x05][0x00]['entities'])
+        print(merged_mapping[0xD2][0x05][0x00]['entities'])
+        self.assertTrue(entity_to_remove not in merged_mapping[0xD2][0x05][0x00]['entities'])  # add assertion here
 
 
 if __name__ == '__main__':
