@@ -2797,6 +2797,42 @@
                  value_template: >-
                    {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
                  device_class: "window"
+      0x09:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "sensor"
+              name: "v_raw"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
+                 enabled_by_default: "false"
+            - component: "sensor"
+              name: "voltage"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC | round(2) }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
+            - component: binary_sensor
+              name: "state_2p"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                 device_class: "window"
+            - component: sensor
+              name: "state_3p"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
       0x0A:
          device_config:
             command: ""
