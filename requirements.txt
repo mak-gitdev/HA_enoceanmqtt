@@ -1,4 +1,3 @@
 pyyaml
 tinydb
-enocean
-paho-mqtt
+git+https://github.com/embyt/enocean-mqtt.git
