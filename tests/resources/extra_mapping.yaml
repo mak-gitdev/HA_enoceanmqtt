@@ -17,4 +17,4 @@
             device_class: outlet
         - component: "button"
           name: "query_status"
-          state: "absent"
+          action: "remove"

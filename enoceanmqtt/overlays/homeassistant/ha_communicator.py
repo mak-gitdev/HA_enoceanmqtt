@@ -400,13 +400,25 @@ def custom_merge(mapping_dict: Dict[int, Any], extra_mapping_dict: Dict[int, Any
             for type_, val_type in val_func.items():
                 if 'entities' in val_type:
                     for element in val_type['entities']:
-                        if 'state' not in element or element['state'] == 'present':
-                            element.pop('state', None)
-                            mapping_copy[rorg][func][type_]['entities'].append(element)
-                        elif element['state'] == 'absent':
+                        if 'action' in element and element['action'] == 'remove':
                             mapping_copy[rorg][func][type_]['entities'] = list(
                                 filter(
-                                    lambda entity: (entity['component'], entity['name']) != (element['component'], element['name']),
+                                    lambda entity: (entity['component'],
+                                                    entity['name']) != (element['component'],
+                                                                        element['name']),
                                     mapping_copy[rorg][func][type_]['entities'])
                             )
+                        if 'action' not in element or element['action'] == 'add':
+                            element.pop('action', None)
+                            try:
+                                identical_entity = next(entity
+                                                        for entity in mapping_copy[rorg][func][type_]['entities']
+                                                        if (entity['component'],
+                                                            entity['name']) == (element['component'],
+                                                                                element['name'])
+                                                        )
+                                identical_entity.update(element)
+                            except StopIteration:
+                                mapping_copy[rorg][func][type_]['entities'].append(element)
+
     return mapping_copy

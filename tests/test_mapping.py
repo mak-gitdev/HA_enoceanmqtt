@@ -40,7 +40,7 @@ class MappingTestCase(unittest.TestCase):
         entity_to_add = {'component': "cover",
                          'name': "cover2",
                          'config': {},
-                         'state': 'present'}
+                         'action': 'add'}
         extra_mapping = {
             0xD2: {
                 0x05: {
@@ -60,13 +60,40 @@ class MappingTestCase(unittest.TestCase):
         self.assertTrue(entity_to_add not in mapping[0xD2][0x05][0x00]['entities'])
         self.assertTrue('state' not in merged_mapping[0xD2][0x05][0x00]['entities'][-1])
 
+    def test_add_identical_mapping(self):
+        mapping_path = Path(__file__).parent.parent / 'enoceanmqtt' / 'overlays' / 'homeassistant' / 'mapping.yaml'
+        with open(mapping_path, 'r', encoding='utf-8') as mapping_file:
+            mapping = yaml.safe_load(mapping_file)
+        entity_to_add = {'component': "cover",
+                         'name': "cover",
+                         'added_key': 'added_value',
+                         'action': 'add'}
+        extra_mapping = {
+            0xD2: {
+                0x05: {
+                    0x00: {
+                        'entities':
+                            [
+                                entity_to_add,
+                            ]
+                    }
+                }
+            }
+        }
+        merged_mapping = custom_merge(mapping, extra_mapping)
+        print(mapping[0xD2][0x05][0x00]['entities'])
+        print(merged_mapping[0xD2][0x05][0x00]['entities'])
+        self.assertTrue((entity_to_add | mapping[0xD2][0x05][0x00]['entities'][0]) in merged_mapping[0xD2][0x05][0x00]['entities'])  # add assertion here
+        self.assertTrue(entity_to_add not in mapping[0xD2][0x05][0x00]['entities'])
+        self.assertTrue('action' not in merged_mapping[0xD2][0x05][0x00]['entities'][-1])
+
     def test_remove_mapping(self):
         mapping_path = Path(__file__).parent.parent / 'enoceanmqtt' / 'overlays' / 'homeassistant' / 'mapping.yaml'
         with open(mapping_path, 'r', encoding='utf-8') as mapping_file:
             mapping = yaml.safe_load(mapping_file)
         entity_to_remove = {'component': "cover",
                             'name': "cover",
-                            'state': 'absent'}
+                            'action': 'remove'}
         extra_mapping = {
             0xD2: {
                 0x05: {
