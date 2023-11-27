@@ -1,4 +1,5 @@
 # Author: Marc Alexandre K. <marcalexandrek-developer@yahoo.fr>
+
 # Mapping of EEPs to Home Assistant Entities
 0xD2:
    0x01:
@@ -71,7 +72,7 @@
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "sensor"
               name: "power"
@@ -86,7 +87,7 @@
                    {% elif value_json.UN == 4 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "button"
               name: "query_energy"
@@ -286,7 +287,7 @@
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "sensor"
               name: "power"
@@ -301,7 +302,7 @@
                    {% elif value_json.UN == 4 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "button"
               name: "query_status"
@@ -464,7 +465,7 @@
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "sensor"
               name: "power"
@@ -479,7 +480,7 @@
                    {% elif value_json.UN == 4 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "button"
               name: "query_mode"
@@ -669,7 +670,7 @@
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "sensor"
               name: "power"
@@ -684,7 +685,7 @@
                    {% elif value_json.UN == 4 %}
                      {{ value_json.MV|int * 1000 }}
                    {% else %}
-                     {{ states(entity_id) }}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
             - component: "button"
               name: "query_status"
@@ -984,21 +985,501 @@
               config:
                  command_topic: "req"
                  payload_open: >-
-                    {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                   {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  payload_close: >-
-                    {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                   {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  payload_stop: >-
-                    {"CMD":"2","CHN":"0","send":"clear"}
+                   {"CMD":"2","CHN":"0","send":"clear"}
                  position_topic: "CMD4"
                  position_template: "{{ value_json.POS }}"
                  set_position_topic: "req"
                  set_position_template: >-
-                    {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                   {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  tilt_status_topic: "CMD4"
                  tilt_status_template: "{{ value_json.ANG }}"
                  tilt_command_topic: "req"
                  tilt_command_template: >-
-                    {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                   {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+            - component: "cover"
+              name: "cover2"
+              config:
+                 command_topic: "req"
+                 payload_open: >-
+                   {"CMD":"1","POS":"0","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                 payload_close: >-
+                   {"CMD":"1","POS":"100","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                 payload_stop: >-
+                   {"CMD":"2","CHN":"0","send":"clear"}
+                 position_topic: "CMD4"
+                 position_open: 0
+                 position_closed: 100
+                 position_template: "{{ value_json.POS }}"
+                 set_position_topic: "req"
+                 set_position_template: >-
+                   {"CMD":"1","POS":"{{ 100 - position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+                 tilt_status_topic: "CMD4"
+                 tilt_status_template: "{{ value_json.ANG }}"
+                 tilt_command_topic: "req"
+                 tilt_command_template: >-
+                   {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+   0x14:
+      0x30:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: binary_sensor
+              name: "alarm"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.SMA0 == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "smoke"
+            - component: binary_sensor
+              name: "fault_mode"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.SMA1 == 1 %}ON{% else %}OFF{% endif %}
+            - component: binary_sensor
+              name: "maintenance"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.SMA2 == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "problem"
+                 icon: "mdi:tools"
+            - component: binary_sensor
+              name: "humidity_range"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.SMA3 == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "problem"
+                 icon: "mdi:water-percent-alert"
+            - component: binary_sensor
+              name: "temperature_range"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.SMA4 == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "problem"
+                 icon: "mdi:thermometer-alert"
+            - component: "sensor"
+              name: "last_maintenance"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.SMA5 }}"
+                 unit_of_measurement: "week"
+                 icon: "mdi:wrench-clock"
+            - component: "sensor"
+              name: "energy"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.ES == 0 %}High
+                   {% elif value_json.ES == 1 %}Medium
+                   {% elif value_json.ES == 2 %}Low
+                   {% else %}Critical
+                   {% endif %}
+                 icon: "mdi:battery-heart"
+            - component: "sensor"
+              name: "end_of_life"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.RPLT }}"
+                 unit_of_measurement: "month"
+                 icon: "mdi:calendar-clock"
+            - component: "sensor"
+              name: "temperature"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.TMP8 | round(1) }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "humidity"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.HUM | round(1) }}"
+                 device_class: "humidity"
+                 unit_of_measurement: "%"
+            - component: "sensor"
+              name: "comfort"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.HCI == 0 %}Good
+                   {% elif value_json.HCI == 1 %}Medium
+                   {% elif value_json.HCI == 2 %}Bad
+                   {% else %}Error
+                   {% endif %}
+                 icon: "mdi:sofa"
+            - component: "sensor"
+              name: "air_quality"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.IAQTH == 0 %}Optimal
+                   {% elif value_json.IAQTH == 1 %}Dry
+                   {% elif value_json.IAQTH == 2 %}High humidity
+                   {% elif value_json.IAQTH == 3 %}High temperature and humidity
+                   {% elif value_json.IAQTH == 4 %}Out of range
+                   {% else %}Error
+                   {% endif %}
+                 icon: "mdi:weather-windy"
+   0x50:
+      0x00:
+         device_config:
+            command: "MT"
+            channel: "MT"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "button"
+              name: "query_basic_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"0","send":"clear"}
+            - component: "button"
+              name: "query_extended_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"1","send":"clear"}
+            - component: "select"
+              name: "operating_mode"
+              config:
+                 options:
+                    - "Off"
+                    - "Level 1"
+                    - "Level 2"
+                    - "Level 3"
+                    - "Level 4"
+                    - "Automatic"
+                    - "Automatic on demand"
+                    - "Supply air only"
+                    - "Exhaust air only"
+                 command_topic: "req"
+                 command_template: >-
+                   {% set modes = {"Off": "0", "Level 1": "1", "Level 2": "2", "Level 3": "3", "Level 4": "4", "Automatic": "11", "Automatic on demand": 12, "Supply air only": 13, "Exhaust air only": 14} %}
+                   {"MT":"1","DOMC":"{{modes[value]}}","OMC":"0","TOMC":"0","COT":"127","HT":"127","AQT":"127","send":"clear"}
+                 state_topic: "MT2"
+                 value_template: >-
+                   {% set modes = {0: "Off", 1: "Level 1", 2: "Level 2", 3: "Level 3", 4: "Level 4", 11: "Automatic", 12: "Automatic on demand", 13: "Supply air only", 14: "Exhaust air only"} %}
+                   {{ modes[value_json.OMS] }}
+                 icon: "mdi:hvac"
+            - component: "sensor"
+              name: "t_outdoor"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.OUTT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_supply"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "supply_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "exhaust_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "supply_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFS }}"
+                 unit_of_measurement: "rpm"
+            - component: "sensor"
+              name: "exhaust_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFS }}"
+                 unit_of_measurement: "rpm"
+      0x01:
+         device_config:
+            command: "MT"
+            channel: "MT"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "button"
+              name: "query_basic_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"0","send":"clear"}
+            - component: "button"
+              name: "query_extended_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"1","send":"clear"}
+            - component: "select"
+              name: "operating_mode"
+              config:
+                 options:
+                    - "Off"
+                    - "Level 1"
+                    - "Level 2"
+                    - "Level 3"
+                    - "Level 4"
+                    - "Automatic"
+                    - "Automatic on demand"
+                    - "Supply air only"
+                    - "Exhaust air only"
+                 command_topic: "req"
+                 command_template: >-
+                   {% set modes = {"Off": "0", "Level 1": "1", "Level 2": "2", "Level 3": "3", "Level 4": "4", "Automatic": "11", "Automatic on demand": 12, "Supply air only": 13, "Exhaust air only": 14} %}
+                   {"MT":"1","DOMC":"{{modes[value]}}","OMC":"0","TOMC":"0","COT":"127","HT":"127","AQT":"127","send":"clear"}
+                 state_topic: "MT2"
+                 value_template: >-
+                   {% set modes = {0: "Off", 1: "Level 1", 2: "Level 2", 3: "Level 3", 4: "Level 4", 11: "Automatic", 12: "Automatic on demand", 13: "Supply air only", 14: "Exhaust air only"} %}
+                   {{ modes[value_json.OMS] }}
+                 icon: "mdi:hvac"
+            - component: "sensor"
+              name: "t_outdoor"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.OUTT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_supply"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "supply_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "exhaust_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "supply_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFS }}"
+                 unit_of_measurement: "rpm"
+            - component: "sensor"
+              name: "exhaust_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFS }}"
+                 unit_of_measurement: "rpm"
+      0x10:
+         device_config:
+            command: "MT"
+            channel: "MT"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "button"
+              name: "query_basic_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"0","send":"clear"}
+            - component: "button"
+              name: "query_extended_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"1","send":"clear"}
+            - component: "select"
+              name: "operating_mode"
+              config:
+                 options:
+                    - "Off"
+                    - "Level 1"
+                    - "Level 2"
+                    - "Level 3"
+                    - "Level 4"
+                    - "Automatic"
+                    - "Automatic on demand"
+                    - "Supply air only"
+                    - "Exhaust air only"
+                 command_topic: "req"
+                 command_template: >-
+                   {% set modes = {"Off": "0", "Level 1": "1", "Level 2": "2", "Level 3": "3", "Level 4": "4", "Automatic": "11", "Automatic on demand": 12, "Supply air only": 13, "Exhaust air only": 14} %}
+                   {"MT":"1","DOMC":"{{modes[value]}}","OMC":"0","TOMC":"0","COT":"127","HT":"127","AQT":"127","RTT":"0","send":"clear"}
+                 state_topic: "MT2"
+                 value_template: >-
+                   {% set modes = {0: "Off", 1: "Level 1", 2: "Level 2", 3: "Level 3", 4: "Level 4", 11: "Automatic", 12: "Automatic on demand", 13: "Supply air only", 14: "Exhaust air only"} %}
+                   {{ modes[value_json.OMS] }}
+                 icon: "mdi:hvac"
+            - component: "sensor"
+              name: "t_outdoor"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.OUTT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_supply"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_indoor"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.INT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_exhaust"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "supply_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "exhaust_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "supply_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFS }}"
+                 unit_of_measurement: "rpm"
+            - component: "sensor"
+              name: "exhaust_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFS }}"
+                 unit_of_measurement: "rpm"
+      0x11:
+         device_config:
+            command: "MT"
+            channel: "MT"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "button"
+              name: "query_basic_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"0","send":"clear"}
+            - component: "button"
+              name: "query_extended_status"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {"MT":"0","RMT":"1","send":"clear"}
+            - component: "select"
+              name: "operating_mode"
+              config:
+                 options:
+                    - "Off"
+                    - "Level 1"
+                    - "Level 2"
+                    - "Level 3"
+                    - "Level 4"
+                    - "Automatic"
+                    - "Automatic on demand"
+                    - "Supply air only"
+                    - "Exhaust air only"
+                 command_topic: "req"
+                 command_template: >-
+                   {% set modes = {"Off": "0", "Level 1": "1", "Level 2": "2", "Level 3": "3", "Level 4": "4", "Automatic": "11", "Automatic on demand": 12, "Supply air only": 13, "Exhaust air only": 14} %}
+                   {"MT":"1","DOMC":"{{modes[value]}}","OMC":"0","HBC":"0","TOMC":"0","COT":"127","HT":"127","AQT":"127","RTT":"0","send":"clear"}
+                 state_topic: "MT2"
+                 value_template: >-
+                   {% set modes = {0: "Off", 1: "Level 1", 2: "Level 2", 3: "Level 3", 4: "Level 4", 11: "Automatic", 12: "Automatic on demand", 13: "Supply air only", 14: "Exhaust air only"} %}
+                   {{ modes[value_json.OMS] }}
+                 icon: "mdi:hvac"
+            - component: "sensor"
+              name: "t_outdoor"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.OUTT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_supply"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_indoor"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.INT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "t_exhaust"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHT }}"
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "supply_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "exhaust_air_flow"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFF }}"
+                 unit_of_measurement: "m3/h"
+            - component: "sensor"
+              name: "supply_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.SPLYFS }}"
+                 unit_of_measurement: "rpm"
+            - component: "sensor"
+              name: "exhaust_fan_speed"
+              config:
+                 state_topic: "MT2"
+                 value_template: "{{ value_json.EXHFS }}"
+                 unit_of_measurement: "rpm"
 0xA5:
    0x02:
       0x01:
@@ -2778,25 +3259,25 @@
             - component: "sensor"
               name: "v_raw"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.SVC }}"
-                 device_class: "voltage"
-                 unit_of_measurement: "V"
-                 enabled_by_default: "false"
+                state_topic: ""
+                value_template: "{{ value_json.SVC }}"
+                device_class: "voltage"
+                unit_of_measurement: "V"
+                enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.SVC | round(2) }}"
-                 device_class: "voltage"
-                 unit_of_measurement: "V"
+                state_topic: ""
+                value_template: "{{ value_json.SVC | round(2) }}"
+                device_class: "voltage"
+                unit_of_measurement: "V"
             - component: binary_sensor
               name: "contact"
               config:
-                 state_topic: ""
-                 value_template: >-
-                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
-                 device_class: "window"
+                state_topic: ""
+                value_template: >-
+                  {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                device_class: "window"
       0x09:
          device_config:
             command: ""
@@ -2808,31 +3289,31 @@
             - component: "sensor"
               name: "v_raw"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.SVC }}"
-                 device_class: "voltage"
-                 unit_of_measurement: "V"
-                 enabled_by_default: "false"
+                state_topic: ""
+                value_template: "{{ value_json.SVC }}"
+                device_class: "voltage"
+                unit_of_measurement: "V"
+                enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.SVC | round(2) }}"
-                 device_class: "voltage"
-                 unit_of_measurement: "V"
+                state_topic: ""
+                value_template: "{{ value_json.SVC | round(2) }}"
+                device_class: "voltage"
+                unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
               config:
-                 state_topic: ""
-                 value_template: >-
-                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
-                 device_class: "window"
+                state_topic: ""
+                value_template: >-
+                  {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                device_class: "window"
             - component: sensor
               name: "state_3p"
               config:
-                 state_topic: ""
-                 value_template: >-
-                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                state_topic: ""
+                value_template: >-
+                  {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
       0x0A:
          device_config:
             command: ""
@@ -2844,38 +3325,38 @@
             - component: "sensor"
               name: "v_raw"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.SVC }}"
-                 device_class: "voltage"
-                 unit_of_measurement: "V"
-                 enabled_by_default: "false"
+                state_topic: ""
+                value_template: "{{ value_json.SVC }}"
+                device_class: "voltage"
+                unit_of_measurement: "V"
+                enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.SVC | round(2) }}"
-                 device_class: "voltage"
-                 unit_of_measurement: "V"
+                state_topic: ""
+                value_template: "{{ value_json.SVC | round(2) }}"
+                device_class: "voltage"
+                unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
               config:
-                 state_topic: ""
-                 value_template: >-
-                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
-                 device_class: "window"
+                state_topic: ""
+                value_template: >-
+                  {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                device_class: "window"
             - component: sensor
               name: "state_3p"
               config:
-                 state_topic: ""
-                 value_template: >-
-                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                state_topic: ""
+                value_template: >-
+                  {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
             - component: binary_sensor
               name: "vib"
               config:
-                 state_topic: ""
-                 value_template: >-
-                   {% if value_json.VIB == 1 %}ON{% else %}OFF{% endif %}
-                 device_class: "vibration"
+                state_topic: ""
+                value_template: >-
+                  {% if value_json.VIB == 1 %}ON{% else %}OFF{% endif %}
+                device_class: "vibration"
    0x20:
       0x01:
          device_config:
@@ -2890,7 +3371,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.CV }}"
-                 device_class: "power_factor"
                  unit_of_measurement: "%"
                  icon: "mdi:valve"
             - component: "binary_sensor"
@@ -2960,6 +3440,103 @@
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
                  unit_of_measurement: "°C"
+            - component: "number"
+              name: "config_valve_position"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "100"
+                 step: "1"
+                 mode: "slider"
+                 unit_of_measurement: "%"
+                 icon: "mdi:valve"
+            - component: "number"
+              name: "config_t_setpoint"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "40"
+                 step: "0.25"
+                 mode: "slider"
+                 unit_of_measurement: "°C"
+                 icon: "mdi:thermometer"
+            - component: "number"
+              name: "config_t_RCU"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "40"
+                 step: "0.25"
+                 mode: "slider"
+                 unit_of_measurement: "°C"
+                 icon: "mdi:thermometer"
+            - component: "switch"
+              name: "config_RIN"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_LFS"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_VO"
+              config:
+                 command_topic: "__trash"
+              name: "config_VC"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_SB"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_SPS"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_SPN"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_RCU"
+              config:
+                 command_topic: "__trash"
+            - component: "button"
+              name: "set_config"
+              config:
+                 command_topic: "req"
+                 command_template: >-
+                   {% set ns = namespace() %}
+                   {% for entity in device_entities(device_id(entity_id)) %}
+                     {% if entity is search('config_valve_position$',ignorecase=True) %}
+                       {% set ns.valve_position = (states(entity)|int(default=0)) %}
+                     {% elif entity is search('config_t_setpoint$',ignorecase=True) %}
+                       {% set ns.temperature_setpoint = ((states(entity)|int(default=0))*255/40)|int %}
+                     {% elif entity is search('config_t_RCU$',ignorecase=True) %}
+                       {% set ns.TMP = ((states(entity)|int(default=0))*255/40)|int %}
+                     {% elif entity is search('config_RIN$',ignorecase=True) %}
+                       {% set ns.RIN = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_LFS$',ignorecase=True) %}
+                       {% set ns.LFS = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_VO$',ignorecase=True) %}
+                       {% set ns.VO = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_VC$',ignorecase=True) %}
+                       {% set ns.VC = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SB$',ignorecase=True) %}
+                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SPS$',ignorecase=True) %}
+                       {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SPN$',ignorecase=True) %}
+                       {% set ns.SPN = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_RCU$',ignorecase=True) %}
+                       {% set ns.RCU = iif(is_state(entity, "on"), 1, 0) %}
+                     {% endif %}
+                   {% endfor %}
+                   {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
+                   {"SP":{{ns.SP}},"TMP":{{ns.TMP}},"RIN":{{ns.RIN}},"LFS":{{ns.LFS}},"VO":{{ns.VO}},"VC":{{ns.VC}},"SB":{{ns.SB}},"SPS":{{ns.SPS}},"SPN":{{ns.SPN}},"RCU":{{ns.RCU}}}
+                 icon: "mdi:download"
+
+
       0x04:
          device_config:
             command: ""
@@ -2973,7 +3550,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.CP }}"
-                 device_class: "none"
                  unit_of_measurement: "%"
                  icon: "mdi:valve"
             - component: "sensor"
@@ -2983,10 +3559,8 @@
                  value_template: >-
                    {% if value_json.TS == 0 %}
                      {{ value_json.FTS * 60 / 255 + 20 }}
-                   # Try without else condition, we will see if it is OK
-                   # If it doesn't work, then add:
-                   #{% else %}
-                   #  {{ states(entity_id) }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
                  unit_of_measurement: "°C"
@@ -2998,6 +3572,8 @@
                  value_template: >-
                    {% if value_json.TS == 0 %}
                      {{ (value_json.FTS * 60 / 255 + 20) | round(1) }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
                  unit_of_measurement: "°C"
@@ -3029,6 +3605,8 @@
                  value_template: >-
                    {% if value_json.FL == 0 %}
                      {{ value_json.TMPFC * 20 / 255 + 10 }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
                  unit_of_measurement: "°C"
@@ -3040,6 +3618,8 @@
                  value_template: >-
                    {% if value_json.FL == 0 %}
                      {{ (value_json.TMPFC * 20 / 255 + 10) | round(1) }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
                  unit_of_measurement: "°C"
@@ -3050,6 +3630,8 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}
                      {% if value_json.TMPFC == 17 %}ON{% else %}OFF{% endif %}
+                   {% else %}
+                     {{ states(entity_id) }}
                    {% endif %}
                  device_class: "problem"
             - component: "binary_sensor"
@@ -3059,6 +3641,8 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}
                      {% if value_json.TMPFC == 18 %}ON{% else %}OFF{% endif %}
+                   {% else %}
+                     {{ states(entity_id) }}
                    {% endif %}
                  device_class: "battery"
             - component: "binary_sensor"
@@ -3068,6 +3652,8 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}
                      {% if value_json.TMPFC == 20 %}ON{% else %}OFF{% endif %}
+                   {% else %}
+                     {{ states(entity_id) }}
                    {% endif %}
                  device_class: "problem"
             - component: "binary_sensor"
@@ -3077,6 +3663,8 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}
                      {% if value_json.TMPFC == 33 %}ON{% else %}OFF{% endif %}
+                   {% else %}
+                     {{ states(entity_id) }}
                    {% endif %}
                  device_class: "problem"
             - component: "binary_sensor"
@@ -3086,6 +3674,8 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}
                      {% if value_json.TMPFC == 36 %}ON{% else %}OFF{% endif %}
+                   {% else %}
+                     {{ states(entity_id) }}
                    {% endif %}
                  device_class: "problem"
             - component: "binary_sensor"
@@ -3095,6 +3685,8 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}
                      {% if value_json.TMPFC == 40 %}ON{% else %}OFF{% endif %}
+                   {% else %}
+                     {{ states(entity_id) }}
                    {% endif %}
                  device_class: "problem"
             # The other errors are not related to the valve itself,
@@ -3106,6 +3698,360 @@
                  value_template: >-
                    {% if value_json.FL == 1 %}ON{% else %}OFF{% endif %}
                  device_class: "problem"
+            - component: "number"
+              name: "config_position"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "100"
+                 step: "1"
+                 mode: "slider"
+                 unit_of_measurement: "%"
+                 icon: "mdi:valve"
+            - component: "number"
+              name: "config_TSP"
+              config:
+                 command_topic: "__trash"
+                 min: "10"
+                 max: "30"
+                 step: "0.25"
+                 mode: "slider"
+                 unit_of_measurement: "°C"
+                 icon: "mdi:thermometer"
+            - component: "switch"
+              name: "config_MC"
+              config:
+                 command_topic: "__trash"
+            - component: "select"
+              name: "config_wakeup_time"
+              config:
+                 options:
+                    - "0 - 10 sec"
+                    - "1 - 60 sec"
+                    - "2 - 90 sec"
+                    - "3 - 120 sec"
+                    - "4 - 150 sec"
+                    - "5 - 180 sec"
+                    - "6 - 210 sec"
+                    - "7 - 240 sec"
+                    - "8 - 270 sec"
+                    - "9 - 300 sec"
+                    - "10 - 330 sec"
+                    - "11 - 360 sec"
+                    - "12 - 390 sec"
+                    - "13 - 420 sec"
+                    - "14 - 450 sec"
+                    - "15 - 480 sec"
+                    - "16 - 510 sec"
+                    - "17 - 540 sec"
+                    - "18 - 570 sec"
+                    - "19 - 600 sec"
+                    - "20 - 630 sec"
+                    - "21 - 660 sec"
+                    - "22 - 690 sec"
+                    - "23 - 720 sec"
+                    - "24 - 750 sec"
+                    - "25 - 780 sec"
+                    - "26 - 810 sec"
+                    - "27 - 840 sec"
+                    - "28 - 870 sec"
+                    - "29 - 900 sec"
+                    - "30 - 930 sec"
+                    - "31 - 960 sec"
+                    - "32 - 990 sec"
+                    - "33 - 1020 sec"
+                    - "34 - 1050 sec"
+                    - "35 - 1080 sec"
+                    - "36 - 1110 sec"
+                    - "37 - 1140 sec"
+                    - "38 - 1170 sec"
+                    - "39 - 1200 sec"
+                    - "40 - 1230 sec"
+                    - "41 - 1260 sec"
+                    - "42 - 1290 sec"
+                    - "43 - 1320 sec"
+                    - "44 - 1350 sec"
+                    - "45 - 1380 sec"
+                    - "46 - 1410 sec"
+                    - "47 - 1440 sec"
+                    - "48 - 1470 sec"
+                    - "49 - 1500 sec"
+                    - "50 - 3 hrs"
+                    - "51 - 6 hrs"
+                    - "52 - 9 hrs"
+                    - "53 - 12 hrs"
+                    - "54 - 15 hrs"
+                    - "55 - 18 hrs"
+                    - "56 - 21 hrs"
+                    - "57 - 24 hrs"
+                    - "58 - 27 hrs"
+                    - "59 - 30 hrs"
+                    - "60 - 33 hrs"
+                    - "61 - 36 hrs"
+                    - "62 - 39 hrs"
+                    - "63 - 42 hrs (max)"
+                 command_topic: "__trash"
+            - component: "select"
+              name: "config_DSO"
+              config:
+                 options:
+                    - "0°"
+                    - "90°"
+                    - "180°"
+                    - "270°"
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_BLC"
+              config:
+                 command_topic: "__trash"
+            - component: "select"
+              name: "config_SER"
+              config:
+                 options:
+                    - "0 - No change"
+                    - "1 - Open valve"
+                    - "2 - Run initialization"
+                    - "3 - Close valve"
+                 command_topic: "__trash"
+            - component: "button"
+              name: "set_config"
+              config:
+                 command_topic: "req"
+                 command_template: >-
+                   {% set ns = namespace() %}
+                   {% for entity in device_entities(device_id(entity_id)) %}
+                     {% if entity is search('config_position$',ignorecase=True) %}
+                       {% set ns.POS = (states(entity)|int(default=0)) %}
+                     {% elif entity is search('config_TSP$',ignorecase=True) %}
+                       {% set ns.TSP = (((states(entity)|int(default=0))-10)*255/20)|int %}
+                     {% elif entity is search('config_MC$',ignorecase=True) %}
+                       {% set ns.MC = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_wakeup_time$',ignorecase=True) %}
+                       {% set ns.WUC = states(entity).split("-")[0]|int(default=0) %}
+                     {% elif entity is search('config_DSO$',ignorecase=True) %}
+                       {% set ns.DSO = (states(entity).split("°")[0]|int(default=0)/90) %}
+                     {% elif entity is search('config_BLCS$',ignorecase=True) %}
+                       {% set ns.BLC = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SER$',ignorecase=True) %}
+                       {% set ns.SER = states(entity).split("-")[0]|int(default=0) %} %}
+                     {% endif %}
+                   {% endfor %}
+                   {"POS":{{ns.POS}},"TSP":{{ns.TSP}},"MC":{{ns.MC}},"WUC":{{ns.WUC}},"DSO":{{ns.DSO}},"BLC":{{ns.BLC}},"SER":{{ns.SER}}}
+                 icon: "mdi:download"
+      0x06:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+            direction: "1"
+            answer: "1"
+         entities:
+            - component: "sensor"
+              name: "curval"
+              config:
+                 state_topic: ""
+                 value_template: "{{ value_json.CV }}"
+                 unit_of_measurement: "%"
+                 icon: "mdi:valve"
+            - component: "sensor"
+              name: "feed_temperature"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.TSL == 1 %}
+                     {{ ((value_json.TMP|float(default=0))*0.5) | round(1) }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
+                   {% endif %}
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "setpoint_temperature"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.LOM == 1 %}
+                     {{ ((value_json.LO|float(default=0))*0.5) | round(1) }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
+                   {% endif %}
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "local_offset"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.LOM == 0 %}
+                     {% if value_json.LO|int(default=0) > 63 %}
+                       {{ ((value_json.LO|int(default=0)-128)) }}
+                     {% else %}
+                       {{ value_json.LO|int(default=0) }}
+                     {% endif %}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
+                   {% endif %}
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "sensor"
+              name: "room_temperature"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.TSL == 0 %}
+                     {{ ((value_json.TMP|float(default=0))*0.5) | round(1) }}
+                   {% else %}
+                     {{ states(entity_id)|int(default=0) }}
+                   {% endif %}
+                 device_class: "temperature"
+                 unit_of_measurement: "°C"
+            - component: "binary_sensor"
+              name: "LOM"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.LOM == 1 %}ON{% else %}OFF{% endif %}
+            - component: "binary_sensor"
+              name: "TSL"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.TSL == 1 %}ON{% else %}OFF{% endif %}
+            - component: "binary_sensor"
+              name: "ENIE"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.ENIE == 1 %}ON{% else %}OFF{% endif %}
+            - component: "binary_sensor"
+              name: "ES"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.ES == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "battery"
+            - component: "binary_sensor"
+              name: "DWO"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.DWO == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "window"
+            - component: "binary_sensor"
+              name: "RCE"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.RCE == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "problem"
+            - component: "binary_sensor"
+              name: "RSS"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.RSS == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "problem"
+            - component: "binary_sensor"
+              name: "ACO"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.ACO == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "problem"
+            - component: "number"
+              name: "config_valve_position"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "100"
+                 step: "1"
+                 mode: "slider"
+                 unit_of_measurement: "%"
+                 icon: "mdi:valve"
+            - component: "number"
+              name: "config_temperature_setpoint"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "40"
+                 step: "0.5"
+                 mode: "slider"
+                 unit_of_measurement: "°C"
+                 icon: "mdi:thermometer"
+            - component: "number"
+              name: "config_temperature_RCU"
+              config:
+                 command_topic: "__trash"
+                 min: "0"
+                 max: "40"
+                 step: "0.25"
+                 mode: "slider"
+                 unit_of_measurement: "°C"
+                 icon: "mdi:thermometer"
+            - component: "switch"
+              name: "config_REF"
+              config:
+                 command_topic: "__trash"
+            - component: "select"
+              name: "config_RFC"
+              config:
+                 options:
+                    - "AUTO (default) 2, 5 or 10 minutes"
+                    - "2 minutes"
+                    - "5 minutes"
+                    - "10 minutes"
+                    - "20 minutes"
+                    - "30 minutes"
+                    - "60 minutes"
+                    - "120 minutes"
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_SB"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_SPS"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_TSL"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "config_SBY"
+              config:
+                 command_topic: "__trash"
+            - component: "button"
+              name: "set_config"
+              config:
+                 command_topic: "req"
+                 command_template: >-
+                   {% set ns = namespace() %}
+                   {% for entity in device_entities(device_id(entity_id)) %}
+                     {% if entity is search('config_valve_position$',ignorecase=True) %}
+                       {% set ns.valve_position = (states(entity)|int(default=0)) %}
+                     {% elif entity is search('config_temperature_setpoint$',ignorecase=True) %}
+                       {% set ns.temperature_setpoint = ((states(entity)|int(default=0))*2) %}
+                     {% elif entity is search('config_temperature_RCU$',ignorecase=True) %}
+                       {% set ns.TMP = ((states(entity)|int(default=0))*4) %}
+                     {% elif entity is search('config_REF$',ignorecase=True) %}
+                       {% set ns.REF = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_RFC$',ignorecase=True) %}
+                       {% set map = {"0": 0, "2": 1, "5": 2, "10": 3, "20": 4, "30": 5, "60": 6, "120": 7} %}
+                       {% set ns.RFC = map[states(entity).split(" ")[0]|int(default=0)|string] %}
+                     {% elif entity is search('config_SB$',ignorecase=True) %}
+                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SPS$',ignorecase=True) %}
+                       {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_TSL$',ignorecase=True) %}
+                       {% set ns.TSL = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SBY$',ignorecase=True) %}
+                       {% set ns.SBY = iif(is_state(entity, "on"), 1, 0) %}
+                     {% endif %}
+                   {% endfor %}
+                   {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
+                   {"SP":{{ns.SP}},"TMP":{{ns.TMP}},"REF":{{ns.REF}},"RFC":{{ns.RFC}},"SB":{{ns.SB}},"SPS":{{ns.SPS}},"TSL":{{ns.TSL}},"SBY":{{ns.SBY}}}
+                 icon: "mdi:download"
    0x30:
       0x03:
          device_config:
@@ -3309,6 +4255,44 @@
                    {% if value is not search('None') %}{% set EB, NU, R1 = 1, 1, id[action[0]] %}{% endif %}
                    {% if action|length==2 %}{% set SA, R2 = 1, id[action[1]] %}{% endif %}
                    {"R1":{{R1}},"EB":{{EB}},"R2":{{R2}},"SA":{{SA}},"T21":{{T21}},"NU":{{NU}},"send":"clear"}
+            - component: "switch"
+              name: "AI"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "AO"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "BI"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "BO"
+              config:
+                 command_topic: "__trash"
+            - component: "button"
+              name: "send"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {% set ns = namespace(action=[]) %}
+                   {% for entity in device_entities(device_id(entity_id)) %}
+                     {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["0"] %}
+                     {% elif entity is search('AO$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["1"] %}
+                     {% elif entity is search('BI$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["2"] %}
+                     {% elif entity is search('BO$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["3"] %}
+                     {% endif %}
+                   {% endfor %}
+                   {% set R1, EB, R2, SA, T21, NU = 0, 0, 0, 0, 1, 0 %}
+                   {% if ns.action|length>0 %}{% set EB, NU, R1 = 1, 1, ns.action[0] %}{% endif %}
+                   {% if ns.action|length>1 %}{% set SA, R2 = 1, ns.action[1] %}{% endif %}
+                   {"R1":{{R1}},"EB":{{EB}},"R2":{{R2}},"SA":{{SA}},"T21":{{T21}},"NU":{{NU}},"send":"clear"}
+                 icon: "mdi:download"
       0x02:
          device_config:
             command: ""
@@ -3382,6 +4366,59 @@
                    {% if value is not search('None') %}{% set EB, NU, R1 = 1, 1, id[action[0]] %}{% endif %}
                    {% if action|length==2 %}{% set SA, R2 = 1, id[action[1]] %}{% endif %}
                    {"R1":{{R1}},"EB":{{EB}},"R2":{{R2}},"SA":{{SA}},"T21":{{T21}},"NU":{{NU}},"send":"clear"}
+            - component: "switch"
+              name: "AI"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "AO"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "BI"
+              config:
+                 command_topic: "__trash"
+            - component: "switch"
+              name: "BO"
+              config:
+                 command_topic: "__trash"
+            - component: "button"
+              name: "send"
+              config:
+                 command_topic: "req"
+                 payload_press: >-
+                   {% set ns = namespace(action=[]) %}
+                   {% for entity in device_entities(device_id(entity_id)) %}
+                     {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["0"] %}
+                     {% elif entity is search('AO$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["1"] %}
+                     {% elif entity is search('BI$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["2"] %}
+                     {% elif entity is search('BO$',ignorecase=True) and is_state(entity, "on") %}
+                       {% set ns.action = ns.action+["3"] %}
+                     {% endif %}
+                   {% endfor %}
+                   {% set R1, EB, R2, SA, T21, NU = 0, 0, 0, 0, 1, 0 %}
+                   {% if ns.action|length>0 %}{% set EB, NU, R1 = 1, 1, ns.action[0] %}{% endif %}
+                   {% if ns.action|length>1 %}{% set SA, R2 = 1, ns.action[1] %}{% endif %}
+                   {"R1":{{R1}},"EB":{{EB}},"R2":{{R2}},"SA":{{SA}},"T21":{{T21}},"NU":{{NU}},"send":"clear"}
+                 icon: "mdi:download"
+   0x04:
+      0x01:
+         device_config:
+            command: ""
+            channel: ""
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: binary_sensor
+              name: "status"
+              config:
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.KC == 112 %}ON{% else %}OFF{% endif %}
    0x05:
       0x02:
          device_config:

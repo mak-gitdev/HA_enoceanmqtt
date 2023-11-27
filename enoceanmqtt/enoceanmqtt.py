@@ -11,7 +11,6 @@ import argparse
 from configparser import ConfigParser
 
 from enoceanmqtt.communicator import Communicator
-from enoceanmqtt.overlays.homeassistant.ha_communicator import HACommunicator
 
 conf = {
     'debug': False,
@@ -113,6 +112,11 @@ def main():
 
     # Select the overlay
     if str(global_config.get('overlay')).lower() == "ha":
+        try:
+            from enoceanmqtt.overlays.homeassistant.ha_communicator import HACommunicator
+        except ImportError:
+            logging.error("Unable to import Home Assistant overlay")
+            return
         logging.info("Selected overlay : Home Assistant")
         com = HACommunicator(conf, sensors)
     else:
