@@ -1476,7 +1476,7 @@
             <item description="24 Hours" value="0" />
             <item description="12 Hours" value="1" />
           </enum>
-          <enum description="AM/PM" shortcut="A/PM" offset="30" size="1">
+          <enum description="AM/PM" shortcut="AMPM" offset="30" size="1">
             <item description="AM" value="0" />
             <item description="PM" value="1" />
           </enum>
@@ -1686,7 +1686,7 @@
             <item description="24 Hours" value="0" />
             <item description="12 Hours" value="1" />
           </enum>
-          <enum description="AM/PM" shortcut="A/PM" offset="30" size="1">
+          <enum description="AM/PM" shortcut="AMPM" offset="30" size="1">
             <item description="AM" value="0" />
             <item description="PM" value="1" />
           </enum>

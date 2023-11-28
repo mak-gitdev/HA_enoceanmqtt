@@ -3058,7 +3058,7 @@
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
-              name: "tempC"
+              name: "temperature"
               config:
                  state_topic: "ID1"
                  value_template: "{{ value_json.TMP | round(1) }}"
@@ -3069,7 +3069,7 @@
               config:
                  state_topic: "ID1"
                  value_template: "{{ value_json.WND }}"
-                 device_class: "speed"
+                 icon: "mdi:weather-windy"
                  unit_of_measurement: "m/s"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3077,7 +3077,7 @@
               config:
                  state_topic: "ID1"
                  value_template: "{{ value_json.WND | round(1) }}"
-                 device_class: "speed"
+                 icon: "mdi:weather-windy"
                  unit_of_measurement: "m/s"
             - component: binary_sensor
               name: "day"
@@ -3155,12 +3155,75 @@
                  value_template: >-
                    {% set d=strptime((value_json.DY ~ '-' ~ value_json.MTH ~ '-' ~ value_json.YR),'%d-%m-%Y') %}
                    {{ d.date() }}
+                 icon: "mdi:calendar-range"
             - component: "sensor"
               name: "date_source"
               config:
                  state_topic: "ID3"
                  value_template: >-
-                   {% if value_json.SRC == 0 %}Real Time Clock{% else %}GPS or equivalent{% endif %}
+                   {% if value_json.SRC == 0 %}Real Time Clock{% else %}Radio Waves{% endif %}
+            - component: "sensor"
+              name: "weekday"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% set map = {"1":"Monday","2":"Tuesday","3":"Wednesday","4":"Thursday","5":"Friday","6":"Saturday","7":"Sunday"} %}
+                   {{ map[value_json.WDY|string] }}
+                 icon: "mdi:calendar"
+            - component: "sensor"
+              name: "time"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {{ strptime((value_json.HR~':'~value_json.MIN~':'~value_json.SEC),'%H:%M:%S').time() }}
+                 icon: "mdi:clock-outline"
+            - component: "sensor"
+              name: "am_pm"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% if value_json.AMPM == 0 %}AM{% else %}PM{% endif %}
+                 icon: "mdi:radio-am"
+            - component: "sensor"
+              name: "time_format"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% if value_json.TMF == 0 %}24{% else %}12{% endif %}
+            - component: "sensor"
+              name: "time_source"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% if value_json.SRC == 0 %}Real Time Clock{% else %}Radio Waves{% endif %}
+            - component: "sensor"
+              name: "elevation"
+              config:
+                 state_topic: "ID5"
+                 value_template: "{{ value_json.ELV }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:elevation-rise"
+            - component: "sensor"
+              name: "azimuth"
+              config:
+                 state_topic: "ID5"
+                 value_template: "{{ value_json.AZM }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:sun-compass"
+            - component: "sensor"
+              name: "latitude"
+              config:
+                 state_topic: "ID6"
+                 value_template: "{{ (value_json.LAT_MSB*256+value_json.LAT_LSB)*180/4095-90 }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:latitude"
+            - component: "sensor"
+              name: "longitude"
+              config:
+                 state_topic: "ID6"
+                 value_template: "{{ (value_json.LOT_MSB*256+value_json.LOT_LSB)*360/4095-180 }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:longitude"
       0x02:
          device_config:
             command: "ID"
@@ -3241,12 +3304,99 @@
                  value_template: >-
                    {% set d=strptime((value_json.DY ~ '-' ~ value_json.MTH ~ '-' ~ value_json.YR),'%d-%m-%Y') %}
                    {{ d.date() }}
+                 icon: "mdi:calendar-range"
             - component: "sensor"
               name: "date_source"
               config:
                  state_topic: "ID3"
                  value_template: >-
-                   {% if value_json.SRC == 0 %}Real Time Clock{% else %}GPS or equivalent{% endif %}
+                   {% if value_json.SRC == 0 %}Real Time Clock{% else %}Radio Waves{% endif %}
+      0x04:
+         device_config:
+            command: "ID"
+            channel: "ID"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "sensor"
+              name: "weekday"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% set map = {"1":"Monday","2":"Tuesday","3":"Wednesday","4":"Thursday","5":"Friday","6":"Saturday","7":"Sunday"} %}
+                   {{ map[value_json.WDY|string] }}
+                 icon: "mdi:calendar"
+            - component: "sensor"
+              name: "time"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {{ strptime((value_json.HR~':'~value_json.MIN~':'~value_json.SEC),'%H:%M:%S').time() }}
+                 icon: "mdi:clock-outline"
+            - component: "sensor"
+              name: "am_pm"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% if value_json.AMPM == 0 %}AM{% else %}PM{% endif %}
+                 icon: "mdi:radio-am"
+            - component: "sensor"
+              name: "time_format"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% if value_json.TMF == 0 %}24{% else %}12{% endif %}
+            - component: "sensor"
+              name: "time_source"
+              config:
+                 state_topic: "ID4"
+                 value_template: >-
+                   {% if value_json.SRC == 0 %}Real Time Clock{% else %}Radio Waves{% endif %}
+      0x05:
+         device_config:
+            command: "ID"
+            channel: "ID"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "sensor"
+              name: "elevation"
+              config:
+                 state_topic: "ID5"
+                 value_template: "{{ value_json.ELV }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:elevation-rise"
+            - component: "sensor"
+              name: "azimuth"
+              config:
+                 state_topic: "ID5"
+                 value_template: "{{ value_json.AZM }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:sun-compass"
+      0x06:
+         device_config:
+            command: "ID"
+            channel: "ID"
+            log_learn: ""
+            direction: ""
+            answer: ""
+         entities:
+            - component: "sensor"
+              name: "latitude"
+              config:
+                 state_topic: "ID6"
+                 value_template: "{{ (value_json.LAT_MSB*256+value_json.LAT_LSB)*180/4095-90 }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:latitude"
+            - component: "sensor"
+              name: "longitude"
+              config:
+                 state_topic: "ID6"
+                 value_template: "{{ (value_json.LOT_MSB*256+value_json.LOT_LSB)*360/4095-180 }}"
+                 unit_of_measurement: "°"
+                 icon: "mdi:longitude"
    0x14:
       0x01:
          device_config:
@@ -3259,25 +3409,25 @@
             - component: "sensor"
               name: "v_raw"
               config:
-                state_topic: ""
-                value_template: "{{ value_json.SVC }}"
-                device_class: "voltage"
-                unit_of_measurement: "V"
-                enabled_by_default: "false"
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
+                 enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
               config:
-                state_topic: ""
-                value_template: "{{ value_json.SVC | round(2) }}"
-                device_class: "voltage"
-                unit_of_measurement: "V"
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC | round(2) }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "contact"
               config:
-                state_topic: ""
-                value_template: >-
-                  {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
-                device_class: "window"
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                 device_class: "window"
       0x09:
          device_config:
             command: ""
@@ -3289,31 +3439,31 @@
             - component: "sensor"
               name: "v_raw"
               config:
-                state_topic: ""
-                value_template: "{{ value_json.SVC }}"
-                device_class: "voltage"
-                unit_of_measurement: "V"
-                enabled_by_default: "false"
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
+                 enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
               config:
-                state_topic: ""
-                value_template: "{{ value_json.SVC | round(2) }}"
-                device_class: "voltage"
-                unit_of_measurement: "V"
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC | round(2) }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
               config:
-                state_topic: ""
-                value_template: >-
-                  {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
-                device_class: "window"
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                 device_class: "window"
             - component: sensor
               name: "state_3p"
               config:
-                state_topic: ""
-                value_template: >-
-                  {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
       0x0A:
          device_config:
             command: ""
@@ -3325,38 +3475,38 @@
             - component: "sensor"
               name: "v_raw"
               config:
-                state_topic: ""
-                value_template: "{{ value_json.SVC }}"
-                device_class: "voltage"
-                unit_of_measurement: "V"
-                enabled_by_default: "false"
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
+                 enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
               config:
-                state_topic: ""
-                value_template: "{{ value_json.SVC | round(2) }}"
-                device_class: "voltage"
-                unit_of_measurement: "V"
+                 state_topic: ""
+                 value_template: "{{ value_json.SVC | round(2) }}"
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
               config:
-                state_topic: ""
-                value_template: >-
-                  {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
-                device_class: "window"
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}OFF{% else %}ON{% endif %}
+                 device_class: "window"
             - component: sensor
               name: "state_3p"
               config:
-                state_topic: ""
-                value_template: >-
-                  {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
             - component: binary_sensor
               name: "vib"
               config:
-                state_topic: ""
-                value_template: >-
-                  {% if value_json.VIB == 1 %}ON{% else %}OFF{% endif %}
-                device_class: "vibration"
+                 state_topic: ""
+                 value_template: >-
+                   {% if value_json.VIB == 1 %}ON{% else %}OFF{% endif %}
+                 device_class: "vibration"
    0x20:
       0x01:
          device_config:
@@ -3482,6 +3632,7 @@
               name: "config_VO"
               config:
                  command_topic: "__trash"
+            - component: "switch"
               name: "config_VC"
               config:
                  command_topic: "__trash"
@@ -4275,7 +4426,7 @@
               name: "send"
               config:
                  command_topic: "req"
-                 payload_press: >-
+                 command_template: >-
                    {% set ns = namespace(action=[]) %}
                    {% for entity in device_entities(device_id(entity_id)) %}
                      {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}
@@ -4386,7 +4537,7 @@
               name: "send"
               config:
                  command_topic: "req"
-                 payload_press: >-
+                 command_template: >-
                    {% set ns = namespace(action=[]) %}
                    {% for entity in device_entities(device_id(entity_id)) %}
                      {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}

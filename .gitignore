@@ -11,3 +11,5 @@ man
 MANIFEST
 dist
 *.priv
+.tests
+.venv
