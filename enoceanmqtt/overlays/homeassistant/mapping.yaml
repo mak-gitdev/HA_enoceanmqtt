@@ -3463,7 +3463,7 @@
               config:
                  state_topic: ""
                  value_template: >-
-                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                   {% if value_json.CT == 0 %}closed{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
       0x0A:
          device_config:
             command: ""
@@ -3499,7 +3499,7 @@
               config:
                  state_topic: ""
                  value_template: >-
-                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                   {% if value_json.CT == 0 %}closed{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
             - component: binary_sensor
               name: "vib"
               config:
