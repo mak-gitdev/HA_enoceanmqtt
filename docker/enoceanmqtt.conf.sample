@@ -3,8 +3,8 @@
 enocean_port    = /dev/enocean
 log_packets     = 1
 overlay         = HA
-#mapping_file    = /config/mapping.yaml	# Uncomment if you want to use a custom mapping.yaml file
-#db_file         = /config/devices.db	# Uncomment if you want to specify another location for the device database
+#mapping_file    = /config/mapping.yaml   # Uncomment if you want to use a custom mapping.yaml file
+#db_file         = /config/devices.db  # Uncomment if you want to specify another location for the device database
 
 ## the discovery prefix is used by MQTT discovery in Home Assistant
 mqtt_discovery_prefix = homeassistant/
@@ -46,6 +46,21 @@ mqtt_debug      = false
 
 
 ## all other sections define the sensors to monitor
+
+# For the moment, you must define two entries per FSB14
+# The first one is for command and status based on A5-3F-7F telegram
+[my_fsb14/a5]
+address = 0x454C544B # The address of the FSB14. Must be the same address as below
+rorg = 0xA5
+func = 0x3F
+type = 0x7F
+
+# The second one is for status based on F6-02-01 telegram
+[my_fsb14/f6]
+address = 0x454C544B # The address of the FSB14. Must be the same address as above
+rorg = 0xF6
+func = 0x02
+type = 0x01
 
 [rocker_1]
 address         = 0xBABECAFE

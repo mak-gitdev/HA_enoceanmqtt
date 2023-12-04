@@ -16,13 +16,8 @@ RUN apk add --no-cache git && \
     pip3 install git+https://github.com/mak-gitdev/enocean.git && \
     git clone https://github.com/embyt/enocean-mqtt.git && \
     cd enocean-mqtt && python3 setup.py develop && cd .. && \
-    if [ -z "${BUILD_VERSION##*.*.*}" ]; then \
-        echo "Building development version ${BUILD_VERSION%-*}" && \
-        git clone -b develop --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git ; \
-    else \
-        echo "Building Stable version ${BUILD_VERSION%-*}" && \
-        git clone -b master --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git ; \
-    fi; \
+    echo "Installing support-eltako branch" && \
+    git clone -b support-eltako --single-branch --depth 1 https://github.com/mak-gitdev/HA_enoceanmqtt.git && \
     cp -rf HA_enoceanmqtt/enoceanmqtt enocean-mqtt && \
     rm -rf HA_enoceanmqtt
 

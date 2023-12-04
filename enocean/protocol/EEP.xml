@@ -65,6 +65,18 @@
         </data>
       </profile>
     </profiles>
+    <profiles func="0x04" description="Position Switch, Home and Office Application">
+      <profile type="0x01" description="Key Card Activated Switch">
+        <data>
+          <enum description="Key Card" shortcut="KC" offset="0" size="8">
+            <item description="Taken out" value="0" />
+            <item description="Inserted" value="112" />
+          </enum>
+          <status description="T21" shortcut="T21" offset="2" size="1" />
+          <status description="NU" shortcut="NU" offset="3" size="1" />
+        </data>
+      </profile>
+    </profiles>
     <profiles func="0x05" description="Detectors">
       <profile type="0x01" description="Liquid Leakage Sensor (mechanic harvester)">
         <data>
@@ -854,7 +866,7 @@
       </profile>
     </profiles>
     <profiles func="0x09" description="Gas Sensor">
-      <profile description="CO2 Sensor" type="0x04">
+      <profile type="0x04" description="CO2 Sensor">
         <data>
           <value shortcut="HUM" description="Rel. Humidity (linear)" offset="0" size="8" unit="%">
             <range>
@@ -886,9 +898,17 @@
               <max>51</max>
             </scale>
           </value>
+          <enum shortcut="HSN" description="Availability of the Humidity Sensor" offset="29" size="1">
+            <item description="not available" value="0" />
+            <item description="available" value="1" />
+          </enum>
+          <enum shortcut="TSN" description="Availability of the Temperature Sensor" offset="30" size="1">
+            <item description="not available" value="0" />
+            <item description="available" value="1" />
+          </enum>
         </data>
       </profile>
-      <profile description="VOC Sensor" type="0x05">
+      <profile type="0x05" description="VOC Sensor">
         <data>
           <value shortcut="Conc" description="VOC Concentration" offset="0" size="16" unit="ppb">
             <range>
@@ -1456,7 +1476,7 @@
             <item description="24 Hours" value="0" />
             <item description="12 Hours" value="1" />
           </enum>
-          <enum description="AM/PM" shortcut="A/PM" offset="30" size="1">
+          <enum description="AM/PM" shortcut="AMPM" offset="30" size="1">
             <item description="AM" value="0" />
             <item description="PM" value="1" />
           </enum>
@@ -1666,7 +1686,7 @@
             <item description="24 Hours" value="0" />
             <item description="12 Hours" value="1" />
           </enum>
-          <enum description="AM/PM" shortcut="A/PM" offset="30" size="1">
+          <enum description="AM/PM" shortcut="AMPM" offset="30" size="1">
             <item description="AM" value="0" />
             <item description="PM" value="1" />
           </enum>
@@ -1770,6 +1790,26 @@
           </enum>
         </data>
       </profile>
+      <profile type="0x09" description="Window/Door-Sensor with States Open/Closed/Tilt, Supply voltage monitor">
+        <data>
+          <value description="Supply voltage / super cap. (linear)" shortcut="SVC" offset="0" size="8" unit="V">
+            <range>
+              <min>0</min>
+              <max>250</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>5.0</max>
+            </scale>
+          </value>
+          <enum description="Contact" shortcut="CT" offset="29" size="2">
+            <item description="Closed" value="0" />
+            <item description="Tilt" value="1" />
+            <item description="Reserved" value="2" />
+            <item description="Open" value="3" />
+          </enum>
+        </data>
+      </profile>
       <profile type="0x0A" description="Window/Door-Sensor with States Open/Closed/Tilt, Supply voltage monitor and Vibration detection">
         <data>
           <value description="Supply voltage / super cap. (linear)" shortcut="SVC" offset="0" size="8" unit="V">
@@ -1788,7 +1828,7 @@
             <item description="Reserved" value="2" />
             <item description="Open" value="3" />
           </enum>
-          <enum description="Contact" shortcut="VIB" offset="31" size="1">
+          <enum description="Vibration" shortcut="VIB" offset="31" size="1">
             <item description="Vibration detected" value="1" />
             <item description="No vibration detected" value="0" />
           </enum>
@@ -1997,9 +2037,8 @@
             <item description="300 sec" value="9" />
             <item description="330 sec" value="10" />
             <item description="360 sec" value="11" />
-            <item description="390 sec" value="11" />
-            <item description="420 sec" value="12" />
-            <item description="450 sec" value="13" />
+            <item description="390 sec" value="12" />
+            <item description="420 sec" value="13" />
             <item description="450 sec" value="14" />
             <item description="480 sec" value="15" />
             <item description="510 sec" value="16" />
@@ -2069,9 +2108,127 @@
           </enum>
         </data>
       </profile>
+      <profile type="0x06" description="Harvesting-powered actuator with local temperature offset control (BI-DIR)">
+        <data direction="1">
+          <value shortcut="CV" description="Current Valve position" offset="0" size="8" unit="%">
+            <range>
+              <min>0</min>
+              <max>100</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>100</max>
+            </scale>
+          </value>
+          <enum shortcut="LOM" description="Local Offset Mode" offset="8" size="1">
+            <item description="LO is relative" value="0" />
+            <item description="LO is absolute" value="1" />
+          </enum>
+          <value shortcut="LO" description="Local Offset" offset="9" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>127</max>
+            </scale>
+          </value>
+          <value shortcut="TMP" description="Local Ambient or Feed temperature" offset="16" size="8" unit="°C">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
+          <enum shortcut="TSL" description="Indicates which sensor is used for TMP" offset="24" size="1">
+            <item description="Ambient sensor temp" value="0" />
+            <item description="Feed sensor temperature" value="1" />
+          </enum>
+          <enum shortcut="ENIE" description="Harvesting status" offset="25" size="1">
+            <item description="Not harvesting" value="0" />
+            <item description="Harvesting active" value="1" />
+          </enum>
+          <enum shortcut="ES" description="Charge level of energy storage" offset="26" size="1">
+            <item description="Low, almost discharged" value="0" />
+            <item description="Sufficiently charged" value="1" />
+          </enum>
+          <enum shortcut="DWO" description="Window open detection" offset="27" size="1">
+            <item description="No open window detected" value="0" />
+            <item description="Open window detected" value="1" />
+          </enum>
+          <enum shortcut="RCE" description="Indicates radio communication errors" offset="29" size="1">
+            <item description="Radio communication is stable" value="0" />
+            <item description="Six or more consecutive radio communication errors have occurred" value="1" />
+          </enum>
+          <enum shortcut="RSS" description="Weak radio signal warning" offset="30" size="1">
+            <item description="Radio signal is strong" value="0" />
+            <item description="Radio signal is weak (-77 dBm or less)" value="1" />
+          </enum>
+          <enum shortcut="ACO" description="Reports blocked actuator (motor)" offset="31" size="1">
+            <item description="Actuator working correctly" value="0" />
+            <item description="Actuator is blocked" value="1" />
+          </enum>
+        </data>
+        <data direction="2">
+          <value shortcut="SP" description="Valve Position or Temperature Set point" offset="0" size="8" unit="%">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
+          <value shortcut="TMP" description="Room temperature from room control unit" offset="8" size="8" unit="°C">
+            <range>
+              <min>0</min>
+              <max>160</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>40</max>
+            </scale>
+          </value>
+          <enum shortcut="REF" description="Execute reference-run" offset="16" size="1">
+            <item description="Normal operation" value="0" />
+            <item description="Reference-run and Maintenance Interval" value="1" />
+          </enum>
+          <enum shortcut="RFC" description="Radio duty cycle selection." offset="17" size="3">
+            <item description="AUTO (default)", value="0" />
+            <item description="2 minutes" value="1" />
+            <item description="5 minutes" value="2" />
+            <item description="10 minutes" value="3" />
+            <item description="20 minutes" value="4" />
+            <item description="30 minutes" value="5" />
+            <item description="60 minutes" value="6" />
+            <item description="120 minutes" value="7" />
+          </enum>
+          <enum shortcut="SB" description="Initiate summer mode (reduced communication)" offset="20" size="1">
+            <item description="Normal operation" value="0" />
+            <item description="Summer mode with 8h radio duty cycle" value="1" />
+          </enum>
+          <enum shortcut="SPS" description="Set point selection for DB3" offset="21" size="1">
+            <item description="Valve position mode" value="0" />
+            <item description="Temperature set point" value="1" />
+          </enum>
+          <enum shortcut="TSL" description="Temperature requested from the actuator" offset="22" size="1">
+            <item description="Request ambient temperature" value="0" />
+            <item description="Request feed temperature" value="1" />
+          </enum>
+          <enum shortcut="SBY" description="Enter standby mode, refer to Appendix" offset="23" size="1">
+            <item description="Normal operation" value="0" />
+            <item description="Standby" value="1" />
+          </enum>
+        </data>
+      </profile>                                                                                                    -->
     </profiles>
     <profiles func="0x30" description="Digital Input">
-      <profile type="0x03" description="Digital Inputs, Wake and Temperature">
+      <profile type="0x03" description="4 Digital Inputs, Wake and Temperature">
         <data>
           <value shortcut="TMP" description="Temperature (linear)" offset="8" size="8" unit="°C">
             <range>
@@ -2105,13 +2262,38 @@
           </enum>
         </data>
       </profile>
+      <profile type="0x04" description="3 Digital Inputs, 1 Digital Input 8 bits">
+        <data>
+          <value shortcut="DV0" description="Digital Value 1 byte" offset="16" size="8" unit="">
+            <range>
+              <min>0</min>
+              <max>255</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>255</max>
+            </scale>
+          </value>
+          <enum shortcut="DI2" description="Digital Input 2" offset="29" size="1">
+            <item description="Low" value="0" />
+            <item description="High" value="1" />
+          </enum>
+          <enum shortcut="DI1" description="Digital Input 1" offset="30" size="1">
+            <item description="Low" value="0" />
+            <item description="High" value="1" />
+          </enum>
+          <enum shortcut="DI0" description="Digital Input 0" offset="31" size="1">
+            <item description="Low" value="0" />
+            <item description="High" value="1" />
+          </enum>
+        </data>
+      </profile>
     </profiles>
     <profiles func="0x38" description="Central Command">
       <profile type="0x08" description="Gateway">
         <command description="Command ID" shortcut="COM" offset="0" size="8">
           <item description="Switching" value="1" />
           <item description="Dimming" value="2" />
-          <item description="Raw Data" value="255" />
         </command>
         <data command="1">
           <enum shortcut="COM" description="Command ID" offset="0" size="8">
@@ -2245,15 +2427,38 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
+        <data command="1" bits="3">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Dim value" shortcut="DV" offset="8" size="3">
+            <item description="Switch to new output value" value="0" />
+            <item description="Dim to new output level - dim timer 1" value="1" />
+            <item description="Dim to new output level - dim timer 2" value="2" />
+            <item description="Dim to new output level - dim timer 3" value="3" />
+            <item description="Stop dimming" value="4" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
+          </enum>
+        </data>
         <data command="4" bits="3">
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
@@ -2283,6 +2488,23 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
+      </profile>
+      <profile type="0x09" description="Type 0x09">
+        <command description="command identifier" shortcut="CMD" offset="4" size="4">
+          <item description="Actuator Set Output" value="1" />
+          <!-- <item description="Actuator Set Local" value="2" /> -->
+          <item description="Actuator Status Query" value="3" />
+          <item description="Actuator Status Response" value="4" />
+          <item description="Actuator Set Measurement" value="5" />
+          <item description="Actuator Measurement Query" value="6" />
+          <item description="Actuator Measurement Response" value="7" />
+          <!-- <item description="Actuator Set Pilot Wire Mode" value="8" /> -->
+          <!-- <item description="Actuator Pilot Wire Mode Query" value="9" /> -->
+          <!-- <item description="Actuator Pilot Wire Mode Response" value="10" /> -->
+          <!-- <item description="Actuator Set External Interface Settings" value="11" /> -->
+          <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
+          <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
+        </command>
         <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2306,93 +2528,6 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
-      </profile>
-      <profile type="0x0A" description="Smart Plug module, no metering capabilities">
-        <command description="Command identifier" shortcut="CMD" offset="4" size="4">
-          <item description="Actuator Set Output" value="1" />
-          <!-- <item description="Actuator Set Local" value="2" /> -->
-          <item description="Actuator Status Query" value="3" />
-          <item description="Actuator Status Response" value="4" />
-<!--
-          <item description="Actuator Set Measurement" value="5" />
-          <item description="Actuator Measurement Query" value="6" />
-          <item description="Actuator Measurement Response" value="7" />
--->
-          <!-- <item description="Actuator Set Pilot Wire Mode" value="8" /> -->
-          <!-- <item description="Actuator Pilot Wire Mode Query" value="9" /> -->
-          <!-- <item description="Actuator Pilot Wire Mode Response" value="10" /> -->
-          <!-- <item description="Actuator Set External Interface Settings" value="11" /> -->
-          <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
-          <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
-        </command>
-        <!-- <data command="8" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="10" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="9" bits="1"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-<!--
-        <data command="6" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
--->
         <data command="3" bits="2">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2404,18 +2539,17 @@
           </enum>
         </data>
         <data command="4" bits="3">
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-<!--
           <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
             <item description="Over current switch off: ready / not supported" value="0" />
             <item description="Over current switch off: executed" value="1" />
@@ -2426,7 +2560,6 @@
             <item description="Error level 2: hardware failure" value="2" />
             <item description="Error level not supported" value="3" />
           </enum>
--->
           <enum description="I/O channel" shortcut="IO" offset="11" size="5">
             <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
             <item description="Not applicable, do not use" value="30" />
@@ -2443,30 +2576,6 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
-        <data command="1" bits="3">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Dim value" shortcut="DV" offset="8" size="3">
-            <item description="Switch to new output value" value="0" />
-            <item description="Dim to new output level - dim timer 1" value="1" />
-            <item description="Dim to new output level - dim timer 2" value="2" />
-            <item description="Dim to new output level - dim timer 3" value="3" />
-            <item description="Stop dimming" value="4" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
-<!--
         <data command="5" bits="6">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2511,7 +2620,129 @@
             <rangeitem description="Min message time {value}" start="1" end="255" />
           </enum>
         </data>
--->
+        <data command="6" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Query" shortcut="qu" offset="10" size="1">
+            <item description="Query energy" value="0" />
+            <item description="Query power" value="1" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="7" bits="6">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Unit" shortcut="UN" offset="8" size="3">
+            <item description="Energy [Ws]" value="0" />
+            <item description="Energy [Wh]" value="1" />
+            <item description="Energy [KWh]" value="2" />
+            <item description="Power [W]" value="3" />
+            <item description="Power [KW]" value="4" />
+            <rangeitem description="Not used" start="5" end="7" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
+            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x0A" description="Smart Plug module, no metering capabilities">
+        <command description="Command identifier" shortcut="CMD" offset="4" size="4">
+          <item description="Actuator Set Output" value="1" />
+          <!-- <item description="Actuator Set Local" value="2" /> -->
+          <item description="Actuator Status Query" value="3" />
+          <item description="Actuator Status Response" value="4" />
+          <!-- <item description="Actuator Set Measurement" value="5" /> -->
+          <!-- <item description="Actuator Measurement Query" value="6" /> -->
+          <!-- <item description="Actuator Measurement Response" value="7" /> -->
+          <!-- <item description="Actuator Set Pilot Wire Mode" value="8" /> -->
+          <!-- <item description="Actuator Pilot Wire Mode Query" value="9" /> -->
+          <!-- <item description="Actuator Pilot Wire Mode Response" value="10" /> -->
+          <!-- <item description="Actuator Set External Interface Settings" value="11" /> -->
+          <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
+          <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
+        </command>
+        <data command="1" bits="3">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Dim value" shortcut="DV" offset="8" size="3">
+            <item description="Switch to new output value" value="0" />
+            <item description="Dim to new output level - dim timer 1" value="1" />
+            <item description="Dim to new output level - dim timer 2" value="2" />
+            <item description="Dim to new output level - dim timer 3" value="3" />
+            <item description="Stop dimming" value="4" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
+          </enum>
+        </data>
+        <data command="3" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
+          </enum>
+        </data>
       </profile>
       <profile type="0x0B" description="Smart Plug module with Energy Measurement">
         <command description="Command identifier" shortcut="CMD" offset="4" size="4">
@@ -2529,122 +2760,6 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
-        <!-- <data command="8" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="10" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="9" bits="1"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <data command="6" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
-        <data command="3" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="4" bits="3">
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-<!--
-          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
-            <item description="Over current switch off: ready / not supported" value="0" />
-            <item description="Over current switch off: executed" value="1" />
-          </enum>
-          <enum description="Error level" shortcut="EL" offset="9" size="2">
-            <item description="Error level 0: hardware OK" value="0" />
-            <item description="Error level 1: hardware warning" value="1" />
-            <item description="Error level 2: hardware failure" value="2" />
-            <item description="Error level not supported" value="3" />
-          </enum>
--->
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Local control" shortcut="LC" offset="16" size="1">
-            <item description="Local control disabled / not supported" value="0" />
-            <item description="Local control enabled" value="1" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
         <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2660,6 +2775,54 @@
             <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
             <item description="All output channels supported by the device" value="30" />
             <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
+          </enum>
+        </data>
+        <data command="3" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
           </enum>
           <enum description="Output value" shortcut="OV" offset="17" size="7">
             <item description="Output value 0% or OFF" value="0" />
@@ -2710,6 +2873,41 @@
           <enum description="Min message time" shortcut="MIT" offset="40" size="8">
             <item description="Reserved" value="0" />
             <rangeitem description="Min message time {value}" start="1" end="255" />
+          </enum>
+        </data>
+        <data command="6" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Query" shortcut="qu" offset="10" size="1">
+            <item description="Query energy" value="0" />
+            <item description="Query power" value="1" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="7" bits="6">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Unit" shortcut="UN" offset="8" size="3">
+            <item description="Energy [Ws]" value="0" />
+            <item description="Energy [Wh]" value="1" />
+            <item description="Energy [KWh]" value="2" />
+            <item description="Power [W]" value="3" />
+            <item description="Power [KW]" value="4" />
+            <rangeitem description="Not used" start="5" end="7" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
+            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
           </enum>
         </data>
       </profile>
@@ -2729,20 +2927,157 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
-        <data command="8" bits="2">
+        <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3">
-            <item description="Off" value="0" />
-            <item description="Comfort" value="1" />
-            <item description="Eco" value="2" />
-            <item description="Anti-freeze" value="3" />
-            <item description="Comfort-1" value="4" />
-            <item description="Comfort-2" value="5" />
+          <enum description="Dim value" shortcut="DV" offset="8" size="3">
+            <item description="Switch to new output value" value="0" />
+            <item description="Dim to new output level - dim timer 1" value="1" />
+            <item description="Dim to new output level - dim timer 2" value="2" />
+            <item description="Dim to new output level - dim timer 3" value="3" />
+            <item description="Stop dimming" value="4" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
-        <data command="10" bits="2">
+        <data command="3" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
+          </enum>
+        </data>
+        <data command="5" bits="6">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Report measurement" shortcut="RM" offset="8" size="1">
+            <item description="Query only" value="0" />
+            <item description="Query / auto" value="1" />
+          </enum>
+          <enum description="Reset measurement" shortcut="RE" offset="9" size="1">
+            <item description="Not active" value="0" />
+            <item description="Trigger signal" value="1" />
+          </enum>
+          <enum description="Measurement mode" shortcut="ep" offset="10" size="1">
+            <item description="Energy" value="0" />
+            <item description="Power" value="1" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Measurement delta LSB" shortcut="MD_LSB" offset="16" size="4">
+            <rangeitem description="Measurement delta LSB {value}" start="0" end="15" />
+          </enum>
+          <enum description="Unit" shortcut="UN" offset="21" size="3">
+            <item description="Energy [Ws]" value="0" />
+            <item description="Energy [Wh]" value="1" />
+            <item description="Energy [KWh]" value="2" />
+            <item description="Power [W]" value="3" />
+            <item description="Power [KW]" value="4" />
+            <rangeitem description="Not used" start="5" end="7" />
+          </enum>
+          <enum description="Measurement delta MSB" shortcut="MD_MSB" offset="24" size="8">
+            <rangeitem description="Measurement delta MSB {value}" start="0" end="255" />
+          </enum>
+          <enum description="Max message time" shortcut="MAT" offset="32" size="8">
+            <item description="Reserved" value="0" />
+            <rangeitem description="Max message time {value}" start="1" end="255" />
+          </enum>
+          <enum description="Min message time" shortcut="MIT" offset="40" size="8">
+            <item description="Reserved" value="0" />
+            <rangeitem description="Min message time {value}" start="1" end="255" />
+          </enum>
+        </data>
+        <data command="6" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Query" shortcut="qu" offset="10" size="1">
+            <item description="Query energy" value="0" />
+            <item description="Query power" value="1" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="7" bits="6">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Unit" shortcut="UN" offset="8" size="3">
+            <item description="Energy [Ws]" value="0" />
+            <item description="Energy [Wh]" value="1" />
+            <item description="Energy [KWh]" value="2" />
+            <item description="Power [W]" value="3" />
+            <item description="Power [KW]" value="4" />
+            <rangeitem description="Not used" start="5" end="7" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
+            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
+          </enum>
+        </data>
+        <data command="8" bits="2">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
@@ -2760,156 +3095,17 @@
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
         </data>
-        <data command="6" bits="2">
+        <data command="10" bits="2">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
-        <data command="3" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="4" bits="3">
-<!--
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
--->
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
-            <item description="Over current switch off: ready / not supported" value="0" />
-            <item description="Over current switch off: executed" value="1" />
-          </enum>
-          <enum description="Error level" shortcut="EL" offset="9" size="2">
-            <item description="Error level 0: hardware OK" value="0" />
-            <item description="Error level 1: hardware warning" value="1" />
-            <item description="Error level 2: hardware failure" value="2" />
-            <item description="Error level not supported" value="3" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Local control" shortcut="LC" offset="16" size="1">
-            <item description="Local control disabled / not supported" value="0" />
-            <item description="Local control enabled" value="1" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
-        <data command="1" bits="3">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Dim value" shortcut="DV" offset="8" size="3">
-            <item description="Switch to new output value" value="0" />
-            <item description="Dim to new output level - dim timer 1" value="1" />
-            <item description="Dim to new output level - dim timer 2" value="2" />
-            <item description="Dim to new output level - dim timer 3" value="3" />
-            <item description="Stop dimming" value="4" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
-        <data command="5" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Report measurement" shortcut="RM" offset="8" size="1">
-            <item description="Query only" value="0" />
-            <item description="Query / auto" value="1" />
-          </enum>
-          <enum description="Reset measurement" shortcut="RE" offset="9" size="1">
-            <item description="Not active" value="0" />
-            <item description="Trigger signal" value="1" />
-          </enum>
-          <enum description="Measurement mode" shortcut="ep" offset="10" size="1">
-            <item description="Energy" value="0" />
-            <item description="Power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement delta LSB" shortcut="MD_LSB" offset="16" size="4">
-            <rangeitem description="Measurement delta LSB {value}" start="0" end="15" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="21" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="Measurement delta MSB" shortcut="MD_MSB" offset="24" size="8">
-            <rangeitem description="Measurement delta MSB {value}" start="0" end="255" />
-          </enum>
-          <enum description="Max message time" shortcut="MAT" offset="32" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Max message time {value}" start="1" end="255" />
-          </enum>
-          <enum description="Min message time" shortcut="MIT" offset="40" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Min message time {value}" start="1" end="255" />
+          <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3">
+            <item description="Off" value="0" />
+            <item description="Comfort" value="1" />
+            <item description="Eco" value="2" />
+            <item description="Anti-freeze" value="3" />
+            <item description="Comfort-1" value="4" />
+            <item description="Comfort-2" value="5" />
           </enum>
         </data>
       </profile>
@@ -2919,11 +3115,9 @@
           <!-- <item description="Actuator Set Local" value="2" /> -->
           <item description="Actuator Status Query" value="3" />
           <item description="Actuator Status Response" value="4" />
-<!--
-          <item description="Actuator Set Measurement" value="5" />
+          <!-- <item description="Actuator Set Measurement" value="5" />
           <item description="Actuator Measurement Query" value="6" />
-          <item description="Actuator Measurement Response" value="7" />
--->
+          <item description="Actuator Measurement Response" value="7" />-->
           <!-- <item description="Actuator Set Pilot Wire Mode" value="8" /> -->
           <!-- <item description="Actuator Pilot Wire Mode Query" value="9" /> -->
           <!-- <item description="Actuator Pilot Wire Mode Response" value="10" /> -->
@@ -2931,126 +3125,6 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
-        <!-- <data command="8" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="10" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="9" bits="1"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-<!--
-        <data command="6" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
--->
-        <data command="3" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="4" bits="3">
-<!--
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
--->
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-<!--
-          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
-            <item description="Over current switch off: ready / not supported" value="0" />
-            <item description="Over current switch off: executed" value="1" />
-          </enum>
-          <enum description="Error level" shortcut="EL" offset="9" size="2">
-            <item description="Error level 0: hardware OK" value="0" />
-            <item description="Error level 1: hardware warning" value="1" />
-            <item description="Error level 2: hardware failure" value="2" />
-            <item description="Error level not supported" value="3" />
-          </enum>
--->
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Local control" shortcut="LC" offset="16" size="1">
-            <item description="Local control disabled / not supported" value="0" />
-            <item description="Local control enabled" value="1" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
         <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3074,52 +3148,54 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
-<!--
-        <data command="5" bits="6">
+        <data command="3" bits="2">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Report measurement" shortcut="RM" offset="8" size="1">
-            <item description="Query only" value="0" />
-            <item description="Query / auto" value="1" />
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
           </enum>
-          <enum description="Reset measurement" shortcut="RE" offset="9" size="1">
-            <item description="Not active" value="0" />
-            <item description="Trigger signal" value="1" />
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Measurement mode" shortcut="ep" offset="10" size="1">
-            <item description="Energy" value="0" />
-            <item description="Power" value="1" />
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
           </enum>
           <enum description="I/O channel" shortcut="IO" offset="11" size="5">
             <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
             <item description="Not applicable, do not use" value="30" />
             <item description="Input channel (from mains supply)" value="31" />
           </enum>
-          <enum description="Measurement delta LSB" shortcut="MD_LSB" offset="16" size="4">
-            <rangeitem description="Measurement delta LSB {value}" start="0" end="15" />
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
           </enum>
-          <enum description="Unit" shortcut="UN" offset="21" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="Measurement delta MSB" shortcut="MD_MSB" offset="24" size="8">
-            <rangeitem description="Measurement delta MSB {value}" start="0" end="255" />
-          </enum>
-          <enum description="Max message time" shortcut="MAT" offset="32" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Max message time {value}" start="1" end="255" />
-          </enum>
-          <enum description="Min message time" shortcut="MIT" offset="40" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Min message time {value}" start="1" end="255" />
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
--->
       </profile>
       <profile type="0x0E" description="Micro Smart Plug module with 1 channel, and metering capabilities">
         <command description="Command identifier" shortcut="CMD" offset="4" size="4">
@@ -3137,124 +3213,6 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
-        <!-- <data command="8" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="10" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="9" bits="1"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <data command="6" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
-        <data command="3" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="4" bits="3">
-<!--
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
--->
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
-            <item description="Over current switch off: ready / not supported" value="0" />
-            <item description="Over current switch off: executed" value="1" />
-          </enum>
-<!--
-          <enum description="Error level" shortcut="EL" offset="9" size="2">
-            <item description="Error level 0: hardware OK" value="0" />
-            <item description="Error level 1: hardware warning" value="1" />
-            <item description="Error level 2: hardware failure" value="2" />
-            <item description="Error level not supported" value="3" />
-          </enum>
--->
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Local control" shortcut="LC" offset="16" size="1">
-            <item description="Local control disabled / not supported" value="0" />
-            <item description="Local control enabled" value="1" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
         <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3270,6 +3228,54 @@
             <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
             <item description="All output channels supported by the device" value="30" />
             <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
+          </enum>
+        </data>
+        <data command="3" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
           </enum>
           <enum description="Output value" shortcut="OV" offset="17" size="7">
             <item description="Output value 0% or OFF" value="0" />
@@ -3320,6 +3326,41 @@
           <enum description="Min message time" shortcut="MIT" offset="40" size="8">
             <item description="Reserved" value="0" />
             <rangeitem description="Min message time {value}" start="1" end="255" />
+          </enum>
+        </data>
+        <data command="6" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Query" shortcut="qu" offset="10" size="1">
+            <item description="Query energy" value="0" />
+            <item description="Query power" value="1" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
+        <data command="7" bits="6">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="Unit" shortcut="UN" offset="8" size="3">
+            <item description="Energy [Ws]" value="0" />
+            <item description="Energy [Wh]" value="1" />
+            <item description="Energy [KWh]" value="2" />
+            <item description="Power [W]" value="3" />
+            <item description="Power [KW]" value="4" />
+            <rangeitem description="Not used" start="5" end="7" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="Not applicable, do not use" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
+            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
           </enum>
         </data>
       </profile>
@@ -3339,126 +3380,6 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
-        <!-- <data command="8" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="10" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="9" bits="1"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-<!--
-        <data command="6" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
--->
-        <data command="3" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="4" bits="3">
-<!--
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
--->
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-<!--
-          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
-            <item description="Over current switch off: ready / not supported" value="0" />
-            <item description="Over current switch off: executed" value="1" />
-          </enum>
-          <enum description="Error level" shortcut="EL" offset="9" size="2">
-            <item description="Error level 0: hardware OK" value="0" />
-            <item description="Error level 1: hardware warning" value="1" />
-            <item description="Error level 2: hardware failure" value="2" />
-            <item description="Error level not supported" value="3" />
-          </enum>
--->
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Local control" shortcut="LC" offset="16" size="1">
-            <item description="Local control disabled / not supported" value="0" />
-            <item description="Local control enabled" value="1" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
         <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3482,52 +3403,54 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
-<!--
-        <data command="5" bits="6">
+        <data command="3" bits="2">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Report measurement" shortcut="RM" offset="8" size="1">
-            <item description="Query only" value="0" />
-            <item description="Query / auto" value="1" />
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
           </enum>
-          <enum description="Reset measurement" shortcut="RE" offset="9" size="1">
-            <item description="Not active" value="0" />
-            <item description="Trigger signal" value="1" />
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Measurement mode" shortcut="ep" offset="10" size="1">
-            <item description="Energy" value="0" />
-            <item description="Power" value="1" />
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
           </enum>
           <enum description="I/O channel" shortcut="IO" offset="11" size="5">
             <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
             <item description="Not applicable, do not use" value="30" />
             <item description="Input channel (from mains supply)" value="31" />
           </enum>
-          <enum description="Measurement delta LSB" shortcut="MD_LSB" offset="16" size="4">
-            <rangeitem description="Measurement delta LSB {value}" start="0" end="15" />
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
           </enum>
-          <enum description="Unit" shortcut="UN" offset="21" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="Measurement delta MSB" shortcut="MD_MSB" offset="24" size="8">
-            <rangeitem description="Measurement delta MSB {value}" start="0" end="255" />
-          </enum>
-          <enum description="Max message time" shortcut="MAT" offset="32" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Max message time {value}" start="1" end="255" />
-          </enum>
-          <enum description="Min message time" shortcut="MIT" offset="40" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Min message time {value}" start="1" end="255" />
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
--->
       </profile>
       <profile type="0x12" description="Slot-in Module with 2 channels, no metering capabilities">
         <command description="Command identifier" shortcut="CMD" offset="4" size="4">
@@ -3545,126 +3468,6 @@
           <!-- <item description="Actuator External Interface Settings Query" value="12" /> -->
           <!-- <item description="Actuator External Interface Settings Response" value="13" /> -->
         </command>
-        <!-- <data command="8" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="10" bits="2"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-          <!-- <enum description="Pilotwire mode" shortcut="PM" offset="13" size="3"> -->
-            <!-- <item description="Off" value="0" /> -->
-            <!-- <item description="Comfort" value="1" /> -->
-            <!-- <item description="Eco" value="2" /> -->
-            <!-- <item description="Anti-freeze" value="3" /> -->
-            <!-- <item description="Comfort-1" value="4" /> -->
-            <!-- <item description="Comfort-2" value="5" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-        <!-- <data command="9" bits="1"> -->
-          <!-- <enum description="Command identifier" shortcut="CMD" offset="4" size="4"> -->
-            <!-- <rangeitem description="Command ID {value}" start="0" end="13" /> -->
-          <!-- </enum> -->
-        <!-- </data> -->
-<!--
-        <data command="6" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Query" shortcut="qu" offset="10" size="1">
-            <item description="Query energy" value="0" />
-            <item description="Query power" value="1" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="7" bits="6">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="Unit" shortcut="UN" offset="8" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Measurement value" shortcut="MV" offset="16" size="32">
-            <rangeitem description="Measurement value {value}" start="0" end="4294967295" />
-          </enum>
-        </data>
--->
-        <data command="3" bits="2">
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="All output channels supported by the device" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-        </data>
-        <data command="4" bits="3">
-<!--
-          <enum description="Power Failure" shortcut="PF" offset="0" size="1">
-            <item description="Power Failure Detection disabled/not supported" value="0" />
-            <item description="Power Failure Detection enabled" value="1" />
-          </enum>
-          <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-            <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-            <item description="Power Failure Detection Detected" value="1" />
-          </enum>
--->
-          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
-            <rangeitem description="Command ID {value}" start="0" end="13" />
-          </enum>
-<!--
-          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
-            <item description="Over current switch off: ready / not supported" value="0" />
-            <item description="Over current switch off: executed" value="1" />
-          </enum>
-          <enum description="Error level" shortcut="EL" offset="9" size="2">
-            <item description="Error level 0: hardware OK" value="0" />
-            <item description="Error level 1: hardware warning" value="1" />
-            <item description="Error level 2: hardware failure" value="2" />
-            <item description="Error level not supported" value="3" />
-          </enum>
--->
-          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
-            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
-            <item description="Not applicable, do not use" value="30" />
-            <item description="Input channel (from mains supply)" value="31" />
-          </enum>
-          <enum description="Local control" shortcut="LC" offset="16" size="1">
-            <item description="Local control disabled / not supported" value="0" />
-            <item description="Local control enabled" value="1" />
-          </enum>
-          <enum description="Output value" shortcut="OV" offset="17" size="7">
-            <item description="Output value 0% or OFF" value="0" />
-            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
-            <rangeitem description="Not used" start="101" end="126" />
-            <item description="output value not valid / not set" value="127" />
-          </enum>
-        </data>
         <data command="1" bits="3">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3688,52 +3491,54 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
-<!--
-        <data command="5" bits="6">
+        <data command="3" bits="2">
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Report measurement" shortcut="RM" offset="8" size="1">
-            <item description="Query only" value="0" />
-            <item description="Query / auto" value="1" />
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
           </enum>
-          <enum description="Reset measurement" shortcut="RE" offset="9" size="1">
-            <item description="Not active" value="0" />
-            <item description="Trigger signal" value="1" />
+        </data>
+        <data command="4" bits="3">
+           <enum description="Power Failure" shortcut="PF" offset="0" size="1">
+             <item description="Power Failure Detection disabled/not supported" value="0" />
+             <item description="Power Failure Detection enabled" value="1" />
+           </enum>
+           <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
+             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detection Detected" value="1" />
+           </enum>
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
           </enum>
-          <enum description="Measurement mode" shortcut="ep" offset="10" size="1">
-            <item description="Energy" value="0" />
-            <item description="Power" value="1" />
+          <enum description="Over current switch off" shortcut="OC" offset="8" size="1">
+            <item description="Over current switch off: ready / not supported" value="0" />
+            <item description="Over current switch off: executed" value="1" />
+          </enum>
+          <enum description="Error level" shortcut="EL" offset="9" size="2">
+            <item description="Error level 0: hardware OK" value="0" />
+            <item description="Error level 1: hardware warning" value="1" />
+            <item description="Error level 2: hardware failure" value="2" />
+            <item description="Error level not supported" value="3" />
           </enum>
           <enum description="I/O channel" shortcut="IO" offset="11" size="5">
             <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
             <item description="Not applicable, do not use" value="30" />
             <item description="Input channel (from mains supply)" value="31" />
           </enum>
-          <enum description="Measurement delta LSB" shortcut="MD_LSB" offset="16" size="4">
-            <rangeitem description="Measurement delta LSB {value}" start="0" end="15" />
+          <enum description="Local control" shortcut="LC" offset="16" size="1">
+            <item description="Local control disabled / not supported" value="0" />
+            <item description="Local control enabled" value="1" />
           </enum>
-          <enum description="Unit" shortcut="UN" offset="21" size="3">
-            <item description="Energy [Ws]" value="0" />
-            <item description="Energy [Wh]" value="1" />
-            <item description="Energy [KWh]" value="2" />
-            <item description="Power [W]" value="3" />
-            <item description="Power [KW]" value="4" />
-            <rangeitem description="Not used" start="5" end="7" />
-          </enum>
-          <enum description="Measurement delta MSB" shortcut="MD_MSB" offset="24" size="8">
-            <rangeitem description="Measurement delta MSB {value}" start="0" end="255" />
-          </enum>
-          <enum description="Max message time" shortcut="MAT" offset="32" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Max message time {value}" start="1" end="255" />
-          </enum>
-          <enum description="Min message time" shortcut="MIT" offset="40" size="8">
-            <item description="Reserved" value="0" />
-            <rangeitem description="Min message time {value}" start="1" end="255" />
+          <enum description="Output value" shortcut="OV" offset="17" size="7">
+            <item description="Output value 0% or OFF" value="0" />
+            <rangeitem description="Output value {value}% or ON" start="1" end="100" />
+            <rangeitem description="Not used" start="101" end="126" />
+            <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
--->
       </profile>
     </profiles>
     <profiles func="0x03" description="Light, Switching + Blind Control">
@@ -3849,6 +3654,81 @@
       </profile>
     </profiles>
     <profiles func="0x14" description="Multi Function Sensors">
+      <profile type="0x30" description="Sensor for Smoke, Air quality, Hygrothermal comfort, Temperature and Humidity">
+        <data>
+          <enum description="Smoke Alarm status" shortcut="SMA0" offset="0" size="1">
+            <item description="Smoke Alarm non-activated" value="0" />
+            <item description="Smoke Alarm activated" value="1" />
+          </enum>
+          <enum description="Sensor fault mode status" shortcut="SMA1" offset="1" size="1">
+            <item description="Sensor Fault mode non-activated" value="0" />
+            <item description="Sensor Fault mode activated" value="1" />
+          </enum>
+          <enum description="Smoke Alarm Condition analysis: Maintenance" shortcut="SMA2" offset="2" size="1">
+            <item description="Maintenance OK" value="0" />
+            <item description="Maintenance not done" value="1" />
+          </enum>
+          <enum description="Smoke Alarm Condition analysis: Humidity" shortcut="SMA3" offset="3" size="1">
+            <item description="Humidity range OK" value="0" />
+            <item description="Humidity range NOK" value="1" />
+          </enum>
+          <enum description="Smoke Alarm Condition analysis: Temperature" shortcut="SMA4" offset="4" size="1">
+            <item description="Temperature range OK" value="0" />
+            <item description="Temperature range NOK" value="1" />
+          </enum>
+          <enum description="Time since last maintenance" shortcut="SMA5" offset="5" size="8">
+            <rangeitem description="{value} week(s)" start="0" end="250" />
+            <rangeitem description="Reserved" start="251" end="254" />
+            <item description="Error" value="255" />
+          </enum>
+          <enum description="Energy Storage Status" shortcut="ES" offset="13" size="2">
+            <item description="High" value="0" />
+            <item description="Medium" value="1" />
+            <item description="Low" value="2" />
+            <item description="Critical" value="3" />
+          </enum>
+          <enum description="Countdown time until product end of life" shortcut="RPLT" offset="15" size="8">
+            <rangeitem description="{value} month(s)" start="0" end="120" />
+            <rangeitem description="Reserved" start="121" end="254" />
+            <item description="Error" value="255" />
+          </enum>
+          <value description="Temperature" shortcut="TMP8" offset="23" size="8" unit="°C">
+            <range>
+              <min>0</min>
+              <max>250</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>50.0</max>
+            </scale>
+          </value>
+          <value description="Humidity" shortcut="HUM" offset="31" size="8" unit="%">
+            <range>
+              <min>0</min>
+              <max>200</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>100.0</max>
+            </scale>
+          </value>
+          <enum description="Hygrothermal Comfort Index" shortcut="HCI" offset="39" size="2">
+            <item description="Good" value="0" />
+            <item description="Medium" value="1" />
+            <item description="Bad" value="2" />
+            <item description="Error" value="3" />
+          </enum>
+          <enum description="T/Hum. Indoor Air Analysis" shortcut="IAQTH" offset="41" size="3">
+            <item description="Optimal air range" value="0" />
+            <item description="Dry Air range" value="1" />
+            <item description="High humidity range" value="2" />
+            <item description="High temperature and humidity range" value="3" />
+            <item description="Temperature or Humidity out of analysis range" value="4" />
+            <rangeitem description="Reserved" start="5" end="6" />
+            <item description="Error" value="7" />
+          </enum>
+        </data>
+      </profile>
       <profile type="0x41" description="Indoor -Temperature, Humidity XYZ Acceleration, Illumination Sensor">
         <data>
           <value description="Temperature 10" shortcut="TMP" offset="0" size="10" unit="°C">
@@ -3919,6 +3799,948 @@
           <enum description="Contact" shortcut="CO" offset="67" size="1">
             <item description="Open" value="0" />
             <item description="Closed" value="1" />
+          </enum>
+        </data>
+      </profile>
+    </profiles>
+    <profiles func="0x50" description="Heat Recovery Ventilation">
+      <profile type="0x00" description="Type 0x00 (single room ventilation unit)">
+        <command description="Message Type" shortcut="MT" offset="0" size="3">
+          <item description="Ventilation Remote Transmission Request Message" value="0" />
+          <item description="Ventilation control" value="1" />
+          <item description="Ventilation basic status" value="2" />
+          <item description="Ventilation extended status" value="3" />
+        </command>
+        <data command="0" bits="1">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Requested Message Type" shortcut="RMT" offset="5" size="3">
+            <item description="Ventilation basic status" value="0" />
+            <item description="Ventilation extended status" value="1" />
+          </enum>
+        </data>
+        <data command="1" bits="6">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Direct Operation Mode Control" shortcut="DOMC" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="No action (keep current ventilation mode/level)" value="15" />
+          </enum>
+          <enum description="Operation Mode Control" shortcut="OMC" offset="8" size="2">
+            <item description="No action" value="0" />
+            <item description="Select next operation mode (edge-trigger)" value="1" />
+            <item description="Select previous operation mode (edge-trigger)" value="2" />
+            <item description="Reserved" value="3" />
+          </enum>
+          <enum description="Timer Operation Mode Control" shortcut="TOMC" offset="16" size="1">
+            <item description="No action" value="0" />
+            <item description="Start timer operation mode (edge-trigger)" value="1" />
+          </enum>
+          <enum description="CO2 Threshold" shortcut="COT" offset="17" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Humidity Threshold" shortcut="HT" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Air Quality Threshold" shortcut="AQT" offset="33" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+        </data>
+        <data command="2" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Operation Mode Status" shortcut="OMS" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="Reserved" value="15" />
+          </enum>
+          <enum description="Supply Air Flap Position" shortcut="SFP" offset="14" size="1">
+            <item description="Supply air flap closed" value="0" />
+            <item description="Supply air flap opened" value="1" />
+          </enum>
+          <enum description="Exhaust Air Flap Position" shortcut="EFP" offset="15" size="1">
+            <item description="Exhaust air flap closed" value="0" />
+            <item description="Exhaust air flap opened" value="1" />
+          </enum>
+          <enum description="Defrost Mode Status" shortcut="DMS" offset="16" size="1">
+            <item description="Defrost mode inactive" value="0" />
+            <item description="Defrost mode active" value="1" />
+          </enum>
+          <enum description="Cooling Protection Status" shortcut="CPS" offset="17" size="1">
+            <item description="Cooling protection mode inactive" value="0" />
+            <item description="Cooling protection mode active" value="1" />
+          </enum>
+          <enum description="Drain Heater Status" shortcut="DHS" offset="20" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Timer Operation Mode Status" shortcut="TOMS" offset="21" size="1">
+            <item description="timer operation mode inactive" value="0" />
+            <item description="timer operation mode active" value="1" />
+          </enum>
+          <enum description="Filter Maintenance Status" shortcut="FMS" offset="22" size="1">
+            <item description="Maintenance not required" value="0" />
+            <item description="Maintenance required" value="1" />
+          </enum>
+          <enum description="Air Quality Sensor 1" shortcut="AQS1" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Not available" value="127" />
+          </enum>
+          <enum description="Master/Slave Configuration Status" shortcut="MSS" offset="32" size="1">
+            <item description="Master" value="0" />
+            <item description="Slave" value="1" />
+          </enum>
+          <value description="Outdoor Air Temperature" shortcut="OUTT" offset="40" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Temperature" shortcut="SPLYT" offset="47" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Fan Air Flow Rate" shortcut="SPLYFF" offset="68" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Exhaust Air Fan Air Flow Rate" shortcut="EXHFF" offset="78" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Supply Fan Speed" shortcut="SPLYFS" offset="88" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Exhaust Fan Speed" shortcut="EXHFS" offset="100" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+        </data>
+        <data command="3" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <value description="Software Version Info" shortcut="SVI" offset="4" size="12" unit="">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Operation Hours Counter" shortcut="OHC" offset="16" size="16" unit="">
+            <range>
+              <min>0</min>
+              <max>65535</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>196605</max>
+            </scale>
+          </value>
+          <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
+            <rangeitem description="{value}" start="0" end="2147483648" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x01" description="Type 0x01 (single room ventilation unit with pre-heater)">
+        <command description="Message Type" shortcut="MT" offset="0" size="3">
+          <item description="Ventilation Remote Transmission Request Message" value="0" />
+          <item description="Ventilation control" value="1" />
+          <item description="Ventilation basic status" value="2" />
+          <item description="Ventilation extended status" value="3" />
+        </command>
+        <data command="0" bits="1">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Requested Message Type" shortcut="RMT" offset="5" size="3">
+            <item description="Ventilation basic status" value="0" />
+            <item description="Ventilation extended status" value="1" />
+          </enum>
+        </data>
+        <data command="1" bits="6">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Direct Operation Mode Control" shortcut="DOMC" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="No action (keep current ventilation mode/level)" value="15" />
+          </enum>
+          <enum description="Operation Mode Control" shortcut="OMC" offset="8" size="2">
+            <item description="No action" value="0" />
+            <item description="Select next operation mode (edge-trigger)" value="1" />
+            <item description="Select previous operation mode (edge-trigger)" value="2" />
+            <item description="Reserved" value="3" />
+          </enum>
+          <enum description="Timer Operation Mode Control" shortcut="TOMC" offset="16" size="1">
+            <item description="No action" value="0" />
+            <item description="Start timer operation mode (edge-trigger)" value="1" />
+          </enum>
+          <enum description="CO2 Threshold" shortcut="COT" offset="17" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Humidity Threshold" shortcut="HT" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Air Quality Threshold" shortcut="AQT" offset="33" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+        </data>
+        <data command="2" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Operation Mode Status" shortcut="OMS" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="Reserved" value="15" />
+          </enum>
+          <enum description="Supply Air Flap Position" shortcut="SFP" offset="14" size="1">
+            <item description="Supply air flap closed" value="0" />
+            <item description="Supply air flap opened" value="1" />
+          </enum>
+          <enum description="Exhaust Air Flap Position" shortcut="EFP" offset="15" size="1">
+            <item description="Exhaust air flap closed" value="0" />
+            <item description="Exhaust air flap opened" value="1" />
+          </enum>
+          <enum description="Defrost Mode Status" shortcut="DMS" offset="16" size="1">
+            <item description="Defrost mode inactive" value="0" />
+            <item description="Defrost mode active" value="1" />
+          </enum>
+          <enum description="Cooling Protection Status" shortcut="CPS" offset="17" size="1">
+            <item description="Cooling protection mode inactive" value="0" />
+            <item description="Cooling protection mode active" value="1" />
+          </enum>
+          <enum description="Outdoor Air Heater Status" shortcut="OHS" offset="18" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Drain Heater Status" shortcut="DHS" offset="20" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Timer Operation Mode Status" shortcut="TOMS" offset="21" size="1">
+            <item description="timer operation mode inactive" value="0" />
+            <item description="timer operation mode active" value="1" />
+          </enum>
+          <enum description="Filter Maintenance Status" shortcut="FMS" offset="22" size="1">
+            <item description="Maintenance not required" value="0" />
+            <item description="Maintenance required" value="1" />
+          </enum>
+          <enum description="Air Quality Sensor 1" shortcut="AQS1" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Not available" value="127" />
+          </enum>
+          <enum description="Master/Slave Configuration Status" shortcut="MSS" offset="32" size="1">
+            <item description="Master" value="0" />
+            <item description="Slave" value="1" />
+          </enum>
+          <value description="Outdoor Air Temperature" shortcut="OUTT" offset="40" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Temperature" shortcut="SPLYT" offset="47" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Fan Air Flow Rate" shortcut="SPLYFF" offset="68" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Exhaust Air Fan Air Flow Rate" shortcut="EXHFF" offset="78" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Supply Fan Speed" shortcut="SPLYFS" offset="88" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Exhaust Fan Speed" shortcut="EXHFS" offset="100" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+        </data>
+        <data command="3" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <value description="Software Version Info" shortcut="SVI" offset="4" size="12" unit="">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Operation Hours Counter" shortcut="OHC" offset="16" size="16" unit="">
+            <range>
+              <min>0</min>
+              <max>65535</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>196605</max>
+            </scale>
+          </value>
+          <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
+            <rangeitem description="{value}" start="0" end="2147483648" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x10" description="Type 0x10 (multi room ventilation unit without bypass)">
+        <command description="Message Type" shortcut="MT" offset="0" size="3">
+          <item description="Ventilation Remote Transmission Request Message" value="0" />
+          <item description="Ventilation control" value="1" />
+          <item description="Ventilation basic status" value="2" />
+          <item description="Ventilation extended status" value="3" />
+        </command>
+        <data command="0" bits="1">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Requested Message Type" shortcut="RMT" offset="5" size="3">
+            <item description="Ventilation basic status" value="0" />
+            <item description="Ventilation extended status" value="1" />
+          </enum>
+        </data>
+        <data command="1" bits="6">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Direct Operation Mode Control" shortcut="DOMC" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="No action (keep current ventilation mode/level)" value="15" />
+          </enum>
+          <enum description="Operation Mode Control" shortcut="OMC" offset="8" size="2">
+            <item description="No action" value="0" />
+            <item description="Select next operation mode (edge-trigger)" value="1" />
+            <item description="Select previous operation mode (edge-trigger)" value="2" />
+            <item description="Reserved" value="3" />
+          </enum>
+          <enum description="Timer Operation Mode Control" shortcut="TOMC" offset="16" size="1">
+            <item description="No action" value="0" />
+            <item description="Start timer operation mode (edge-trigger)" value="1" />
+          </enum>
+          <enum description="CO2 Threshold" shortcut="COT" offset="17" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Humidity Threshold" shortcut="HT" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Air Quality Threshold" shortcut="AQT" offset="33" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <value description="Room temperature threshold" shortcut="RTT" offset="41" size="7" unit="°C">
+            <range>
+              <min>1</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-63.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+        </data>
+        <data command="2" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Operation Mode Status" shortcut="OMS" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="Reserved" value="15" />
+          </enum>
+          <enum description="Defrost Mode Status" shortcut="DMS" offset="16" size="1">
+            <item description="Defrost mode inactive" value="0" />
+            <item description="Defrost mode active" value="1" />
+          </enum>
+          <enum description="Cooling Protection Status" shortcut="CPS" offset="17" size="1">
+            <item description="Cooling protection mode inactive" value="0" />
+            <item description="Cooling protection mode active" value="1" />
+          </enum>
+          <enum description="Outdoor Air Heater Status" shortcut="OHS" offset="18" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Supply Air Heater Status" shortcut="SHS" offset="19" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Timer Operation Mode Status" shortcut="TOMS" offset="21" size="1">
+            <item description="timer operation mode inactive" value="0" />
+            <item description="timer operation mode active" value="1" />
+          </enum>
+          <enum description="Filter Maintenance Status" shortcut="FMS" offset="22" size="1">
+            <item description="Maintenance not required" value="0" />
+            <item description="Maintenance required" value="1" />
+          </enum>
+          <enum description="Weekly Timer Program Status" shortcut="WTPS" offset="23" size="1">
+            <item description="Weekly timer program disabled or not configured" value="0" />
+            <item description="Weekly timer program active" value="1" />
+          </enum>
+          <enum description="Room Temperature Control Status" shortcut="RTCS" offset="24" size="1">
+            <item description="Room temperature control inactive" value="0" />
+            <item description="Room temperature control active" value="1" />
+          </enum>
+          <enum description="Air Quality Sensor 1" shortcut="AQS1" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Not available" value="127" />
+          </enum>
+          <enum description="Air Quality Sensor 2" shortcut="AQS2" offset="33" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Not available" value="127" />
+          </enum>
+          <value description="Outdoor Air Temperature" shortcut="OUTT" offset="40" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Temperature" shortcut="SPLYT" offset="47" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Indoor Air Temperature" shortcut="INT" offset="54" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Exhaust Air Temperature" shortcut="EXHT" offset="61" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Fan Air Flow Rate" shortcut="SPLYFF" offset="68" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Exhaust Air Fan Air Flow Rate" shortcut="EXHFF" offset="78" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Supply Fan Speed" shortcut="SPLYFS" offset="88" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Exhaust Fan Speed" shortcut="EXHFS" offset="100" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+        </data>
+        <data command="3" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <value description="Software Version Info" shortcut="SVI" offset="4" size="12" unit="">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Operation Hours Counter" shortcut="OHC" offset="16" size="16" unit="">
+            <range>
+              <min>0</min>
+              <max>65535</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>196605</max>
+            </scale>
+          </value>
+          <enum description="Digital Input 0...15 Status" shortcut="DIS" offset="32" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Digital Output 0...15 Status" shortcut="DOS" offset="48" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
+            <rangeitem description="{value}" start="0" end="2147483648" />
+          </enum>
+        </data>
+      </profile>
+      <profile type="0x11" description="Type 0x11 (multi room ventilation unit with bypass)">
+        <command description="Message Type" shortcut="MT" offset="0" size="3">
+          <item description="Ventilation Remote Transmission Request Message" value="0" />
+          <item description="Ventilation control" value="1" />
+          <item description="Ventilation basic status" value="2" />
+          <item description="Ventilation extended status" value="3" />
+        </command>
+        <data command="0" bits="1">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Requested Message Type" shortcut="RMT" offset="5" size="3">
+            <item description="Ventilation basic status" value="0" />
+            <item description="Ventilation extended status" value="1" />
+          </enum>
+        </data>
+        <data command="1" bits="6">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Direct Operation Mode Control" shortcut="DOMC" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="No action (keep current ventilation mode/level)" value="15" />
+          </enum>
+          <enum description="Operation Mode Control" shortcut="OMC" offset="8" size="2">
+            <item description="No action" value="0" />
+            <item description="Select next operation mode (edge-trigger)" value="1" />
+            <item description="Select previous operation mode (edge-trigger)" value="2" />
+            <item description="Reserved" value="3" />
+          </enum>
+          <enum description="Heat Exchanger Bypass Control" shortcut="HBC" offset="10" size="2">
+            <item description="No action" value="0" />
+            <item description="Close bypass (edge-trigger)" value="1" />
+            <item description="Open bypass (edge-trigger)" value="2" />
+            <item description="Reserved" value="3" />
+          </enum>
+          <enum description="Timer Operation Mode Control" shortcut="TOMC" offset="16" size="1">
+            <item description="No action" value="0" />
+            <item description="Start timer operation mode (edge-trigger)" value="1" />
+          </enum>
+          <enum description="CO2 Threshold" shortcut="COT" offset="17" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Humidity Threshold" shortcut="HT" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <enum description="Air Quality Threshold" shortcut="AQT" offset="33" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Default (use threshold configured in device)" value="127" />
+          </enum>
+          <value description="Room temperature threshold" shortcut="RTT" offset="41" size="7" unit="°C">
+            <range>
+              <min>1</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-63.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+        </data>
+        <data command="2" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <enum description="Operation Mode Status" shortcut="OMS" offset="4" size="4">
+            <item description="Off" value="0" />
+            <item description="Level 1" value="1" />
+            <item description="Level 2" value="2" />
+            <item description="Level 3" value="3" />
+            <item description="Level 4" value="4" />
+            <rangeitem description="Reserved" start="5" end="10" />
+            <item description="Automatic" value="11" />
+            <item description="Automatic on demand" value="12" />
+            <item description="Supply air only" value="13" />
+            <item description="Exhaust air only" value="14" />
+            <item description="Reserved" value="15" />
+          </enum>
+          <enum description="Safety Mode Status" shortcut="SMS" offset="12" size="1">
+            <item description="Fireplace safety mode disabled" value="0" />
+            <item description="Fireplace safety mode enabled" value="1" />
+          </enum>
+          <enum description="Heat Exchanger Bypass Status" shortcut="HBS" offset="13" size="1">
+            <item description="Bypass closed (heat-recovery active)" value="0" />
+            <item description="Bypass opened (heat-recovery inactive)" value="1" />
+          </enum>
+          <enum description="Defrost Mode Status" shortcut="DMS" offset="16" size="1">
+            <item description="Defrost mode inactive" value="0" />
+            <item description="Defrost mode active" value="1" />
+          </enum>
+          <enum description="Cooling Protection Status" shortcut="CPS" offset="17" size="1">
+            <item description="Cooling protection mode inactive" value="0" />
+            <item description="Cooling protection mode active" value="1" />
+          </enum>
+          <enum description="Outdoor Air Heater Status" shortcut="OHS" offset="18" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Supply Air Heater Status" shortcut="SHS" offset="19" size="1">
+            <item description="Inactive" value="0" />
+            <item description="Active" value="1" />
+          </enum>
+          <enum description="Timer Operation Mode Status" shortcut="TOMS" offset="21" size="1">
+            <item description="timer operation mode inactive" value="0" />
+            <item description="timer operation mode active" value="1" />
+          </enum>
+          <enum description="Filter Maintenance Status" shortcut="FMS" offset="22" size="1">
+            <item description="Maintenance not required" value="0" />
+            <item description="Maintenance required" value="1" />
+          </enum>
+          <enum description="Weekly Timer Program Status" shortcut="WTPS" offset="23" size="1">
+            <item description="Weekly timer program disabled or not configured" value="0" />
+            <item description="Weekly timer program active" value="1" />
+          </enum>
+          <enum description="Room Temperature Control Status" shortcut="RTCS" offset="24" size="1">
+            <item description="Room temperature control inactive" value="0" />
+            <item description="Room temperature control active" value="1" />
+          </enum>
+          <enum description="Air Quality Sensor 1" shortcut="AQS1" offset="25" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Not available" value="127" />
+          </enum>
+          <enum description="Air Quality Sensor 2" shortcut="AQS2" offset="33" size="7">
+            <rangeitem description="{value} %" start="0" end="100" />
+            <rangeitem description="Reserved" start="101" end="126" />
+            <item description="Not available" value="127" />
+          </enum>
+          <value description="Outdoor Air Temperature" shortcut="OUTT" offset="40" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Temperature" shortcut="SPLYT" offset="47" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Indoor Air Temperature" shortcut="INT" offset="54" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Exhaust Air Temperature" shortcut="EXHT" offset="61" size="7" unit="°C">
+            <range>
+              <min>0</min>
+              <max>127</max>
+            </range>
+            <scale>
+              <min>-64.0</min>
+              <max>63.0</max>
+            </scale>
+          </value>
+          <value description="Supply Air Fan Air Flow Rate" shortcut="SPLYFF" offset="68" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Exhaust Air Fan Air Flow Rate" shortcut="EXHFF" offset="78" size="10" unit="m3/h">
+            <range>
+              <min>0</min>
+              <max>1023</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>1023</max>
+            </scale>
+          </value>
+          <value description="Supply Fan Speed" shortcut="SPLYFS" offset="88" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Exhaust Fan Speed" shortcut="EXHFS" offset="100" size="12" unit="1/min">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+        </data>
+        <data command="3" bits="14">
+          <enum description="Message Type" shortcut="MT" offset="0" size="3">
+            <rangeitem description="Message Type {value}" start="0" end="3" />
+            <rangeitem description="Reserved {value}" start="4" end="7" />
+          </enum>
+          <value description="Software Version Info" shortcut="SVI" offset="4" size="12" unit="">
+            <range>
+              <min>0</min>
+              <max>4095</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>4095</max>
+            </scale>
+          </value>
+          <value description="Operation Hours Counter" shortcut="OHC" offset="16" size="16" unit="">
+            <range>
+              <min>0</min>
+              <max>65535</max>
+            </range>
+            <scale>
+              <min>0</min>
+              <max>196605</max>
+            </scale>
+          </value>
+          <enum description="Digital Input 0...15 Status" shortcut="DIS" offset="32" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Digital Output 0...15 Status" shortcut="DOS" offset="48" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
+            <rangeitem description="{value}" start="0" end="32768" />
+          </enum>
+          <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
+            <rangeitem description="{value}" start="0" end="2147483648" />
           </enum>
         </data>
       </profile>

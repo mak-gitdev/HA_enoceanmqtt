@@ -10,7 +10,6 @@ import yaml
 
 import enocean.utils
 from enoceanmqtt.communicator import Communicator
-
 from enoceanmqtt.overlays.homeassistant.device_manager import DeviceManager
 
 class HACommunicator(Communicator):
@@ -62,7 +61,7 @@ class HACommunicator(Communicator):
         self._devmgr = DeviceManager(config)
 
         # Starting from HA 2024.2.0, device name should not be used in entity names
-        # Get how this should be handled as specified by config.ha_dev_name_in_entity
+        # Get how this should be handled as specified by the user
         if str(config.get('ha_dev_name_in_entity')) in ("True", "true", "1"):
             self._dev_name_in_entity = True
 
