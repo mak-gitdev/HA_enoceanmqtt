@@ -71,7 +71,7 @@ class HACommunicator(Communicator):
                 logging.debug("Found new model-based device: %s %s", manufacturer, model)
                 devcfg = {}
                 try:
-                    devcfg = copy.deepcopy(_ha_mapping[manufacturer][model]['device_config'])
+                    devcfg = copy.deepcopy(self._ha_mapping[manufacturer][model]['device_config'])
                 except KeyError:
                     pass
                 for new_sens in devcfg:
@@ -263,7 +263,7 @@ class HACommunicator(Communicator):
         self._system_status_topic[attr] = self.conf['mqtt_prefix']+'__system/'+attr
 
     def _mqtt_discovery_eep(self, sensor, prev_sensor_cfgtopics=None):
-        '''Publish MQTT discovery sensor entities configuration to Home Assistant'''
+        '''Publish MQTT discovery EEP entities configuration to Home Assistant'''
         if prev_sensor_cfgtopics is None:
             prev_sensor_cfgtopics = []
         update = prev_sensor_cfgtopics != []
