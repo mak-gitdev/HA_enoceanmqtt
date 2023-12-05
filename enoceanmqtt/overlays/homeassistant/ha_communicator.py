@@ -67,7 +67,7 @@ class HACommunicator(Communicator):
         # Create sensors from models
         for cur_model in models:
             if str(cur_model.get('ignore')) not in ("True", "true", "1"):
-                manufacturer,model = cur_model.get('model').split('/')
+                manufacturer,model = cur_model.get('model').lower().split('/')
                 logging.debug("Found new model-based device: %s %s", manufacturer, model)
                 devcfg = {}
                 try:

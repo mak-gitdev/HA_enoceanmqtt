@@ -4630,7 +4630,7 @@
 
 # Mapping of Eltako devices using non-standard or universal EEPs to Home Assistant Entities
 eltako:
-   FSB14:
+   fsb14:
       device_config:
          - rorg: "0xA5"
            func: "0x3F"
@@ -4673,7 +4673,7 @@ eltako:
            name: "up"
            config:
               command_topic: "a5/req"
-              payload_press: >-
+              command_template: >-
                 {% set ns = namespace() %}
                 {% for entity in device_entities(device_id(entity_id)) %}
                   {% if entity is search('time_in_ms$',ignorecase=True) %}
@@ -4696,7 +4696,7 @@ eltako:
            name: "down"
            config:
               command_topic: "a5/req"
-              payload_press: >-
+              command_template: >-
                 {% set ns = namespace() %}
                 {% for entity in device_entities(device_id(entity_id)) %}
                   {% if entity is search('time_in_ms$',ignorecase=True) %}
@@ -4728,7 +4728,7 @@ eltako:
               payload_on: "on"
               payload_off: "off"
               value_template: >-
-                {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="70","on","off") }}
          - component: binary_sensor
            name: "end_bottom"
            config:
@@ -4736,8 +4736,24 @@ eltako:
               payload_on: "on"
               payload_off: "off"
               value_template: >-
-                {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
-   FSB61:
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="50","on","off") }}
+         - component: binary_sensor
+           name: "start_up"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="01","on","off") }}
+         - component: binary_sensor
+           name: "start_down"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="02","on","off") }}
+   fsb61:
       device_config:
          - rorg: "0xA5"
            func: "0x3F"
@@ -4780,7 +4796,7 @@ eltako:
            name: "up"
            config:
               command_topic: "a5/req"
-              payload_press: >-
+              command_template: >-
                 {% set ns = namespace() %}
                 {% for entity in device_entities(device_id(entity_id)) %}
                   {% if entity is search('time_in_ms$',ignorecase=True) %}
@@ -4803,7 +4819,7 @@ eltako:
            name: "down"
            config:
               command_topic: "a5/req"
-              payload_press: >-
+              command_template: >-
                 {% set ns = namespace() %}
                 {% for entity in device_entities(device_id(entity_id)) %}
                   {% if entity is search('time_in_ms$',ignorecase=True) %}
@@ -4835,7 +4851,7 @@ eltako:
               payload_on: "on"
               payload_off: "off"
               value_template: >-
-                {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="70","on","off") }}
          - component: binary_sensor
            name: "end_bottom"
            config:
@@ -4843,7 +4859,23 @@ eltako:
               payload_on: "on"
               payload_off: "off"
               value_template: >-
-                {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="50","on","off") }}
+         - component: binary_sensor
+           name: "start_up"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="01","on","off") }}
+         - component: binary_sensor
+           name: "start_down"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="02","on","off") }}
 
 
 
