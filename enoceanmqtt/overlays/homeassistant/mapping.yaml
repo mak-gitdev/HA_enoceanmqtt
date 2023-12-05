@@ -4631,58 +4631,219 @@
 # Mapping of Eltako devices using non-standard or universal EEPs to Home Assistant Entities
 eltako:
    FSB14:
-      control:
-         device_config:
-            rorg: "0xA5"
-            func: "0x3F"
-            type: "0x7F"
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "button"
-              name: "pairing"
-              config:
-                 command_topic: "req"
-                 payload_press: >-
-                   {"raw_data":"FF:F8:0D:80","send":"clear+learn+raw_data"}
-      status:
-         device_config:
-            - rorg: "0xF6"
-              func: "0x02"
-              type: "0x01"
-              command: ""
-              channel: ""
-              log_learn: ""
-              direction: ""
-              answer: ""
-            - rorg: "0xA5"
-              func: "0x3F"
-              type: "0x7F"
-              command: ""
-              channel: ""
-              log_learn: ""
-              direction: ""
-              answer: ""
-         entities:
-            - component: binary_sensor
-              name: "end_bottom"
-              config:
-                 state_topic: ""
-                 payload_on: "on"
-                 payload_off: "off"
-                 value_template: >-
-                   {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
-            - component: binary_sensor
-              name: "end_top"
-              config:
-                 state_topic: ""
-                 payload_on: "on"
-                 payload_off: "off"
-                 value_template: >-
-                   {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+      device_config:
+         - rorg: "0xA5"
+           func: "0x3F"
+           type: "0x7F"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"FF:F8:0D:80","send":"clear+learn+raw_data"}
+         - component: "switch"
+           name: "time_in_ms"
+           config:
+              command_topic: "__trash"
+         - component: "number"
+           name: "shut_time"
+           config:
+              command_topic: "__trash"
+              min: "1"
+              max: "255"
+              step: "0.1"
+              mode: "box"
+              unit_of_measurement: "s"
+              icon: "mdi:sort-time-ascending-outline"
+         - component: "button"
+           name: "up"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('time_in_ms$',ignorecase=True) %}
+                    {% set ns.time_in_ms = iif(is_state(entity, "on"),1,0) %}
+                  {% elif entity is search('shut_time$',ignorecase=True) %}
+                    {% set ns.shut_time_sec = '%02x' % (states(entity)|int(default=1)) %}
+                    {% set ns.shut_time_msb = '%02x' % ((((states(entity)|float(default=0))*10)/256)|int) %}
+                    {% set ns.shut_time_lsb = '%02x' % ((((states(entity)|float(default=10))*10)%256)|int) %}
+                  {% endif %}
+                {% endfor %}
+                {% if ns.time_in_ms == 0 %}
+                  {% set ns.shut_time_msb = '00' %}
+                  {% set ns.shut_time_lsb = ns.shut_time_sec %}
+                  {% set ns.DB0 = '08' %}
+                {% else %}
+                  {% set ns.DB0 = '0A' %}
+                {% endif %}
+                {"raw_data":"{{ns.shut_time_msb}}:{{ns.shut_time_lsb}}:01:{{ns.DB0}}","send":"clear+raw_data"}
+         - component: "button"
+           name: "down"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('time_in_ms$',ignorecase=True) %}
+                    {% set ns.time_in_ms = iif(is_state(entity, "on"),1,0) %}
+                  {% elif entity is search('shut_time$',ignorecase=True) %}
+                    {% set ns.shut_time_sec = '%02x' % (states(entity)|int(default=1)) %}
+                    {% set ns.shut_time_msb = '%02x' % ((((states(entity)|float(default=0))*10)/256)|int) %}
+                    {% set ns.shut_time_lsb = '%02x' % ((((states(entity)|float(default=10))*10)%256)|int) %}
+                  {% endif %}
+                {% endfor %}
+                {% if ns.time_in_ms == 0 %}
+                  {% set ns.shut_time_msb = '00' %}
+                  {% set ns.shut_time_lsb = ns.shut_time_sec %}
+                  {% set ns.DB0 = '08' %}
+                {% else %}
+                  {% set ns.DB0 = '0A' %}
+                {% endif %}
+                {"raw_data":"{{ns.shut_time_msb}}:{{ns.shut_time_lsb}}:02:{{ns.DB0}}","send":"clear+raw_data"}
+         - component: "button"
+           name: "stop"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"00:00:00:08","send":"clear+raw_data"}
+         - component: binary_sensor
+           name: "end_top"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "end_bottom"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
+   FSB61:
+      device_config:
+         - rorg: "0xA5"
+           func: "0x3F"
+           type: "0x7F"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"FF:F8:0D:80","send":"clear+learn+raw_data"}
+         - component: "switch"
+           name: "time_in_ms"
+           config:
+              command_topic: "__trash"
+         - component: "number"
+           name: "shut_time"
+           config:
+              command_topic: "__trash"
+              min: "1"
+              max: "255"
+              step: "0.1"
+              mode: "box"
+              unit_of_measurement: "s"
+              icon: "mdi:sort-time-ascending-outline"
+         - component: "button"
+           name: "up"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('time_in_ms$',ignorecase=True) %}
+                    {% set ns.time_in_ms = iif(is_state(entity, "on"),1,0) %}
+                  {% elif entity is search('shut_time$',ignorecase=True) %}
+                    {% set ns.shut_time_sec = '%02x' % (states(entity)|int(default=1)) %}
+                    {% set ns.shut_time_msb = '%02x' % ((((states(entity)|float(default=0))*10)/256)|int) %}
+                    {% set ns.shut_time_lsb = '%02x' % ((((states(entity)|float(default=10))*10)%256)|int) %}
+                  {% endif %}
+                {% endfor %}
+                {% if ns.time_in_ms == 0 %}
+                  {% set ns.shut_time_msb = '00' %}
+                  {% set ns.shut_time_lsb = ns.shut_time_sec %}
+                  {% set ns.DB0 = '08' %}
+                {% else %}
+                  {% set ns.DB0 = '0A' %}
+                {% endif %}
+                {"raw_data":"{{ns.shut_time_msb}}:{{ns.shut_time_lsb}}:01:{{ns.DB0}}","send":"clear+raw_data"}
+         - component: "button"
+           name: "down"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('time_in_ms$',ignorecase=True) %}
+                    {% set ns.time_in_ms = iif(is_state(entity, "on"),1,0) %}
+                  {% elif entity is search('shut_time$',ignorecase=True) %}
+                    {% set ns.shut_time_sec = '%02x' % (states(entity)|int(default=1)) %}
+                    {% set ns.shut_time_msb = '%02x' % ((((states(entity)|float(default=0))*10)/256)|int) %}
+                    {% set ns.shut_time_lsb = '%02x' % ((((states(entity)|float(default=10))*10)%256)|int) %}
+                  {% endif %}
+                {% endfor %}
+                {% if ns.time_in_ms == 0 %}
+                  {% set ns.shut_time_msb = '00' %}
+                  {% set ns.shut_time_lsb = ns.shut_time_sec %}
+                  {% set ns.DB0 = '08' %}
+                {% else %}
+                  {% set ns.DB0 = '0A' %}
+                {% endif %}
+                {"raw_data":"{{ns.shut_time_msb}}:{{ns.shut_time_lsb}}:02:{{ns.DB0}}","send":"clear+raw_data"}
+         - component: "button"
+           name: "stop"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"00:00:00:08","send":"clear+raw_data"}
+         - component: binary_sensor
+           name: "end_top"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 3) or (value_json.SA and value_json.R2 == 3) %}on{% else %}off{% endif %}
+         - component: binary_sensor
+           name: "end_bottom"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {% if (value_json.EB and value_json.R1 == 2) or (value_json.SA and value_json.R2 == 2) %}on{% else %}off{% endif %}
 
 
 

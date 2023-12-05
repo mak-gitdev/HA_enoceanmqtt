@@ -29,33 +29,67 @@ class HACommunicator(Communicator):
             self._ha_mapping = yaml.safe_load(file)
         logging.info("Mapping file correctly read: %s", mapping_file)
 
+        # Get Model-based sensors
+        models = []
+        models = [item for item in sensors if item.get('model')]
+
+        # Get EEP-based sensors
+        sensors = [cur_sensor for cur_sensor in sensors if cur_sensor not in models]
+
         # Overwrite some of the user-defined device configuration
         # to comply with the overlay requirements
         for cur_sensor in sensors:
             if str(cur_sensor.get('ignore')) not in ("True", "true", "1"):
                 # Retrieve EEP-related device configuration
-                rorg = cur_sensor['rorg']
-                func = cur_sensor['func']
+                rorg  = cur_sensor['rorg']
+                func  = cur_sensor['func']
                 type_ = cur_sensor['type']
                 devcfg = {}
                 try:
-                    devcfg = self._ha_mapping[rorg][func][type_]['device_config']
+                    devcfg = copy.deepcopy(self._ha_mapping[rorg][func][type_]['device_config'])
                 except KeyError:
                     pass
 
                 # Set EEP-related device configuration
-                cur_sensor['command'] = devcfg.get('command')
-                cur_sensor['channel'] = devcfg.get('channel')
+                cur_sensor['command']   = devcfg.get('command')
+                cur_sensor['channel']   = devcfg.get('channel')
                 cur_sensor['log_learn'] = devcfg.get('log_learn')
                 cur_sensor['direction'] = devcfg.get('direction')
-                cur_sensor['answer'] = devcfg.get('answer')
+                cur_sensor['answer']    = devcfg.get('answer')
 
                 # Better to work with JSON in HA so force JSON usage
                 # Also force publish_rssi, publish_date and persistent
                 cur_sensor['publish_json'] = "1"
                 cur_sensor['publish_rssi'] = "1"
                 cur_sensor['publish_date'] = "1"
-                cur_sensor['persistent'] = "1"
+                cur_sensor['persistent']   = "1"
+
+        # Create sensors from models
+        for cur_model in models:
+            if str(cur_model.get('ignore')) not in ("True", "true", "1"):
+                manufacturer,model = cur_model.get('model').split('/')
+                logging.debug("Found new model-based device: %s %s", manufacturer, model)
+                devcfg = {}
+                try:
+                    devcfg = copy.deepcopy(_ha_mapping[manufacturer][model]['device_config'])
+                except KeyError:
+                    pass
+                for new_sens in devcfg:
+                    new_sens['name'] = cur_model.get('name')+'/'+new_sens.get('rorg')[2:4].lower()
+                    new_sens['address'] = cur_model.get('address')
+                    new_sens['manufacturer'] = manufacturer
+                    new_sens['model'] = model
+                    new_sens['rorg'] = int(new_sens['rorg'],0)
+                    new_sens['func'] = int(new_sens['func'],0)
+                    new_sens['type'] = int(new_sens['type'],0)
+                    # Better to work with JSON in HA so force JSON usage
+                    # Also force publish_rssi, publish_date and persistent
+                    new_sens['publish_json'] = "1"
+                    new_sens['publish_rssi'] = "1"
+                    new_sens['publish_date'] = "1"
+                    new_sens['persistent']   = "1"
+                    sensors.append(new_sens)
+                    logging.debug("Created sensor: %s", new_sens)
 
         # Create device manager
         self._devmgr = DeviceManager(config)
@@ -98,23 +132,43 @@ class HACommunicator(Communicator):
                 # configuration when sensor mapping has changed
                 for cur_sensor in self.sensors:
                     if str(cur_sensor.get('ignore')) not in ("True", "true", "1"):
-                        # Create sensor UID
-                        eep = format((cur_sensor['rorg']<<16)+(cur_sensor['func']<<8)+cur_sensor['type'], '06X')
-                        try:
-                            sender = format(cur_sensor.get('sender'),'08X')
-                        except:
-                            sender = 'NONE'
-                        dev_uid = eep+"_"+format(cur_sensor['address'],'08X')+"_"+sender
-                        # Get sensor from DB if it exists
-                        sensor_db = self._devmgr.db_get_device_by_field('name', cur_sensor['name'])
-                        # Sensor discovery/update
-                        cfgtopics = sensor_db.get('cfgtopics', None) if sensor_db else None
-                        self._mqtt_discovery_sensor(cur_sensor, cfgtopics)
-                        # Remove device from the UID list
-                        try:
-                            known_uids.remove(dev_uid)
-                        except ValueError:
-                            pass
+                        if not cur_sensor.get('model'):
+                            # Create sensor UID
+                            eep = format((cur_sensor['rorg']<<16)+(cur_sensor['func']<<8)+cur_sensor['type'], '06X')
+                            try:
+                                sender = format(cur_sensor.get('sender'),'08X')
+                            except:
+                                sender = 'NONE'
+                            dev_uid = eep+"_"+format(cur_sensor['address'],'08X')+"_"+sender
+                            # Get sensor from DB if it exists
+                            sensor_db = self._devmgr.db_get_device_by_field('name', cur_sensor['name'])
+                            # Sensor discovery/update
+                            cfgtopics = sensor_db.get('cfgtopics', None) if sensor_db else None
+                            self._mqtt_discovery_eep(cur_sensor, cfgtopics)
+                            # Remove device from the UID list
+                            try:
+                                known_uids.remove(dev_uid)
+                            except ValueError:
+                                pass
+                        else:
+                            # Create sensor UID
+                            try:
+                                sender = format(cur_sensor.get('sender'),'08X')
+                            except:
+                                sender = 'NONE'
+                            dev_uid = cur_sensor['manufacturer']+"_"+cur_sensor['model']+"_"+format(cur_sensor['address'],'08X')+"_"+sender
+                            # Retrieve device name from sensor name by removing "/RORG" at the end
+                            name = cur_sensor['name'][:-3]
+                            # Get sensor from DB if it exists
+                            sensor_db = self._devmgr.db_get_device_by_field('name', name)
+                            # Sensor discovery/update
+                            cfgtopics = sensor_db.get('cfgtopics', None) if sensor_db else None
+                            self._mqtt_discovery_model(cur_sensor, cfgtopics)
+                            # Remove device from the UID list
+                            try:
+                                known_uids.remove(dev_uid)
+                            except ValueError:
+                                pass
 
                 # Delete devices that are no more listed in config file
                 logging.debug("List of remaining UIDS: %s", str(known_uids))
@@ -161,6 +215,7 @@ class HACommunicator(Communicator):
     # SYSTEM
     #=============================================================================================
     def _mqtt_discovery_system(self, attr):
+        '''Publish MQTT discovery system entities configuration to Home Assistant'''
         device_map = copy.deepcopy(self._ha_mapping['system'][attr])
         for entity in device_map:
             cfg = entity['config']
@@ -207,8 +262,8 @@ class HACommunicator(Communicator):
         self.mqtt.subscribe(self.conf['mqtt_prefix']+'__system/'+attr+'/req/#')
         self._system_status_topic[attr] = self.conf['mqtt_prefix']+'__system/'+attr
 
-    def _mqtt_discovery_sensor(self, sensor, prev_sensor_cfgtopics=None):
-        '''Publish MQTT discovery configuration to Home Assistant'''
+    def _mqtt_discovery_eep(self, sensor, prev_sensor_cfgtopics=None):
+        '''Publish MQTT discovery sensor entities configuration to Home Assistant'''
         if prev_sensor_cfgtopics is None:
             prev_sensor_cfgtopics = []
         update = prev_sensor_cfgtopics != []
@@ -327,6 +382,123 @@ class HACommunicator(Communicator):
         self._devmgr.db_upsert_device(sensor, dev_uid, 'cfgtopics', sensor_cfgtopics)
         logging.info("Device %s (UID: %s / EEP: %s) %s device database",
                      sensor['name'], dev_uid, eep_dash,
+                     'updated on' if update else 'added to')
+
+    def _mqtt_discovery_model(self, sensor, prev_sensor_cfgtopics=None):
+        '''Publish MQTT discovery model entities configuration to Home Assistant'''
+        if prev_sensor_cfgtopics is None:
+            prev_sensor_cfgtopics = []
+        update = prev_sensor_cfgtopics != []
+        model = sensor['model']
+        manufacturer = sensor['manufacturer']
+        reference = manufacturer+"_"+model
+        name = sensor['name'][:-3]
+        is_virtual = str(sensor.get('virtual')) == '1'
+
+        # If the device is supported, retrieve the device mapping
+        device_map = None
+        try:
+            if is_virtual:
+                device_map = copy.deepcopy(self._ha_mapping[manufacturer][model]['virtual'])
+            else:
+                device_map = copy.deepcopy(self._ha_mapping[manufacturer][model]['entities'])
+        except KeyError:
+            pass
+
+        if device_map is None:
+            logging.warning('Device not yet supported: %s%s',
+                            reference,' (Virtual).' if is_virtual else \
+                                      '. Only RSSI sensor will be available')
+            device_map = []
+
+        if not is_virtual:
+            # Add RSSI sensor in HA
+            device_map += copy.deepcopy(self._ha_mapping['common']['rssi'])
+            # Add DATE sensor in HA
+            device_map += copy.deepcopy(self._ha_mapping['common']['date'])
+
+        address = format(sensor['address'],'08X')
+        try:
+            sender = format(sensor.get('sender'),'08X')
+        except:
+            sender = 'NONE'
+        dev_uid = reference+"_"+address+"_"+sender
+        dev_name = "e2m_"+name.replace(self.conf['mqtt_prefix'], "").replace("/", "_")
+        sensor_cfgtopics = []
+
+        # Delete previous entities that are no more used in loaded mapping
+        if update:
+            for entity in device_map:
+                # Create a unique ID for the entity
+                uid = "enocean_"+dev_uid+"_"+entity['name']
+
+                # The configuration topic defined for MQTT Discovery
+                cfgtopic = f"{entity['component']}/{uid}/config"
+
+                # Remove the entity from the list of entities to be deleted during update
+                if cfgtopic in prev_sensor_cfgtopics:
+                    prev_sensor_cfgtopics.remove(cfgtopic)
+
+            # Delete to-be-deleted entities, if any
+            for cfgtopic in prev_sensor_cfgtopics:
+                self.mqtt.publish(f"{self._mqtt_discovery_prefix}{cfgtopic}", "", retain=True)
+
+        # Loop over all the entities defined in the device
+        for entity in device_map:
+            # A name should be defined in mapping. If not, generate one.
+            if str(entity.get('name')).lower() in ("none", ""):
+                entity['name'] = str(int(time.time()))
+            # Select the entity configuration
+            cfg = entity['config']
+
+            # Create a unique ID for the entity
+            uid = "enocean_"+dev_uid+"_"+entity['name']
+            cfg['unique_id'] = uid
+
+            # The entity name to be displayed in HA
+            if self._dev_name_in_entity:
+                cfg['name'] = dev_name+'_'+entity['name']
+            else:
+                cfg['name'] = entity['name']
+
+            # Associate all entities to the device in HA
+            cfg['device'] = {}
+            cfg['device']['name'] = dev_name
+            cfg['device']['identifiers'] = address if address != 'FFFFFFFF' else dev_uid
+            cfg['device']['model'] = model+" @"+address if address != 'FFFFFFFF' else \
+                                     model+' (VIRTUAL) / '+sender+'->'+address
+            cfg['device']['manufacturer'] = manufacturer
+            cfg['device']['configuration_url'] = 'https://www.google.com/search?q='+\
+                                                 manufacturer+'+'+model+'+pdf'
+
+            # The configuration topic defined for MQTT Discovery
+            cfgtopic = f"{entity['component']}/{uid}/config"
+
+            # List of entities configuration topics for later component deletion/update
+            sensor_cfgtopics.append(cfgtopic)
+
+            # Append defined entity's topics to the device topic
+            for key in cfg:
+                if "topic" in key:
+                    if cfg[key] not in ("", None):
+                        cfg[key] = name+"/"+cfg[key]
+                    else:
+                        cfg[key] = name
+
+            # Publish the device configuration to MQTT for discovery
+            self.mqtt.publish(f"{self._mqtt_discovery_prefix}{cfgtopic}",
+                              json.dumps(cfg), retain=True)
+
+        if sensor_cfgtopics:
+            # Subscribe to one config topic so that we can detect when MQTT delete is pressed
+            self.mqtt.subscribe(f"{self._mqtt_discovery_prefix}{sensor_cfgtopics[0]}/#")
+            # Subscribe to system message topic (per-device)
+            self.mqtt.subscribe(name+'/__system/#')
+
+        # Add/update device to the database
+        self._devmgr.db_upsert_device(sensor, dev_uid, 'cfgtopics', sensor_cfgtopics)
+        logging.info("Device %s (UID: %s / REF: %s) %s device database",
+                     name, dev_uid, reference,
                      'updated on' if update else 'added to')
 
     def _handle_system_msg(self, msg, delete=False):
