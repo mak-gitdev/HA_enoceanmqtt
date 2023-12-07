@@ -4627,9 +4627,31 @@
                  payload_on: "0"
                  payload_off: "1"
 
-
 # Mapping of Eltako devices using non-standard or universal EEPs to Home Assistant Entities
 eltako:
+   fhd60sb:
+      device_config:
+         - rorg: "0xA5"
+           func: "0x06"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: sensor
+           name: "lux"
+           config:
+              state_topic: "a5"
+              value_template: >-
+                {% if value_json._RAW_DATA_.split(":")[1]=="00" %}
+                  {{ value_json._RAW_DATA_.split(":")[0]|int(base=16) }}
+                {% else %}
+                  {{ value_json.ILL2 | round(1) }}
+                {% endif %}
+              device_class: "illuminance"
+              unit_of_measurement: "lx"
    fsb14:
       device_config:
          - rorg: "0xA5"
@@ -4876,8 +4898,165 @@ eltako:
               payload_off: "off"
               value_template: >-
                 {{ iif(value_json._RAW_DATA_.split(":")[0]=="02","on","off") }}
-
-
+   fsr61:
+      device_config:
+         - rorg: "0xA5"
+           func: "0x38"
+           type: "0x08"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"E0:40:0D:80","send":"clear+learn+raw_data"}
+         - component: "switch"
+           name: "switch"
+           config:
+              command_topic: "a5/req"
+              payload_on: >-
+                {"raw_data":"01:00:00:09","send":"clear+raw_data"}
+              payload_off: >-
+                {"raw_data":"01:00:00:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              value_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}ON{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}OFF{% endif %}
+              enabled_by_default: "false"
+              device_class: "outlet"
+         - component: "light"
+           name: "light"
+           config:
+              schema: "template"
+              command_topic: "a5/req"
+              command_on_template: >-
+                {"raw_data":"01:00:00:09","send":"clear+raw_data"}
+              command_off_template: >-
+                {"raw_data":"01:00:00:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              state_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}on{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}off{% endif %}
+   fsr14:
+      device_config:
+         - rorg: "0xA5"
+           func: "0x38"
+           type: "0x08"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"E0:40:0D:80","send":"clear+learn+raw_data"}
+         - component: "switch"
+           name: "switch"
+           config:
+              command_topic: "a5/req"
+              payload_on: >-
+                {"raw_data":"01:00:00:09","send":"clear+raw_data"}
+              payload_off: >-
+                {"raw_data":"01:00:00:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              value_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}ON{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}OFF{% endif %}
+              enabled_by_default: "false"
+              device_class: "outlet"
+         - component: "light"
+           name: "light"
+           config:
+              schema: "template"
+              command_topic: "a5/req"
+              command_on_template: >-
+                {"raw_data":"01:00:00:09","send":"clear+raw_data"}
+              command_off_template: >-
+                {"raw_data":"01:00:00:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              state_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}on{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}off{% endif %}
+   fud14:
+      device_config:
+         - rorg: "0xA5"
+           func: "0x38"
+           type: "0x08"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"E0:40:0D:80","send":"clear+learn+raw_data"}
+         - component: "number"
+           name: "speed"
+           config:
+              command_topic: "__trash"
+              min: "0"
+              max: "255"
+              step: "1"
+              mode: "slider"
+              icon: "mdi:speedometer"
+         - component: "light"
+           name: "light"
+           config:
+              schema: "template"
+              command_topic: "a5/req"
+              command_on_template: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('speed$',ignorecase=True) %}
+                    {% set ns.dim_speed = '%02x' % (states(entity)|int(default=0)) %}
+                  {% endif %}
+                {% endfor %}
+                {% set dim_val = '%02x' % (((brightness|int(default=255))*100/255)|int) %}
+                {"raw_data":"02:{{ns.dim_val}}:{{ns.dim_speed}}:09","send":"clear+raw_data"}
+              command_off_template: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('speed$',ignorecase=True) %}
+                    {% set ns.dim_speed = '%02x' % (states(entity)|int(default=0)) %}
+                  {% endif %}
+                {% endfor %}
+                {"raw_data":"02:00:{{ns.dim_speed}}:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              state_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}on{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}off{% endif %}
 
 # Below are mappings common to all EEPs
 common:
