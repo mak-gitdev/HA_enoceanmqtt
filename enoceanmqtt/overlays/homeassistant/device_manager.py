@@ -103,12 +103,18 @@ class DeviceManager():
     def db_upsert_device(self, sensor, uid, attr_name = None, attr = None):
         '''Update or add device to the database'''
         sensor_db = {}
-        sensor_db['uid']     = uid
-        sensor_db['address'] = sensor['address']
-        sensor_db['name']    = sensor['name']
-        sensor_db['rorg']    = sensor['rorg']
-        sensor_db['func']    = sensor['func']
-        sensor_db['type']    = sensor['type']
+        sensor_db['uid'] = uid
+        if not sensor.get('model'):
+           sensor_db['address'] = sensor['address']
+           sensor_db['name']    = sensor['name']
+           sensor_db['rorg']    = sensor['rorg']
+           sensor_db['func']    = sensor['func']
+           sensor_db['type']    = sensor['type']
+        else:
+           sensor_db['address'] = sensor['address']
+           sensor_db['name']    = sensor['name'][:-3]
+           sensor_db['model']   = sensor['model']
+
         if attr is not None:
             sensor_db[attr_name] = attr
         dev = Query()

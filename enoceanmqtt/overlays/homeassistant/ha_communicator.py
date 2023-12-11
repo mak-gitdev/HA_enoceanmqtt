@@ -451,6 +451,10 @@ class HACommunicator(Communicator):
             # Select the entity configuration
             cfg = entity['config']
 
+            # For models, get RSSI and DATE from the next MQTT level
+            if str(entity.get('name')).lower() in ("rssi", "last_seen"):
+                cfg['state_topic'] = "+"
+
             # Create a unique ID for the entity
             uid = "enocean_"+dev_uid+"_"+entity['name']
             cfg['unique_id'] = uid
@@ -465,8 +469,8 @@ class HACommunicator(Communicator):
             cfg['device'] = {}
             cfg['device']['name'] = dev_name
             cfg['device']['identifiers'] = address if address != 'FFFFFFFF' else dev_uid
-            cfg['device']['model'] = model+" @"+address if address != 'FFFFFFFF' else \
-                                     model+' (VIRTUAL) / '+sender+'->'+address
+            cfg['device']['model'] = model.upper()+" @"+address if address != 'FFFFFFFF' else \
+                                     model.upper()+' (VIRTUAL) / '+sender+'->'+address
             cfg['device']['manufacturer'] = manufacturer
             cfg['device']['configuration_url'] = 'https://www.google.com/search?q='+\
                                                  manufacturer+'+'+model+'+pdf'
