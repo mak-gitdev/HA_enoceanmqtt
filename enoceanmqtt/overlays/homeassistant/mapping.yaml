@@ -4039,6 +4039,7 @@ eltako:
               command_topic: "a5/req"
               payload_press: >-
                 {"raw_data":"FF:F8:0D:80","send":"clear+learn+raw_data"}
+              icon: "mdi:connection"
          - component: "number"
            name: "shut_time"
            config:
