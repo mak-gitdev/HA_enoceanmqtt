@@ -1709,6 +1709,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -1716,6 +1717,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -1787,6 +1789,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -1794,6 +1797,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -1865,7 +1869,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
-                 device_class: "voltage"
                  enabled_by_default: "false"
                  availability_topic: ""
                  availability_template: >-
@@ -1874,12 +1877,13 @@
                    {% else %}
                      offline
                    {% endif %}
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "voltage"
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
-                 device_class: "voltage"
                  availability_topic: ""
                  availability_template: >-
                    {% if value_json.SVA == 1 %}
@@ -1887,6 +1891,8 @@
                    {% else %}
                      offline
                    {% endif %}
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
               config:
@@ -1908,6 +1914,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -1915,6 +1922,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
               config:
@@ -1936,6 +1944,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -1943,6 +1952,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
               config:
@@ -1980,6 +1990,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -1987,6 +1998,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2045,12 +2057,14 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  enabled_by_default: "false"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "voltage"
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2108,6 +2122,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2115,6 +2130,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
