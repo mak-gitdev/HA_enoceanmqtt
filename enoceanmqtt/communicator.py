@@ -150,7 +150,7 @@ class Communicator:
                             cur_sensor['learn'] = True
                         elif action == "raw_data":
                             raw_data = True
-                    
+
                     # raw_data has not been validated by the send payload
                     if 'raw_data' in cur_sensor and not raw_data:
                         del cur_sensor['raw_data']
@@ -487,7 +487,7 @@ class Communicator:
             sender = [(sensor['sender'] >> i*8) & 0xff for i in reversed(range(4))]
         else:
             sender = self.enocean_sender
-        
+
         # Check whether the learn bit should be set in the packet (only valid for RORG.BS1 and RORG.BS4)
         force_learn = False
         if sensor.get('learn'):
@@ -579,8 +579,8 @@ class Communicator:
 #            if 'address' in cur_sensor and \
 #                    enocean.utils.combine_hex(packet.sender) == cur_sensor['address']:
             # Does this sensor match?
-            if enocean.utils.combine_hex(packet.sender) == cur_sensor.get('address') and \
-               ((packet.rorg == cur_sensor.get('rorg') and not cur_sensor.get('sender')) or \
+            if (enocean.utils.combine_hex(packet.sender) == cur_sensor.get('address')) and \
+               ((packet.rorg == cur_sensor.get('rorg')) or \
                 (not cur_sensor.get('rorg') and cur_sensor.get('ignore'))):
                 found_sensor = cur_sensor
                 break

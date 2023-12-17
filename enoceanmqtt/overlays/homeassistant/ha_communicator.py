@@ -81,6 +81,8 @@ class HACommunicator(Communicator):
                         new_sens['default_data'] = cur_model.get('default_data')
                     if cur_model.get('sender'):
                         new_sens['sender'] = cur_model.get('sender')
+                    if cur_model.get('ignore'):
+                        new_sens['ignore'] = cur_model.get('ignore')
                     new_sens['manufacturer'] = manufacturer
                     new_sens['model'] = model
                     new_sens['rorg'] = int(new_sens['rorg'],0)
