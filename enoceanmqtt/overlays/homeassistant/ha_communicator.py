@@ -77,8 +77,10 @@ class HACommunicator(Communicator):
                 for new_sens in devcfg:
                     new_sens['name'] = cur_model.get('name')+'/'+new_sens.get('rorg')[2:4].lower()
                     new_sens['address'] = cur_model.get('address')
-                    new_sens['default_data'] = cur_model.get('default_data',"")
-                    new_sens['sender'] = cur_model.get('sender',"")
+                    if cur_model.get('default_data'):
+                        new_sens['default_data'] = cur_model.get('default_data')
+                    if cur_model.get('sender'):
+                        new_sens['sender'] = cur_model.get('sender')
                     new_sens['manufacturer'] = manufacturer
                     new_sens['model'] = model
                     new_sens['rorg'] = int(new_sens['rorg'],0)
