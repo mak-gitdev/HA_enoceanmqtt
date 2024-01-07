@@ -67,7 +67,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -164,22 +166,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -282,7 +284,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -379,22 +383,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -460,7 +464,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -563,22 +569,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -665,7 +671,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -762,22 +770,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -972,7 +980,7 @@
                  payload: "4"
                  value_template: "{{ value_json.BA }}"
    0x05:
-      0x00:
+      0x00: &D20500
          device_config:
             command: "CMD"
             channel: "CMD"
@@ -991,12 +999,22 @@
                  payload_stop: >-
                    {"CMD":"2","CHN":"0","send":"clear"}
                  position_topic: "CMD4"
-                 position_template: "{{ value_json.POS }}"
+                 position_template: >-
+                   {% if (value_json.POS <= 100) and (value_json.POS >= 0) %}
+                     {{ value_json.POS }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_position")|int(default=0) }}
+                   {% endif %}
                  set_position_topic: "req"
                  set_position_template: >-
                    {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  tilt_status_topic: "CMD4"
-                 tilt_status_template: "{{ value_json.ANG }}"
+                 tilt_status_template: >-
+                   {% if (value_json.ANG <= 100) and (value_json.ANG >= 0) %}
+                     {{ value_json.ANG }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_tilt_position")|int(default=0) }}
+                   {% endif %}
                  tilt_command_topic: "req"
                  tilt_command_template: >-
                    {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
@@ -1013,15 +1031,26 @@
                  position_topic: "CMD4"
                  position_open: 0
                  position_closed: 100
-                 position_template: "{{ value_json.POS }}"
+                 position_template: >-
+                   {% if (value_json.POS <= 100) and (value_json.POS >= 0) %}
+                     {{ value_json.POS }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_position")|int(default=0) }}
+                   {% endif %}
                  set_position_topic: "req"
                  set_position_template: >-
                    {"CMD":"1","POS":"{{ 100 - position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  tilt_status_topic: "CMD4"
-                 tilt_status_template: "{{ value_json.ANG }}"
+                 tilt_status_template: >-
+                   {% if (value_json.ANG <= 100) and (value_json.ANG >= 0) %}
+                     {{ value_json.ANG }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_tilt_position")|int(default=0) }}
+                   {% endif %}
                  tilt_command_topic: "req"
                  tilt_command_template: >-
                    {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+      0x02: *D20500
    0x14:
       0x30:
          device_config:
@@ -2237,6 +2266,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2244,6 +2274,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2315,6 +2346,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2322,6 +2354,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2393,7 +2426,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
-                 device_class: "voltage"
                  enabled_by_default: "false"
                  availability_topic: ""
                  availability_template: >-
@@ -2402,12 +2434,13 @@
                    {% else %}
                      offline
                    {% endif %}
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "voltage"
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
-                 device_class: "voltage"
                  availability_topic: ""
                  availability_template: >-
                    {% if value_json.SVA == 1 %}
@@ -2415,6 +2448,8 @@
                    {% else %}
                      offline
                    {% endif %}
+                 device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
               config:
@@ -2436,6 +2471,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2443,6 +2479,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
               config:
@@ -2464,6 +2501,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2471,6 +2509,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
               config:
@@ -2508,6 +2547,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2515,6 +2555,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2573,12 +2614,14 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  enabled_by_default: "false"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "voltage"
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2636,6 +2679,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2643,6 +2687,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
               config:
@@ -2742,8 +2787,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_raw"
               config:
@@ -2773,8 +2816,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_raw"
               config:
@@ -2809,8 +2850,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_raw"
               config:
@@ -2862,11 +2901,11 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_slide_switch$',ignorecase=True) %}
+                     {% if entity is search('slide_switch',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.SLSW = 1 %}{% else %}{% set ns.SLSW = 0 %}{% endif %}
-                     {% elif entity is search('_setpoint$',ignorecase=True) %}
+                     {% elif entity is search('setpoint',ignorecase=True) %}
                        {% set ns.SP = (states(entity)|int)|int(default=128) %}
-                     {% elif entity is search('_temperature$',ignorecase=True) %}
+                     {% elif entity is search('temperature',ignorecase=True) %}
                        {% set ns.TMP = (40-(states(entity)|float(default=20))*255/40)|int %}
                      {% endif %}
                    {% endfor %}
@@ -2885,8 +2924,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "h_raw"
               config:
@@ -2936,8 +2973,6 @@
               config:
                  state_topic: ""
                  value_template: "{{ value_json.SP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
             - component: "sensor"
               name: "h_raw"
               config:
@@ -3659,28 +3694,28 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('config_valve_position$',ignorecase=True) %}
+                     {% if entity is search('config_valve_position',ignorecase=True) %}
                        {% set ns.valve_position = (states(entity)|int(default=0)) %}
-                     {% elif entity is search('config_t_setpoint$',ignorecase=True) %}
+                     {% elif entity is search('config_t_setpoint',ignorecase=True) %}
                        {% set ns.temperature_setpoint = ((states(entity)|int(default=0))*255/40)|int %}
-                     {% elif entity is search('config_t_RCU$',ignorecase=True) %}
-                       {% set ns.TMP = ((states(entity)|int(default=0))*255/40)|int %}
-                     {% elif entity is search('config_RIN$',ignorecase=True) %}
+                     {% elif entity is search('config_t_RCU',ignorecase=True) %}
+                       {% set ns.TMP = (states(entity)|float(default=0.0)) %}
+                     {% elif entity is search('config_RIN',ignorecase=True) %}
                        {% set ns.RIN = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_LFS$',ignorecase=True) %}
+                     {% elif entity is search('config_LFS',ignorecase=True) %}
                        {% set ns.LFS = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_VO$',ignorecase=True) %}
-                       {% set ns.VO = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_VC$',ignorecase=True) %}
-                       {% set ns.VC = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SB$',ignorecase=True) %}
-                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SPS$',ignorecase=True) %}
+                     {% elif entity is search('config_SPS',ignorecase=True) %}
                        {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SPN$',ignorecase=True) %}
+                     {% elif entity is search('config_SPN',ignorecase=True) %}
                        {% set ns.SPN = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_RCU$',ignorecase=True) %}
+                     {% elif entity is search('config_RCU',ignorecase=True) %}
                        {% set ns.RCU = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_VO',ignorecase=True) %}
+                       {% set ns.VO = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_VC',ignorecase=True) %}
+                       {% set ns.VC = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SB',ignorecase=True) %}
+                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
                    {% endfor %}
                    {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
@@ -3971,20 +4006,20 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('config_position$',ignorecase=True) %}
+                     {% if entity is search('config_position',ignorecase=True) %}
                        {% set ns.POS = (states(entity)|int(default=0)) %}
-                     {% elif entity is search('config_TSP$',ignorecase=True) %}
-                       {% set ns.TSP = (((states(entity)|int(default=0))-10)*255/20)|int %}
-                     {% elif entity is search('config_MC$',ignorecase=True) %}
-                       {% set ns.MC = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_wakeup_time$',ignorecase=True) %}
+                     {% elif entity is search('config_TSP',ignorecase=True) %}
+                       {% set ns.TSP = (states(entity)|float(default=0.0)) %}
+                     {% elif entity is search('config_wakeup_time',ignorecase=True) %}
                        {% set ns.WUC = states(entity).split("-")[0]|int(default=0) %}
-                     {% elif entity is search('config_DSO$',ignorecase=True) %}
+                     {% elif entity is search('config_DSO',ignorecase=True) %}
                        {% set ns.DSO = (states(entity).split("°")[0]|int(default=0)/90) %}
-                     {% elif entity is search('config_BLCS$',ignorecase=True) %}
+                     {% elif entity is search('config_BLCS',ignorecase=True) %}
                        {% set ns.BLC = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SER$',ignorecase=True) %}
+                     {% elif entity is search('config_SER',ignorecase=True) %}
                        {% set ns.SER = states(entity).split("-")[0]|int(default=0) %} %}
+                     {% elif entity is search('config_MC',ignorecase=True) %}
+                       {% set ns.MC = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
                    {% endfor %}
                    {"POS":{{ns.POS}},"TSP":{{ns.TSP}},"MC":{{ns.MC}},"WUC":{{ns.WUC}},"DSO":{{ns.DSO}},"BLC":{{ns.BLC}},"SER":{{ns.SER}}}
@@ -4179,25 +4214,25 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('config_valve_position$',ignorecase=True) %}
+                     {% if entity is search('config_valve_position',ignorecase=True) %}
                        {% set ns.valve_position = (states(entity)|int(default=0)) %}
-                     {% elif entity is search('config_temperature_setpoint$',ignorecase=True) %}
+                     {% elif entity is search('config_temperature_setpoint',ignorecase=True) %}
                        {% set ns.temperature_setpoint = ((states(entity)|int(default=0))*2) %}
-                     {% elif entity is search('config_temperature_RCU$',ignorecase=True) %}
-                       {% set ns.TMP = ((states(entity)|int(default=0))*4) %}
-                     {% elif entity is search('config_REF$',ignorecase=True) %}
+                     {% elif entity is search('config_temperature_RCU',ignorecase=True) %}
+                       {% set ns.TMP = ((states(entity)|float(default=0.0))) %}
+                     {% elif entity is search('config_REF',ignorecase=True) %}
                        {% set ns.REF = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_RFC$',ignorecase=True) %}
+                     {% elif entity is search('config_RFC',ignorecase=True) %}
                        {% set map = {"0": 0, "2": 1, "5": 2, "10": 3, "20": 4, "30": 5, "60": 6, "120": 7} %}
                        {% set ns.RFC = map[states(entity).split(" ")[0]|int(default=0)|string] %}
-                     {% elif entity is search('config_SB$',ignorecase=True) %}
-                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SPS$',ignorecase=True) %}
-                       {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_TSL$',ignorecase=True) %}
-                       {% set ns.TSL = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SBY$',ignorecase=True) %}
+                     {% elif entity is search('config_SBY',ignorecase=True) %}
                        {% set ns.SBY = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SPS',ignorecase=True) %}
+                       {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_TSL',ignorecase=True) %}
+                       {% set ns.TSL = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SB',ignorecase=True) %}
+                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
                    {% endfor %}
                    {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
@@ -4429,13 +4464,13 @@
                  command_template: >-
                    {% set ns = namespace(action=[]) %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}
+                     {% if entity is search('AI',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["0"] %}
-                     {% elif entity is search('AO$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('AO',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["1"] %}
-                     {% elif entity is search('BI$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('BI',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["2"] %}
-                     {% elif entity is search('BO$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('BO',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["3"] %}
                      {% endif %}
                    {% endfor %}
@@ -4540,13 +4575,13 @@
                  command_template: >-
                    {% set ns = namespace(action=[]) %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}
+                     {% if entity is search('AI',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["0"] %}
-                     {% elif entity is search('AO$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('AO',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["1"] %}
-                     {% elif entity is search('BI$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('BI',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["2"] %}
-                     {% elif entity is search('BO$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('BO',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["3"] %}
                      {% endif %}
                    {% endfor %}
