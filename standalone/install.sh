@@ -31,9 +31,8 @@ package_install()
 #==================================================
 # CHECK USER
 #==================================================
-#if [ "$(whoami)" == "root" ]; then
 if [ "$(id -u)" = "0" ]; then
-    printf "Install script should not be run as root. Do not use sudo nor log as root user to run the script."
+    printf "[ERROR]: Install script should not be run as root. Do not use sudo nor log as root user to run the script.\n"
     exit 1
 fi
 
@@ -55,7 +54,7 @@ while [ $# -gt 0 ]; do
     -v | --version ) VERSION="$2"                        ; shift 2 ;;
     -d | --dir )     INSTALL_DIR="$2"                    ; shift 2 ;;
     -h | --help )                                  usage ; exit  0 ;;
-    * )	             printf "Unknown option $1\n"; usage ; exit  1 ;;
+    * )              printf "Unknown option $1\n"; usage ; exit  1 ;;
   esac
 done
 
@@ -98,10 +97,8 @@ pip3 install --user --force-reinstall git+https://github.com/mak-gitdev/enocean.
 printf "\n==================================================\n"
 printf "Install enocean-mqtt\n\n"
 rm -rf enocean-mqtt
-#pip3 install --user -e git+https://github.com/embyt/enocean-mqtt.git#egg=enocean-mqtt
-#mv src/enocean-mqtt enocean-mqtt && rm -rf src
 git clone -b master --single-branch --depth 1 https://github.com/embyt/enocean-mqtt.git
-cd enocean-mqtt && pip3 install --user -e . && cd .. 
+cd enocean-mqtt && pip3 install --user -e . && cd ..
 
 printf "\n==================================================\n"
 printf "Install Home Assistant overlay\n\n"
