@@ -45,20 +45,40 @@ mqtt_debug      = false
 
 ## all other sections define the sensors to monitor
 
-# For the moment, you must define two entries per FSB14
-# The first one is for command and status based on A5-3F-7F telegram
-[my_fsb14/a5]
-address = 0x454C544B # The address of the FSB14. Must be the same address as below
-rorg = 0xA5
-func = 0x3F
-type = 0x7F
+# Define an FSB14 device
+[my_fsb14]
+address         = 0x454C5400 # The address of the FSB14
+model           = eltako/fsb14
 
-# The second one is for status based on F6-02-01 telegram
-[my_fsb14/f6]
-address = 0x454C544B # The address of the FSB14. Must be the same address as above
-rorg = 0xF6
-func = 0x02
-type = 0x01
+# Define an FSB61 device
+[my_fsb61]
+address         = 0x454C5401 # The address of the FSB61
+model           = eltako/fsb61
+
+# Define an FSR14 device
+[my_fsr14]
+address         = 0x454C5402 # The address of the FSR14
+model           = eltako/fsr14
+
+# Define an FSR61 device
+[my_fsr61]
+address         = 0x454C5403 # The address of the FSR61
+model           = eltako/fsr61
+
+# Define an FHD60SB device
+[my_fhd60sb]
+address         = 0x454C5404 # The address of the FHD60SB
+model           = eltako/fhd60sb
+
+# Define an FUD14 device
+[my_fud14]
+address         = 0x454C5405 # The address of the FUD14
+model           = eltako/fud14
+
+# Define an FUD61 device
+[my_fud61]
+address         = 0x454C5406 # The address of the FUD61
+model           = eltako/fud61
 
 [rocker_1]
 address         = 0xBABECAFE
