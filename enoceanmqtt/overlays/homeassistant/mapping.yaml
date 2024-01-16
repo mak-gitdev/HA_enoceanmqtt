@@ -4114,7 +4114,7 @@
               config:
                  state_topic: ""
                  value_template: >-
-                   {% if value_json.ES == 1 %}ON{% else %}OFF{% endif %}
+                   {% if value_json.ES == 1 %}OFF{% else %}ON{% endif %}
                  device_class: "battery"
             - component: "binary_sensor"
               name: "DWO"
