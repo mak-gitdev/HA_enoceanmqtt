@@ -914,6 +914,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.BATT }}"
                  device_class: "battery"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "binary_sensor"
               name: "single"
@@ -1128,6 +1129,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP8 | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "humidity"
@@ -1135,6 +1137,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "comfort"
@@ -1209,6 +1212,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1216,6 +1220,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1289,6 +1294,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1296,6 +1302,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1369,6 +1376,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1376,6 +1384,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_indoor"
@@ -1383,6 +1392,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.INT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_exhaust"
@@ -1390,6 +1400,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.EXHT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1463,6 +1474,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1470,6 +1482,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_indoor"
@@ -1477,6 +1490,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.INT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_exhaust"
@@ -1484,6 +1498,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.EXHT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1511,7 +1526,7 @@
                  unit_of_measurement: "rpm"
 0xA5:
    0x02:
-      0x01:
+      0x01: &A50201
          device_config:
             command: ""
             channel: ""
@@ -1525,6 +1540,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1533,559 +1549,32 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
-      0x02:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x03:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x04:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x05:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x06:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x07:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x08:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x09:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x0A:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x0B:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x10:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x11:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x12:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x13:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x14:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x15:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x16:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x17:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x18:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x19:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x1A:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x1B:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x20:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-      0x30:
-         device_config:
-            command: ""
-            channel: ""
-            log_learn: ""
-            direction: ""
-            answer: ""
-         entities:
-            - component: "sensor"
-              name: "t_raw"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
-                 enabled_by_default: "false"
-            - component: "sensor"
-              name: "tempC"
-              config:
-                 state_topic: ""
-                 value_template: "{{ value_json.TMP | round(1) }}"
-                 device_class: "temperature"
-                 unit_of_measurement: "°C"
+      0x02: *A50201
+      0x03: *A50201
+      0x04: *A50201
+      0x05: *A50201
+      0x06: *A50201
+      0x07: *A50201
+      0x08: *A50201
+      0x09: *A50201
+      0x0A: *A50201
+      0x0B: *A50201
+      0x10: *A50201
+      0x11: *A50201
+      0x12: *A50201
+      0x13: *A50201
+      0x14: *A50201
+      0x15: *A50201
+      0x16: *A50201
+      0x17: *A50201
+      0x18: *A50201
+      0x19: *A50201
+      0x1A: *A50201
+      0x1B: *A50201
+      0x20: *A50201
+      0x30: *A50201
    0x04:
       0x01:
          device_config:
@@ -2101,6 +1590,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2109,6 +1599,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2116,6 +1607,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2124,6 +1616,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "status"
@@ -2145,6 +1638,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2153,6 +1647,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2160,6 +1655,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2168,6 +1664,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "status"
@@ -2189,6 +1686,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2197,6 +1695,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2204,6 +1703,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2212,6 +1712,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
       0x04:
          device_config:
@@ -2227,6 +1728,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2235,6 +1737,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2242,6 +1745,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2250,6 +1754,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
    0x06:
       0x01:
@@ -2266,6 +1771,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2274,6 +1780,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2286,6 +1793,7 @@
                      {{ value_json.ILL2 }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2299,6 +1807,7 @@
                      {{ value_json.ILL2 | round(1) }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "ill1_raw"
@@ -2306,6 +1815,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2314,6 +1824,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2322,6 +1833,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2330,6 +1842,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
       0x02:
@@ -2346,6 +1859,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2354,6 +1868,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2366,6 +1881,7 @@
                      {{ value_json.ILL2 }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2379,6 +1895,7 @@
                      {{ value_json.ILL2 | round(2) }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "ill1_raw"
@@ -2386,6 +1903,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2394,6 +1912,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 | round(2) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2402,6 +1921,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2410,6 +1930,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 | round(2) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
    0x07:
@@ -2435,6 +1956,7 @@
                      offline
                    {% endif %}
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "voltage"
@@ -2449,6 +1971,7 @@
                      offline
                    {% endif %}
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
@@ -2471,6 +1994,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2479,6 +2003,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
@@ -2501,6 +2026,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2509,6 +2035,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
@@ -2523,6 +2050,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2531,6 +2059,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
    0x08:
       0x01:
@@ -2547,6 +2076,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2555,6 +2085,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2562,6 +2093,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2570,6 +2102,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2577,6 +2110,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2585,6 +2119,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "pir"
@@ -2613,6 +2148,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  enabled_by_default: "false"
                  unit_of_measurement: "V"
             - component: "sensor"
@@ -2621,6 +2157,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2628,6 +2165,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2636,6 +2174,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2643,6 +2182,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2651,6 +2191,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "pir"
@@ -2679,6 +2220,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2687,6 +2229,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2694,6 +2237,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2702,6 +2246,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2709,6 +2254,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2717,6 +2263,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "pir"
@@ -2746,6 +2293,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "concentration"
@@ -2753,6 +2301,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.Conc }}"
                  device_class: "carbon_dioxide"
+                 state_class: "measurement"
                  unit_of_measurement: "ppm"
             - component: "sensor"
               name: "temperature"
@@ -2760,6 +2309,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "HSN"
@@ -2793,6 +2343,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2822,6 +2373,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2830,6 +2382,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "occ"
@@ -2856,6 +2409,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2864,6 +2418,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "nightmode"
@@ -2930,6 +2485,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2938,6 +2494,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2945,6 +2502,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2953,6 +2511,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "occ"
@@ -2979,6 +2538,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2987,6 +2547,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2994,6 +2555,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3002,6 +2564,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
    0x12:
       0x00:
@@ -3075,6 +2638,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.DWS }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3083,6 +2647,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.DWS | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -3090,6 +2655,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3098,6 +2664,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "ws_raw"
@@ -3132,6 +2699,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3140,6 +2708,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sns_raw"
@@ -3147,6 +2716,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3155,6 +2725,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sne_raw"
@@ -3162,6 +2733,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3170,6 +2742,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "binary_sensor"
               name: "hem_north"
@@ -3273,6 +2846,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3281,6 +2855,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sns_raw"
@@ -3288,6 +2863,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3296,6 +2872,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sne_raw"
@@ -3303,6 +2880,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3311,6 +2889,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "binary_sensor"
               name: "hem_north"
@@ -3448,6 +3027,7 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  unit_of_measurement: "V"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -3455,6 +3035,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "contact"
@@ -3478,6 +3059,7 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  unit_of_measurement: "V"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -3485,6 +3067,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
@@ -3514,6 +3097,7 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  unit_of_measurement: "V"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -3521,6 +3105,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
@@ -3616,6 +3201,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3624,6 +3210,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "number"
               name: "config_valve_position"
@@ -3721,8 +3308,6 @@
                    {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
                    {"SP":{{ns.SP}},"TMP":{{ns.TMP}},"RIN":{{ns.RIN}},"LFS":{{ns.LFS}},"VO":{{ns.VO}},"VC":{{ns.VC}},"SB":{{ns.SB}},"SPS":{{ns.SPS}},"SPN":{{ns.SPN}},"RCU":{{ns.RCU}}}
                  icon: "mdi:download"
-
-
       0x04:
          device_config:
             command: ""
@@ -3749,6 +3334,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3762,6 +3348,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "st_raw"
@@ -3772,6 +3359,7 @@
                      {{ value_json.FTS * 20 / 255 + 10 }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3783,6 +3371,7 @@
                      {{ (value_json.FTS * 20 / 255 + 10) | round(1) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "rt_raw"
@@ -3796,6 +3385,7 @@
                    {% endif %}
                  device_class: "temperature"
                  unit_of_measurement: "°C"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "room_temperature"
@@ -3808,6 +3398,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "binary_sensor"
               name: "err_meas"
@@ -4050,6 +3641,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "setpoint_temperature"
@@ -4062,6 +3654,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "local_offset"
@@ -4090,6 +3683,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "binary_sensor"
               name: "LOM"
@@ -4253,6 +3847,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -4261,6 +3856,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "wake"
@@ -4682,6 +4278,7 @@ common:
            value_template: "{{ value_json._RSSI_ }}"
            unit_of_measurement: "dBm"
            device_class: "signal_strength"
+           state_class: "measurement"
            entity_category: "diagnostic"
    date:
       - component: "sensor"
