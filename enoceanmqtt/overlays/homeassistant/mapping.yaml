@@ -3605,10 +3605,10 @@
                        {% set ns.WUC = states(entity).split("-")[0]|int(default=0) %}
                      {% elif entity is search('config_DSO',ignorecase=True) %}
                        {% set ns.DSO = (states(entity).split("°")[0]|int(default=0)/90) %}
-                     {% elif entity is search('config_BLCS',ignorecase=True) %}
+                     {% elif entity is search('config_BLC',ignorecase=True) %}
                        {% set ns.BLC = iif(is_state(entity, "on"), 1, 0) %}
                      {% elif entity is search('config_SER',ignorecase=True) %}
-                       {% set ns.SER = states(entity).split("-")[0]|int(default=0) %} %}
+                       {% set ns.SER = states(entity).split("-")[0]|int(default=0) %}
                      {% elif entity is search('config_MC',ignorecase=True) %}
                        {% set ns.MC = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
