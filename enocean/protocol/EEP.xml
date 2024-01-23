@@ -1511,7 +1511,7 @@
           </enum>
         </data>
         <data command="6">
-          <value description="Latitude(MSB)" Shortcut="LAT_MSB" offset="0" size="4" unit="">
+          <value description="Latitude(MSB)" shortcut="LAT_MSB" offset="0" size="4" unit="">
             <range>
               <min>0</min>
               <max>15</max>
@@ -1725,7 +1725,7 @@
       </profile>
       <profile type="0x06" description="Geographic Position Exchange">
         <data>
-          <value description="Latitude(MSB)" Shortcut="LAT_MSB" offset="0" size="4" unit="">
+          <value description="Latitude(MSB)" shortcut="LAT_MSB" offset="0" size="4" unit="">
             <range>
               <min>0</min>
               <max>15</max>
@@ -2199,7 +2199,7 @@
             <item description="Reference-run and Maintenance Interval" value="1" />
           </enum>
           <enum shortcut="RFC" description="Radio duty cycle selection." offset="17" size="3">
-            <item description="AUTO (default)", value="0" />
+            <item description="AUTO (default)" value="0" />
             <item description="2 minutes" value="1" />
             <item description="5 minutes" value="2" />
             <item description="10 minutes" value="3" />
@@ -2415,7 +2415,7 @@
         <command description="command identifier" shortcut="CMD" offset="4" size="4">
           <item description="Actuator Set Output" value="1" />
           <!-- <item description="Actuator Set Local" value="2" /> -->
-          <!-- <item description="Actuator Status Query" value="3" /> -->
+          <item description="Actuator Status Query" value="3" />
           <item description="Actuator Status Response" value="4" />
           <!-- <item description="Actuator Set Measurement" value="5" /> -->
           <!-- <item description="Actuator Measurement Query" value="6" /> -->
@@ -2450,14 +2450,24 @@
             <item description="output value not valid / not set" value="127" />
           </enum>
         </data>
+        <data command="3" bits="2">
+          <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
+            <rangeitem description="Command ID {value}" start="0" end="13" />
+          </enum>
+          <enum description="I/O channel" shortcut="IO" offset="11" size="5">
+            <rangeitem description="Output channel {value} (to load)" start="0" end="29" />
+            <item description="All output channels supported by the device" value="30" />
+            <item description="Input channel (from mains supply)" value="31" />
+          </enum>
+        </data>
         <data command="4" bits="3">
            <enum description="Power Failure" shortcut="PF" offset="0" size="1">
              <item description="Power Failure Detection disabled/not supported" value="0" />
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2544,8 +2554,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2711,8 +2721,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2799,8 +2809,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -2966,8 +2976,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3164,8 +3174,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3252,8 +3262,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3419,8 +3429,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3507,8 +3517,8 @@
              <item description="Power Failure Detection enabled" value="1" />
            </enum>
            <enum description="Power Failure Detection" shortcut="PFD" offset="1" size="1">
-             <item description="Power Failure Detection not detected/not supported/disabled" value="0" />
-             <item description="Power Failure Detection Detected" value="1" />
+             <item description="Power Failure not detected/not supported/disabled" value="0" />
+             <item description="Power Failure Detected" value="1" />
            </enum>
           <enum description="Command identifier" shortcut="CMD" offset="4" size="4">
             <rangeitem description="Command ID {value}" start="0" end="13" />
@@ -3543,7 +3553,7 @@
     </profiles>
     <profiles func="0x03" description="Light, Switching + Blind Control">
       <profile type="0x0A" description="Push Button – Single Button">
-        <data>
+        <data bits="2">
           <value description="Battery Autonomy" shortcut="BATT" offset="0" size="8" unit="%">
             <range>
               <min>1</min>
@@ -3652,10 +3662,224 @@
           </enum>
         </data>
       </profile>
+      <profile type="0x02" description="Type 0x02">
+        <command description="command identifier" shortcut="CMD" offset="28" size="4">
+          <item description="Go to Position and Angle" value="1" />
+          <item description="Stop" value="2" />
+          <item description="Query Position and Angle" value="3" />
+          <item description="Reply Position and Angle" value="4" />
+        </command>
+        <data command="1" bits="4">
+          <enum description="Vertical position" shortcut="POS" offset="1" size="7">
+            <rangeitem description="Output position {value}%" start="0" end="100" />
+            <item description="Do not change" value="127" />
+          </enum>
+          <enum description="Rotation angle" shortcut="ANG" offset="9" size="7">
+            <rangeitem description="Output angle {value}%" start="0" end="100" />
+            <item description="Do not change" value="127" />
+          </enum>
+          <enum description="Repositioning" shortcut="REPO" offset="17" size="3">
+            <item description="Go directly to POS/ANG" value="0" />
+            <item description="Go up (0%), then to POS/ANG" value="1" />
+            <item description="Go down (100%), then to POS/ANG" value="2" />
+            <item description="Reserved" value="3" />
+          </enum>
+          <enum description="Locking modes" shortcut="LOCK" offset="21" size="3">
+            <item description="Do not change" value="0" />
+            <item description="Set blockage mode" value="1" />
+            <item description="Reserved" value="2" />
+            <item description="Reserved" value="3" />
+            <item description="Reserved" value="4" />
+            <item description="Reserved" value="5" />
+            <item description="Reserved" value="6" />
+            <item description="Deblockage" value="7" />
+          </enum>
+          <enum description="Channel" shortcut="CHN" offset="24" size="4">
+            <item description="Channel 1" value="0" />
+            <rangeitem description="Reserved {value}" start="1" end="15" />
+          </enum>
+          <enum description="Command Id" shortcut="CMD" offset="28" size="4">
+            <item description="Reserved" value="0" />
+            <rangeitem description="Command ID {value}" start="1" end="4" />
+            <rangeitem description="Reserved {value}" start="5" end="15" />
+          </enum>
+        </data>
+        <data command="2" bits="1">
+          <enum description="Channel" shortcut="CHN" offset="0" size="4">
+            <item description="Channel 1" value="0" />
+            <rangeitem description="Reserved {value}" start="1" end="15" />
+          </enum>
+          <enum description="Command Id" shortcut="CMD" offset="4" size="4">
+            <item description="Reserved" value="0" />
+            <rangeitem description="Command ID {value}" start="1" end="4" />
+            <rangeitem description="Reserved {value}" start="5" end="15" />
+          </enum>
+        </data>
+        <data command="3" bits="1">
+          <enum description="Channel" shortcut="CHN" offset="0" size="4">
+            <item description="Channel 1" value="0" />
+            <rangeitem description="Reserved {value}" start="1" end="15" />
+          </enum>
+          <enum description="Command Id" shortcut="CMD" offset="4" size="4">
+            <item description="Reserved" value="0" />
+            <rangeitem description="Command ID {value}" start="1" end="4" />
+            <rangeitem description="Reserved {value}" start="5" end="15" />
+          </enum>
+        </data>
+        <data command="4" bits="4">
+          <enum description="Current vertical position" shortcut="POS" offset="1" size="7">
+            <rangeitem description="Output position {value}%" start="0" end="100" />
+            <item description="Position unknown, will be known after the next goto cmd" value="127" />
+          </enum>
+          <enum description="Current rotation angle" shortcut="ANG" offset="9" size="7">
+            <rangeitem description="Output angle {value}%" start="0" end="100" />
+            <item description="Angle unknown, will be known after the next goto cmd" value="127" />
+          </enum>
+          <enum description="Current locking mode" shortcut="LOCK" offset="21" size="3">
+            <item description="Normal (no lock)" value="0" />
+            <item description="Blockage mode" value="1" />
+            <item description="Reserved" value="2" />
+            <item description="Reserved" value="3" />
+            <item description="Reserved" value="4" />
+            <item description="Reserved" value="5" />
+            <item description="Reserved" value="6" />
+            <item description="Reserved" value="7" />
+          </enum>
+          <enum description="Channel" shortcut="CHN" offset="24" size="4">
+            <item description="Channel 1" value="0" />
+            <rangeitem description="Reserved {value}" start="1" end="15" />
+          </enum>
+          <enum description="Command Id" shortcut="CMD" offset="28" size="4">
+            <item description="Reserved" value="0" />
+            <rangeitem description="Command ID {value}" start="1" end="4" />
+            <rangeitem description="Reserved {value}" start="5" end="15" />
+          </enum>
+        </data>
+      </profile>
+    </profiles>
+    <profiles func="0x06" description="Multisensor Window Handle">
+      <profile type="0x01" description="Alarm, Position Sensor, Vacation Mode, Optional Sensors">
+        <command description="Message type" shortcut="MT" offset="0" size="8">
+          <item description="Sensor Values" value="0" />
+          <item description="Configuration Report" value="10" />
+          <item description="Log data 1" value="20" />
+          <item description="Log data 2" value="21" />
+          <item description="Log data 3" value="22" />
+          <item description="Log data 4" value="23" />
+          <item description="Control and Settings" value="80" />
+        </command>
+        <data command="0" bits="10">
+          <enum description="Message Type" shortcut="MT" offset="0" size="8">
+            <rangeitem description="Message Type ID {value}" start="0" end="8" />
+          </enum>
+          <enum description="Burglary Alarm" shortcut="BAL" offset="8" size="4">
+            <item description="Not triggered" value="0" />
+            <item description="Triggered" value="1" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Protection Plus Alarm" shortcut="PPAL" offset="12" size="4">
+            <item description="Protection Plus Alarm not triggered" value="0" />
+            <item description="Protection Plus Alarm triggered" value="1" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Handle Position" shortcut="HP" offset="16" size="4">
+            <item description="Handle Position undefined" value="0" />
+            <item description="Handle Up" value="1" />
+            <item description="Handle Down" value="2" />
+            <item description="Handle Left" value="3" />
+            <item description="Handle Right" value="4" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Window State" shortcut="WS" offset="20" size="4">
+            <item description="Window State undefined" value="0" />
+            <item description="Window tilted" value="1" />
+            <item description="Window not tilted" value="2" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Button Right" shortcut="BR" offset="24" size="4">
+            <item description="No Change" value="0" />
+            <item description="Button Pressed" value="1" />
+            <item description="Button Released" value="2" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Button Left" shortcut="BL" offset="28" size="4">
+            <item description="No Change" value="0" />
+            <item description="Button Pressed" value="1" />
+            <item description="Button Released" value="2" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Motion" shortcut="M" offset="32" size="4">
+            <item description="Motion not triggered" value="0" />
+            <item description="Motion triggered" value="1" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <enum description="Vacation Mode" shortcut="V" offset="36" size="4">
+            <item description="No Change" value="0" />
+            <item description="Vacation On" value="1" />
+            <item description="Vacation Off" value="2" />
+            <item description="Supported + invalid" value="14" />
+            <item description="Not supported" value="15" />
+          </enum>
+          <value description="Temperature (linear)" shortcut="TMP" offset="40" size="8" unit="°C">
+            <range>
+              <min>0</min>
+              <max>250</max>
+            </range>
+            <scale>
+              <min>-20.000000</min>
+              <max>60.000000</max>
+            </scale>
+            <item description="Supported + invalid" value="254" />
+            <item description="Not supported" value="255" />
+          </value>
+          <value description="Humidity (linear)" shortcut="HUM" offset="48" size="8" unit="%">
+            <range>
+              <min>0</min>
+              <max>200</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>100.000000</max>
+            </scale>
+            <item description="Supported + invalid" value="254" />
+            <item description="Not supported" value="255" />
+          </value>
+          <value description="Illumination (linear)" shortcut="ILL" offset="56" size="16" unit="lx">
+            <range>
+              <min>0</min>
+              <max>60000</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>60000.000000</max>
+            </scale>
+            <item description="Over range" value="60001" />
+            <item description="Supported + invalid" value="65534" />
+            <item description="Not supported" value="65535" />
+          </value>
+          <value description="Battery State (linear)" shortcut="BS" offset="72" size="5" unit="%">
+            <range>
+              <min>0</min>
+              <max>20</max>
+            </range>
+            <scale>
+              <min>0.000000</min>
+              <max>100.000000</max>
+            </scale>
+          </value>
+        </data>
+      </profile>
     </profiles>
     <profiles func="0x14" description="Multi Function Sensors">
       <profile type="0x30" description="Sensor for Smoke, Air quality, Hygrothermal comfort, Temperature and Humidity">
-        <data>
+        <data bits="6">
           <enum description="Smoke Alarm status" shortcut="SMA0" offset="0" size="1">
             <item description="Smoke Alarm non-activated" value="0" />
             <item description="Smoke Alarm activated" value="1" />
@@ -3730,7 +3954,7 @@
         </data>
       </profile>
       <profile type="0x41" description="Indoor -Temperature, Humidity XYZ Acceleration, Illumination Sensor">
-        <data>
+        <data bits="9">
           <value description="Temperature 10" shortcut="TMP" offset="0" size="10" unit="°C">
             <range>
               <min>0</min>
@@ -4007,10 +4231,10 @@
             </scale>
           </value>
           <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
-            <rangeitem description="{value}" start="0" end="2147483648" />
+            <rangeitem description="{value}" start="0" end="4294967295" />
           </enum>
         </data>
       </profile>
@@ -4221,10 +4445,10 @@
             </scale>
           </value>
           <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
-            <rangeitem description="{value}" start="0" end="2147483648" />
+            <rangeitem description="{value}" start="0" end="4294967295" />
           </enum>
         </data>
       </profile>
@@ -4466,16 +4690,16 @@
             </scale>
           </value>
           <enum description="Digital Input 0...15 Status" shortcut="DIS" offset="32" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Digital Output 0...15 Status" shortcut="DOS" offset="48" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
-            <rangeitem description="{value}" start="0" end="2147483648" />
+            <rangeitem description="{value}" start="0" end="4294967295" />
           </enum>
         </data>
       </profile>
@@ -4731,16 +4955,16 @@
             </scale>
           </value>
           <enum description="Digital Input 0...15 Status" shortcut="DIS" offset="32" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Digital Output 0...15 Status" shortcut="DOS" offset="48" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Info Message 0...15 Status" shortcut="IMS" offset="64" size="16">
-            <rangeitem description="{value}" start="0" end="32768" />
+            <rangeitem description="{value}" start="0" end="65535" />
           </enum>
           <enum description="Fault 0...31 Status" shortcut="FS" offset="80" size="32">
-            <rangeitem description="{value}" start="0" end="2147483648" />
+            <rangeitem description="{value}" start="0" end="4294967295" />
           </enum>
         </data>
       </profile>

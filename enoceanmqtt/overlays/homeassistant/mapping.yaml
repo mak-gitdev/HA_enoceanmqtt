@@ -2592,8 +2592,8 @@
             - component: "sensor"
               name: "channel"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.CH }}"
+                 state_topic: "+"
+                 value_template: "{{ value_json.CH | int(default=0) }}"
       0x01:
          device_config:
             command: ""
@@ -2621,8 +2621,8 @@
             - component: "sensor"
               name: "tariff"
               config:
-                 state_topic: "DT1"
-                 value_template: "{{ value_json.TI }}"
+                 state_topic: "+"
+                 value_template: "{{ value_json.TI | int(default=0) }}"
    0x13:
       0x01:
          device_config:
@@ -2761,7 +2761,7 @@
               config:
                  state_topic: "ID3"
                  value_template: >-
-                   {% set d=strptime((value_json.DY ~ '-' ~ value_json.MTH ~ '-' ~ value_json.YR),'%d-%m-%Y') %}
+                   {% set d=strptime((value_json.DY|int(default=0) ~ '-' ~ value_json.MTH|int(default=0) ~ '-' ~ value_json.YR|int(default=0)),'%d-%m-%Y') %}
                    {{ d.date() }}
                  icon: "mdi:calendar-range"
             - component: "sensor"
@@ -2783,7 +2783,7 @@
               config:
                  state_topic: "ID4"
                  value_template: >-
-                   {{ strptime((value_json.HR~':'~value_json.MIN~':'~value_json.SEC),'%H:%M:%S').time() }}
+                   {{ strptime((value_json.HR|int(default=0)~':'~value_json.MIN|int(default=0)~':'~value_json.SEC|int(default=0)),'%H:%M:%S').time() }}
                  icon: "mdi:clock-outline"
             - component: "sensor"
               name: "am_pm"
@@ -2916,7 +2916,7 @@
               config:
                  state_topic: "ID3"
                  value_template: >-
-                   {% set d=strptime((value_json.DY ~ '-' ~ value_json.MTH ~ '-' ~ value_json.YR),'%d-%m-%Y') %}
+                   {% set d=strptime((value_json.DY|int(default=0) ~ '-' ~ value_json.MTH|int(default=0) ~ '-' ~ value_json.YR|int(default=0)),'%d-%m-%Y') %}
                    {{ d.date() }}
                  icon: "mdi:calendar-range"
             - component: "sensor"
@@ -2946,7 +2946,7 @@
               config:
                  state_topic: "ID4"
                  value_template: >-
-                   {{ strptime((value_json.HR~':'~value_json.MIN~':'~value_json.SEC),'%H:%M:%S').time() }}
+                   {{ strptime((value_json.HR|int(default=0)~':'~value_json.MIN|int(default=0)~':'~value_json.SEC|int(default=0)),'%H:%M:%S').time() }}
                  icon: "mdi:clock-outline"
             - component: "sensor"
               name: "am_pm"
