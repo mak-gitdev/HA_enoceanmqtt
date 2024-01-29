@@ -67,7 +67,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -164,22 +166,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -282,7 +284,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -379,22 +383,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -460,7 +464,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -563,22 +569,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -665,7 +671,9 @@
                  device_class: "energy"
                  unit_of_measurement: "Wh"
                  value_template: >-
-                   {% if value_json.UN == 1 %}
+                   {% if value_json.UN == 0 %}
+                     {{ (value_json.MV|int / 3600)|int }}
+                   {% elif value_json.UN == 1 %}
                      {{ value_json.MV }}
                    {% elif value_json.UN == 2 %}
                      {{ value_json.MV|int * 1000 }}
@@ -762,22 +770,22 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_meas_type$',ignorecase=True) %}
+                     {% if entity is search('meas_type',ignorecase=True) %}
                        {% if states(entity) is search ('only') %}{% set ns.RM = 0 %}{% else %}{% set ns.RM = 1 %}{% endif %}
                        {% if states(entity) is search ('Energy') %}{% set ns.ep = 0 %}{% else %}{% set ns.ep = 1 %}{% endif %}
-                       {% if states(entity) is search ('Ws') %}{% set ns.UN = 0 %}
+                       {% if states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
+                       {% elif states(entity) is search (' KW') %}{% set ns.UN = 4 %}
                        {% elif states(entity) is search (' Wh') %}{% set ns.UN = 1 %}
-                       {% elif states(entity) is search ('KWh') %}{% set ns.UN = 2 %}
-                       {% elif states(entity) is search (' W$') %}{% set ns.UN = 3 %}
-                       {% else %}{% set ns.UN = 4 %}
+                       {% elif states(entity) is search (' Ws') %}{% set ns.UN = 0 %}
+                       {% else %}{% set ns.UN = 3 %}
                        {% endif %}
-                     {% elif entity is search('_reset_meas$',ignorecase=True) %}
+                     {% elif entity is search('reset_meas',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.RE = 1 %}{% else %}{% set ns.RE = 0 %}{% endif %}
-                     {% elif entity is search('_meas_mat$',ignorecase=True) %}
+                     {% elif entity is search('meas_mat',ignorecase=True) %}
                        {% set ns.MAT = (states(entity)|int /10)|int(default=10) %}
-                     {% elif entity is search('_meas_mit$',ignorecase=True) %}
+                     {% elif entity is search('meas_mit',ignorecase=True) %}
                        {% set ns.MIT = states(entity)|int(default=1) %}
-                     {% elif entity is search('_meas_md$',ignorecase=True) %}
+                     {% elif entity is search('meas_md',ignorecase=True) %}
                        {% set ns.MD_MSB = (states(entity)|int/16)|int(default=0) %}
                        {% set ns.MD_LSB = (states(entity)|int%16)|int(default=0) %}
                      {% endif %}
@@ -906,6 +914,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.BATT }}"
                  device_class: "battery"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "binary_sensor"
               name: "single"
@@ -972,7 +981,7 @@
                  payload: "4"
                  value_template: "{{ value_json.BA }}"
    0x05:
-      0x00:
+      0x00: &D20500
          device_config:
             command: "CMD"
             channel: "CMD"
@@ -991,12 +1000,22 @@
                  payload_stop: >-
                     {"CMD":"2","CHN":"0","send":"clear"}
                  position_topic: "CMD4"
-                 position_template: "{{ value_json.POS }}"
+                 position_template: >-
+                   {% if (value_json.POS <= 100) and (value_json.POS >= 0) %}
+                     {{ value_json.POS }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_position")|int(default=0) }}
+                   {% endif %}
                  set_position_topic: "req"
                  set_position_template: >-
                     {"CMD":"1","POS":"{{ position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  tilt_status_topic: "CMD4"
-                 tilt_status_template: "{{ value_json.ANG }}"
+                 tilt_status_template: >-
+                   {% if (value_json.ANG <= 100) and (value_json.ANG >= 0) %}
+                     {{ value_json.ANG }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_tilt_position")|int(default=0) }}
+                   {% endif %}
                  tilt_command_topic: "req"
                  tilt_command_template: >-
                     {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
@@ -1013,15 +1032,26 @@
                  position_topic: "CMD4"
                  position_open: 0
                  position_closed: 100
-                 position_template: "{{ value_json.POS }}"
+                 position_template: >-
+                   {% if (value_json.POS <= 100) and (value_json.POS >= 0) %}
+                     {{ value_json.POS }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_position")|int(default=0) }}
+                   {% endif %}
                  set_position_topic: "req"
                  set_position_template: >-
                    {"CMD":"1","POS":"{{ 100 - position }}","ANG":"127","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
                  tilt_status_topic: "CMD4"
-                 tilt_status_template: "{{ value_json.ANG }}"
+                 tilt_status_template: >-
+                   {% if (value_json.ANG <= 100) and (value_json.ANG >= 0) %}
+                     {{ value_json.ANG }}
+                   {% else %}
+                     {{ state_attr(entity_id,"current_tilt_position")|int(default=0) }}
+                   {% endif %}
                  tilt_command_topic: "req"
                  tilt_command_template: >-
                    {"CMD":"1","POS":"127","ANG":"{{ tilt_position }}","REPO":"0","LOCK":"0","CHN":"0","send":"clear"}
+      0x02: *D20500
    0x14:
       0x30:
          device_config:
@@ -1099,6 +1129,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP8 | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "humidity"
@@ -1106,6 +1137,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "comfort"
@@ -1180,6 +1212,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1187,6 +1220,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1260,6 +1294,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1267,6 +1302,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1340,6 +1376,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1347,6 +1384,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_indoor"
@@ -1354,6 +1392,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.INT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_exhaust"
@@ -1361,6 +1400,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.EXHT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1434,6 +1474,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.OUTT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_supply"
@@ -1441,6 +1482,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.SPLYT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_indoor"
@@ -1448,6 +1490,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.INT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "t_exhaust"
@@ -1455,6 +1498,7 @@
                  state_topic: "MT2"
                  value_template: "{{ value_json.EXHT }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "supply_air_flow"
@@ -1496,6 +1540,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1504,6 +1549,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
       0x02: *A50201
       0x03: *A50201
@@ -1544,6 +1590,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1552,6 +1599,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -1559,6 +1607,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1567,6 +1616,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "status"
@@ -1588,6 +1638,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1596,6 +1647,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -1603,6 +1655,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1611,6 +1664,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "status"
@@ -1632,6 +1686,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1640,6 +1695,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -1647,6 +1703,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1655,6 +1712,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
       0x04:
          device_config:
@@ -1670,6 +1728,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1678,6 +1737,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -1685,6 +1745,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1693,6 +1754,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
    0x06:
       0x01:
@@ -1709,6 +1771,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1717,6 +1780,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -1729,6 +1793,7 @@
                      {{ value_json.ILL2 }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1742,6 +1807,7 @@
                      {{ value_json.ILL2 | round(1) }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "ill1_raw"
@@ -1749,6 +1815,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1757,6 +1824,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1765,6 +1833,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1773,6 +1842,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
       0x02:
@@ -1789,6 +1859,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1797,6 +1868,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -1809,6 +1881,7 @@
                      {{ value_json.ILL2 }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1822,6 +1895,7 @@
                      {{ value_json.ILL2 | round(2) }}
                    {% endif %}
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "ill1_raw"
@@ -1829,6 +1903,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1837,6 +1912,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL1 | round(2) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1845,6 +1921,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1853,6 +1930,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL2 | round(2) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
    0x07:
@@ -1878,6 +1956,7 @@
                      offline
                    {% endif %}
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "voltage"
@@ -1892,6 +1971,7 @@
                      offline
                    {% endif %}
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
@@ -1914,6 +1994,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1922,6 +2003,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
@@ -1944,6 +2026,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1952,6 +2035,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "pir"
@@ -1966,6 +2050,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1974,6 +2059,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
    0x08:
       0x01:
@@ -1990,6 +2076,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -1998,6 +2085,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2005,6 +2093,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2013,6 +2102,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2020,6 +2110,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2028,6 +2119,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "pir"
@@ -2056,6 +2148,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  enabled_by_default: "false"
                  unit_of_measurement: "V"
             - component: "sensor"
@@ -2064,6 +2157,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2071,6 +2165,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2079,6 +2174,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2086,6 +2182,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2094,6 +2191,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "pir"
@@ -2122,6 +2220,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2130,6 +2229,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: "sensor"
               name: "lux_raw"
@@ -2137,6 +2237,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2145,6 +2246,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.ILL | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2152,6 +2254,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2160,6 +2263,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "pir"
@@ -2189,6 +2293,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "concentration"
@@ -2196,6 +2301,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.Conc }}"
                  device_class: "carbon_dioxide"
+                 state_class: "measurement"
                  unit_of_measurement: "ppm"
             - component: "sensor"
               name: "temperature"
@@ -2203,6 +2309,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "HSN"
@@ -2236,6 +2343,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2265,6 +2373,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2273,6 +2382,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "occ"
@@ -2299,6 +2409,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2307,6 +2418,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "nightmode"
@@ -2344,11 +2456,11 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('_slide_switch$',ignorecase=True) %}
+                     {% if entity is search('slide_switch',ignorecase=True) %}
                        {% if is_state(entity, "on") %}{% set ns.SLSW = 1 %}{% else %}{% set ns.SLSW = 0 %}{% endif %}
-                     {% elif entity is search('_setpoint$',ignorecase=True) %}
+                     {% elif entity is search('setpoint',ignorecase=True) %}
                        {% set ns.SP = (states(entity)|int)|int(default=128) %}
-                     {% elif entity is search('_temperature$',ignorecase=True) %}
+                     {% elif entity is search('temperature',ignorecase=True) %}
                        {% set ns.TMP = (40-(states(entity)|float(default=20))*255/40)|int %}
                      {% endif %}
                    {% endfor %}
@@ -2373,6 +2485,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2381,6 +2494,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2388,6 +2502,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2396,6 +2511,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "occ"
@@ -2422,6 +2538,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2430,6 +2547,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.HUM | round(1) }}"
                  device_class: "humidity"
+                 state_class: "measurement"
                  unit_of_measurement: "%"
             - component: "sensor"
               name: "t_raw"
@@ -2437,6 +2555,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2445,6 +2564,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
    0x12:
       0x00:
@@ -2472,8 +2592,8 @@
             - component: "sensor"
               name: "channel"
               config:
-                 state_topic: ""
-                 value_template: "{{ value_json.CH }}"
+                 state_topic: "+"
+                 value_template: "{{ value_json.CH | int(default=0) }}"
       0x01:
          device_config:
             command: ""
@@ -2501,8 +2621,8 @@
             - component: "sensor"
               name: "tariff"
               config:
-                 state_topic: "DT1"
-                 value_template: "{{ value_json.TI }}"
+                 state_topic: "+"
+                 value_template: "{{ value_json.TI | int(default=0) }}"
    0x13:
       0x01:
          device_config:
@@ -2518,6 +2638,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.DWS }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2526,6 +2647,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.DWS | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "t_raw"
@@ -2533,6 +2655,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2541,6 +2664,7 @@
                  state_topic: "ID1"
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "ws_raw"
@@ -2575,6 +2699,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2583,6 +2708,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sns_raw"
@@ -2590,6 +2716,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2598,6 +2725,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sne_raw"
@@ -2605,6 +2733,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2613,6 +2742,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "binary_sensor"
               name: "hem_north"
@@ -2631,7 +2761,7 @@
               config:
                  state_topic: "ID3"
                  value_template: >-
-                   {% set d=strptime((value_json.DY ~ '-' ~ value_json.MTH ~ '-' ~ value_json.YR),'%d-%m-%Y') %}
+                   {% set d=strptime((value_json.DY|int(default=0) ~ '-' ~ value_json.MTH|int(default=0) ~ '-' ~ value_json.YR|int(default=0)),'%d-%m-%Y') %}
                    {{ d.date() }}
                  icon: "mdi:calendar-range"
             - component: "sensor"
@@ -2653,7 +2783,7 @@
               config:
                  state_topic: "ID4"
                  value_template: >-
-                   {{ strptime((value_json.HR~':'~value_json.MIN~':'~value_json.SEC),'%H:%M:%S').time() }}
+                   {{ strptime((value_json.HR|int(default=0)~':'~value_json.MIN|int(default=0)~':'~value_json.SEC|int(default=0)),'%H:%M:%S').time() }}
                  icon: "mdi:clock-outline"
             - component: "sensor"
               name: "am_pm"
@@ -2716,6 +2846,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2724,6 +2855,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNW * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sns_raw"
@@ -2731,6 +2863,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2739,6 +2872,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNS * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "sensor"
               name: "sne_raw"
@@ -2746,6 +2880,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -2754,6 +2889,7 @@
                  state_topic: "ID2"
                  value_template: "{{ value_json.SNE * 1000 | round(1) }}"
                  device_class: "illuminance"
+                 state_class: "measurement"
                  unit_of_measurement: "lx"
             - component: "binary_sensor"
               name: "hem_north"
@@ -2780,7 +2916,7 @@
               config:
                  state_topic: "ID3"
                  value_template: >-
-                   {% set d=strptime((value_json.DY ~ '-' ~ value_json.MTH ~ '-' ~ value_json.YR),'%d-%m-%Y') %}
+                   {% set d=strptime((value_json.DY|int(default=0) ~ '-' ~ value_json.MTH|int(default=0) ~ '-' ~ value_json.YR|int(default=0)),'%d-%m-%Y') %}
                    {{ d.date() }}
                  icon: "mdi:calendar-range"
             - component: "sensor"
@@ -2810,7 +2946,7 @@
               config:
                  state_topic: "ID4"
                  value_template: >-
-                   {{ strptime((value_json.HR~':'~value_json.MIN~':'~value_json.SEC),'%H:%M:%S').time() }}
+                   {{ strptime((value_json.HR|int(default=0)~':'~value_json.MIN|int(default=0)~':'~value_json.SEC|int(default=0)),'%H:%M:%S').time() }}
                  icon: "mdi:clock-outline"
             - component: "sensor"
               name: "am_pm"
@@ -2891,6 +3027,7 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  unit_of_measurement: "V"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2898,6 +3035,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "contact"
@@ -2921,6 +3059,7 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  unit_of_measurement: "V"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2928,6 +3067,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
@@ -2941,7 +3081,7 @@
               config:
                  state_topic: ""
                  value_template: >-
-                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                   {% if value_json.CT == 0 %}closed{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
       0x0A:
          device_config:
             command: ""
@@ -2957,6 +3097,7 @@
                  value_template: "{{ value_json.SVC }}"
                  device_class: "voltage"
                  unit_of_measurement: "V"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "voltage"
@@ -2964,6 +3105,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.SVC | round(2) }}"
                  device_class: "voltage"
+                 state_class: "measurement"
                  unit_of_measurement: "V"
             - component: binary_sensor
               name: "state_2p"
@@ -2977,7 +3119,7 @@
               config:
                  state_topic: ""
                  value_template: >-
-                   {% if value_json.CT == 0 %}off{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
+                   {% if value_json.CT == 0 %}closed{% elif value_json.CT == 1 %}tilt{% elif value_json.CT == 3 %}open{% else %}reserved{% endif %}
             - component: binary_sensor
               name: "vib"
               config:
@@ -3059,6 +3201,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3067,6 +3210,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "number"
               name: "config_valve_position"
@@ -3137,35 +3281,33 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('config_valve_position$',ignorecase=True) %}
+                     {% if entity is search('config_valve_position',ignorecase=True) %}
                        {% set ns.valve_position = (states(entity)|int(default=0)) %}
-                     {% elif entity is search('config_t_setpoint$',ignorecase=True) %}
+                     {% elif entity is search('config_t_setpoint',ignorecase=True) %}
                        {% set ns.temperature_setpoint = ((states(entity)|int(default=0))*255/40)|int %}
-                     {% elif entity is search('config_t_RCU$',ignorecase=True) %}
-                       {% set ns.TMP = ((states(entity)|int(default=0))*255/40)|int %}
-                     {% elif entity is search('config_RIN$',ignorecase=True) %}
+                     {% elif entity is search('config_t_RCU',ignorecase=True) %}
+                       {% set ns.TMP = (states(entity)|float(default=0.0)) %}
+                     {% elif entity is search('config_RIN',ignorecase=True) %}
                        {% set ns.RIN = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_LFS$',ignorecase=True) %}
+                     {% elif entity is search('config_LFS',ignorecase=True) %}
                        {% set ns.LFS = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_VO$',ignorecase=True) %}
-                       {% set ns.VO = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_VC$',ignorecase=True) %}
-                       {% set ns.VC = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SB$',ignorecase=True) %}
-                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SPS$',ignorecase=True) %}
+                     {% elif entity is search('config_SPS',ignorecase=True) %}
                        {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SPN$',ignorecase=True) %}
+                     {% elif entity is search('config_SPN',ignorecase=True) %}
                        {% set ns.SPN = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_RCU$',ignorecase=True) %}
+                     {% elif entity is search('config_RCU',ignorecase=True) %}
                        {% set ns.RCU = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_VO',ignorecase=True) %}
+                       {% set ns.VO = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_VC',ignorecase=True) %}
+                       {% set ns.VC = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SB',ignorecase=True) %}
+                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
                    {% endfor %}
                    {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
                    {"SP":{{ns.SP}},"TMP":{{ns.TMP}},"RIN":{{ns.RIN}},"LFS":{{ns.LFS}},"VO":{{ns.VO}},"VC":{{ns.VC}},"SB":{{ns.SB}},"SPS":{{ns.SPS}},"SPN":{{ns.SPN}},"RCU":{{ns.RCU}}}
                  icon: "mdi:download"
-
-
       0x04:
          device_config:
             command: ""
@@ -3192,6 +3334,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3205,6 +3348,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "st_raw"
@@ -3215,6 +3359,7 @@
                      {{ value_json.FTS * 20 / 255 + 10 }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3226,6 +3371,7 @@
                      {{ (value_json.FTS * 20 / 255 + 10) | round(1) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "rt_raw"
@@ -3239,6 +3385,7 @@
                    {% endif %}
                  device_class: "temperature"
                  unit_of_measurement: "°C"
+                 state_class: "measurement"
                  enabled_by_default: "false"
             - component: "sensor"
               name: "room_temperature"
@@ -3251,6 +3398,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "binary_sensor"
               name: "err_meas"
@@ -3449,20 +3597,20 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('config_position$',ignorecase=True) %}
+                     {% if entity is search('config_position',ignorecase=True) %}
                        {% set ns.POS = (states(entity)|int(default=0)) %}
-                     {% elif entity is search('config_TSP$',ignorecase=True) %}
-                       {% set ns.TSP = (((states(entity)|int(default=0))-10)*255/20)|int %}
-                     {% elif entity is search('config_MC$',ignorecase=True) %}
-                       {% set ns.MC = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_wakeup_time$',ignorecase=True) %}
+                     {% elif entity is search('config_TSP',ignorecase=True) %}
+                       {% set ns.TSP = (states(entity)|float(default=0.0)) %}
+                     {% elif entity is search('config_wakeup_time',ignorecase=True) %}
                        {% set ns.WUC = states(entity).split("-")[0]|int(default=0) %}
-                     {% elif entity is search('config_DSO$',ignorecase=True) %}
+                     {% elif entity is search('config_DSO',ignorecase=True) %}
                        {% set ns.DSO = (states(entity).split("°")[0]|int(default=0)/90) %}
-                     {% elif entity is search('config_BLCS$',ignorecase=True) %}
+                     {% elif entity is search('config_BLC',ignorecase=True) %}
                        {% set ns.BLC = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SER$',ignorecase=True) %}
-                       {% set ns.SER = states(entity).split("-")[0]|int(default=0) %} %}
+                     {% elif entity is search('config_SER',ignorecase=True) %}
+                       {% set ns.SER = states(entity).split("-")[0]|int(default=0) %}
+                     {% elif entity is search('config_MC',ignorecase=True) %}
+                       {% set ns.MC = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
                    {% endfor %}
                    {"POS":{{ns.POS}},"TSP":{{ns.TSP}},"MC":{{ns.MC}},"WUC":{{ns.WUC}},"DSO":{{ns.DSO}},"BLC":{{ns.BLC}},"SER":{{ns.SER}}}
@@ -3493,6 +3641,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "setpoint_temperature"
@@ -3505,6 +3654,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "sensor"
               name: "local_offset"
@@ -3533,6 +3683,7 @@
                      {{ states(entity_id)|int(default=0) }}
                    {% endif %}
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: "binary_sensor"
               name: "LOM"
@@ -3557,7 +3708,7 @@
               config:
                  state_topic: ""
                  value_template: >-
-                   {% if value_json.ES == 1 %}ON{% else %}OFF{% endif %}
+                   {% if value_json.ES == 1 %}OFF{% else %}ON{% endif %}
                  device_class: "battery"
             - component: "binary_sensor"
               name: "DWO"
@@ -3657,25 +3808,25 @@
                  command_template: >-
                    {% set ns = namespace() %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('config_valve_position$',ignorecase=True) %}
+                     {% if entity is search('config_valve_position',ignorecase=True) %}
                        {% set ns.valve_position = (states(entity)|int(default=0)) %}
-                     {% elif entity is search('config_temperature_setpoint$',ignorecase=True) %}
+                     {% elif entity is search('config_temperature_setpoint',ignorecase=True) %}
                        {% set ns.temperature_setpoint = ((states(entity)|int(default=0))*2) %}
-                     {% elif entity is search('config_temperature_RCU$',ignorecase=True) %}
-                       {% set ns.TMP = ((states(entity)|int(default=0))*4) %}
-                     {% elif entity is search('config_REF$',ignorecase=True) %}
+                     {% elif entity is search('config_temperature_RCU',ignorecase=True) %}
+                       {% set ns.TMP = ((states(entity)|float(default=0.0))) %}
+                     {% elif entity is search('config_REF',ignorecase=True) %}
                        {% set ns.REF = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_RFC$',ignorecase=True) %}
+                     {% elif entity is search('config_RFC',ignorecase=True) %}
                        {% set map = {"0": 0, "2": 1, "5": 2, "10": 3, "20": 4, "30": 5, "60": 6, "120": 7} %}
                        {% set ns.RFC = map[states(entity).split(" ")[0]|int(default=0)|string] %}
-                     {% elif entity is search('config_SB$',ignorecase=True) %}
-                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SPS$',ignorecase=True) %}
-                       {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_TSL$',ignorecase=True) %}
-                       {% set ns.TSL = iif(is_state(entity, "on"), 1, 0) %}
-                     {% elif entity is search('config_SBY$',ignorecase=True) %}
+                     {% elif entity is search('config_SBY',ignorecase=True) %}
                        {% set ns.SBY = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SPS',ignorecase=True) %}
+                       {% set ns.SPS = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_TSL',ignorecase=True) %}
+                       {% set ns.TSL = iif(is_state(entity, "on"), 1, 0) %}
+                     {% elif entity is search('config_SB',ignorecase=True) %}
+                       {% set ns.SB = iif(is_state(entity, "on"), 1, 0) %}
                      {% endif %}
                    {% endfor %}
                    {% set ns.SP = iif((ns.SPS == 1), ns.temperature_setpoint, ns.valve_position) %}
@@ -3696,6 +3847,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
                  enabled_by_default: "false"
             - component: "sensor"
@@ -3704,6 +3856,7 @@
                  state_topic: ""
                  value_template: "{{ value_json.TMP | round(1) }}"
                  device_class: "temperature"
+                 state_class: "measurement"
                  unit_of_measurement: "°C"
             - component: binary_sensor
               name: "wake"
@@ -3794,12 +3947,6 @@
                    {"COM":"1","TIM":"0","LCK":"0","DEL":"0","SW":"1","send":"clear"}
                  command_off_template: >-
                    {"COM":"1","TIM":"0","LCK":"0","DEL":"0","SW":"0","send":"clear"}
-            - component: "button"
-              name: "pairing"
-              config:
-                 command_topic: "req"
-                 payload_press: >-
-                   {"COM":"1","raw_data":"E0:40:0D:87","send":"clear+learn+raw_data"}
             - component: "light"
               name: "light_COM2"
               config:
@@ -3907,13 +4054,13 @@
                  command_template: >-
                    {% set ns = namespace(action=[]) %}
                    {% for entity in device_entities(device_id(entity_id)) %}
-                     {% if entity is search('AI$',ignorecase=True) and is_state(entity, "on") %}
+                     {% if entity is search('AI',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["0"] %}
-                     {% elif entity is search('AO$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('AO',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["1"] %}
-                     {% elif entity is search('BI$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('BI',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["2"] %}
-                     {% elif entity is search('BO$',ignorecase=True) and is_state(entity, "on") %}
+                     {% elif entity is search('BO',ignorecase=True) and is_state(entity, "on") %}
                        {% set ns.action = ns.action+["3"] %}
                      {% endif %}
                    {% endfor %}
@@ -4029,6 +4176,7 @@ eltako:
                   {{ value_json.ILL2 | round(1) }}
                 {% endif %}
               device_class: "illuminance"
+              state_class: "measurement"
               unit_of_measurement: "lx"
    fsb14: &fsb14
       device_config:
@@ -4157,6 +4305,140 @@ eltako:
               value_template: >-
                 {{ iif(value_json._RAW_DATA_.split(":")[0]=="02","on","off") }}
    fsb61: *fsb14
+   fj62: &fj62
+      device_config:
+         - rorg: "0xA5"
+           func: "0x3F"
+           type: "0x7F"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"FF:F8:0D:80","send":"clear+learn+raw_data"}
+              icon: "mdi:connection"
+         - component: "button"
+           name: "unlock_pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"00:00:00:28","send":"clear+raw_data"}
+              icon: "mdi:connection"
+         - component: "number"
+           name: "shut_time"
+           config:
+              command_topic: "a5/__trash"
+              min: "1"
+              max: "255"
+              step: "0.1"
+              mode: "box"
+              unit_of_measurement: "s"
+              icon: "mdi:sort-clock-ascending-outline"
+         - component: "cover"
+           name: "cover"
+           config:
+              command_topic: "a5/req"
+              payload_open: >-
+                {"DB3":"0","DB2":"0","DB1":"1","DB0":"8","send":"clear"}
+              payload_close: >-
+                {"DB3":"0","DB2":"0","DB1":"2","DB0":"8","send":"clear"}
+              payload_stop: >-
+                {"DB3":"0","DB2":"0","DB1":"0","DB0":"8","send":"clear"}
+              state_topic: "+"
+              state_stopped: "0"
+              state_opening: "01"
+              state_closing: "02"
+              state_open: "70"
+              state_closed: "50"
+              value_template: >-
+                {% if value_json._RAW_DATA_.split(":")|length == 2 %}
+                  {{ value_json._RAW_DATA_.split(":")[0] }}
+                {% else %}
+                  {{ states(entity_id)|int(default=0) }}
+                {% endif %}
+              set_position_topic: "a5/req"
+              set_position_template: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('shut_time$',ignorecase=True) %}
+                    {% set ns.shut_time_sec = states(entity)|float(default=255.0) %}
+                  {% endif %}
+                {% endfor %}
+                {% set cur_pos = state_attr(entity_id,"current_position")|int(default=0) %}
+                {% set step = position - cur_pos %}
+                {% set DB1 = iif(step < 0,2,1) %}
+                {% set drive_time_100ms = (((step|abs)*ns.shut_time_sec/100)*10)|int %}
+                {% set shut_time_msb = (drive_time_100ms/256)|int %}
+                {% set shut_time_lsb = (drive_time_100ms%256)|int %}
+                {"DB3":"{{shut_time_msb}}","DB2":"{{shut_time_lsb}}","DB1":"{{DB1}}","DB0":"10","send":"clear"}
+              position_topic: "+"
+              position_template: >-
+                {% set ns = namespace() %}
+                {% for entity in device_entities(device_id(entity_id)) %}
+                  {% if entity is search('shut_time$',ignorecase=True) %}
+                    {% set ns.shut_time_sec = states(entity)|float(default=255) %}
+                  {% endif %}
+                {% endfor %}
+                {% if value_json._RAW_DATA_.split(":")|length == 2 %}
+                  {% if value_json._RAW_DATA_.split(":")[0]=="70" %}{{position_open}}
+                  {% elif value_json._RAW_DATA_.split(":")[0]=="50" %}{{position_closed}}
+                  {% endif %}
+                {% elif value_json._RAW_DATA_.split(":")|length == 5 %}
+                  {% set drive_time_sec = (value_json.DB3*256+value_json.DB2)|int(default=0)/10 %}
+                  {% set step = drive_time_sec*100/ns.shut_time_sec %}
+                  {% set dir = iif(value_json.DB1==1,1,-1) %}
+                  {% set cur_pos = state_attr(entity_id,"current_position")|int(default=0) %}
+                  {{max(0, min((cur_pos+step*dir)|int, 100))}}
+                {% else %}
+                  {{ states(entity_id)|int(default=0) }}
+                {% endif %}
+         - component: binary_sensor
+           name: "end_top"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="70","on","off") }}
+         - component: binary_sensor
+           name: "end_bottom"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="50","on","off") }}
+         - component: binary_sensor
+           name: "start_up"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="01","on","off") }}
+         - component: binary_sensor
+           name: "start_down"
+           config:
+              state_topic: "f6"
+              payload_on: "on"
+              payload_off: "off"
+              value_template: >-
+                {{ iif(value_json._RAW_DATA_.split(":")[0]=="02","on","off") }}
+   tf61j: *fj62
    fsr14: &fsr14
       device_config:
          - rorg: "0xA5"
@@ -4209,6 +4491,71 @@ eltako:
               state_template: >-
                 {% if value_json._RAW_DATA_.split(":")[0]=="70" %}on{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}off{% endif %}
    fsr61: *fsr14
+   tf61l: &tf61l
+      device_config:
+         - rorg: "0xA5"
+           func: "0x38"
+           type: "0x08"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+         - rorg: "0xF6"
+           func: "0x02"
+           type: "0x01"
+           command: ""
+           channel: ""
+           log_learn: ""
+           direction: ""
+           answer: ""
+      entities:
+         - component: "button"
+           name: "pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"E0:40:0D:80","send":"clear+learn+raw_data"}
+              icon: "mdi:connection"
+         - component: "button"
+           name: "unlock_pairing"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"00:00:00:28","send":"clear+raw_data"}
+              icon: "mdi:connection"
+         - component: "button"
+           name: "enable_feedback"
+           config:
+              command_topic: "a5/req"
+              payload_press: >-
+                {"raw_data":"00:00:00:08","send":"clear+raw_data"}
+              icon: "mdi:connection"
+         - component: "switch"
+           name: "switch"
+           config:
+              command_topic: "a5/req"
+              payload_on: >-
+                {"raw_data":"01:00:00:09","send":"clear+raw_data"}
+              payload_off: >-
+                {"raw_data":"01:00:00:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              value_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}ON{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}OFF{% endif %}
+              enabled_by_default: "false"
+              device_class: "outlet"
+         - component: "light"
+           name: "light"
+           config:
+              schema: "template"
+              command_topic: "a5/req"
+              command_on_template: >-
+                {"raw_data":"01:00:00:09","send":"clear+raw_data"}
+              command_off_template: >-
+                {"raw_data":"01:00:00:08","send":"clear+raw_data"}
+              state_topic: "f6"
+              state_template: >-
+                {% if value_json._RAW_DATA_.split(":")[0]=="70" %}on{% elif value_json._RAW_DATA_.split(":")[0]=="50" %}off{% endif %}
    fud14: &fud14
       device_config:
          - rorg: "0xA5"
@@ -4289,6 +4636,7 @@ eltako:
                   {{ states(entity_id)|int(default=0) }}
                 {% endif %}
    fud61: *fud14
+   fdg14: *fud14
 
 # Below are mappings common to all EEPs
 common:
@@ -4300,6 +4648,7 @@ common:
            value_template: "{{ value_json._RSSI_ }}"
            unit_of_measurement: "dBm"
            device_class: "signal_strength"
+           state_class: "measurement"
            entity_category: "diagnostic"
    date:
       - component: "sensor"

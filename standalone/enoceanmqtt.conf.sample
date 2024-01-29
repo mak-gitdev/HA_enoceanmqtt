@@ -47,45 +47,69 @@ mqtt_debug      = false
 
 # Define an FSB14 device
 [my_fsb14]
-address         = 0x454C5400 # The address of the FSB14
-model           = eltako/fsb14
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FSB14
+model   = eltako/fsb14
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 # Define an FSB61 device
 [my_fsb61]
-address         = 0x454C5401 # The address of the FSB61
-model           = eltako/fsb61
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FSB61
+model   = eltako/fsb61
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 # Define an FSR14 device
 [my_fsr14]
-address         = 0x454C5402 # The address of the FSR14
-model           = eltako/fsr14
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FSR14
+model   = eltako/fsr14
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 # Define an FSR61 device
 [my_fsr61]
-address         = 0x454C5403 # The address of the FSR61
-model           = eltako/fsr61
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FSR61
+model   = eltako/fsr61
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 # Define an FHD60SB device
 [my_fhd60sb]
-address         = 0x454C5404 # The address of the FHD60SB
-model           = eltako/fhd60sb
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FHD60SB
+model   = eltako/fhd60sb
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 # Define an FUD14 device
 [my_fud14]
-address         = 0x454C5405 # The address of the FUD14
-model           = eltako/fud14
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FUD14
+model   = eltako/fud14
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 # Define an FUD61 device
 [my_fud61]
-address         = 0x454C5406 # The address of the FUD61
-model           = eltako/fud61
-sender          = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+address = 0xYYYYYYYY # The address of your FUD61
+model   = eltako/fud61
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+
+# Define a TF61L device
+[my_tf61l]
+address = 0xYYYYYYYY # The address of your TF61L
+model   = eltako/tf61l
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+
+# Define a TF61J device
+[my_tf61j]
+address = 0xYYYYYYYY # The address of your TF61J
+model   = eltako/tf61j
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+
+# Define an FJ62 device
+[my_fj62]
+address = 0xYYYYYYYY # The address of your FJ62
+model   = eltako/fj62
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
+
+# Define an FDG14 device
+[my_fdg14]
+address = 0xYYYYYYYY # The address of your FDG14
+model   = eltako/fdg14
+sender  = 0xFFXXXXXX # base id of your EnOcean transceiver + unique offset
 
 [rocker_1]
 address         = 0xBABECAFE
