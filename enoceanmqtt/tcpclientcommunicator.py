@@ -23,14 +23,16 @@ class TCPClientCommunicator(Communicator):
 
     def run(self):
         self.logger.info('TCPClientCommunicator started')
-        self.sock.settimeout(0.5)
+        self.sock.settimeout(3)
         pinged = time.time()
                 
         try:
             self.sock.connect(( self.host, self.port))
-        except socket.error as e:
+        except Exception as e:
             self.logger.error('Exception occured while connecting: ' + str(e))
             self.stop()
+
+        self.sock.settimeout(0.5)
 
         while not self._stop_flag.is_set():
             # If there's messages in transmit queue
@@ -58,7 +60,7 @@ class TCPClientCommunicator(Communicator):
                 self.logger.error('Exception occured while parsing: ' + str(e))
                 
             time.sleep(0)
-            if time.time() > pinged + 60:
+            if time.time() > pinged + 30:
                 self.send(Packet(PACKET.COMMON_COMMAND, data=[0x08]))
                 pinged = time.time()
           
