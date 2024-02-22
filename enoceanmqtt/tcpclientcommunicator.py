@@ -6,6 +6,8 @@ import time
 
 
 from enocean.communicators.communicator import Communicator
+from enocean.protocol.constants import PACKET
+from enocean.protocol.packet import Packet
 
 
 class TCPClientCommunicator(Communicator):
@@ -21,6 +23,8 @@ class TCPClientCommunicator(Communicator):
     def run(self):
         self.logger.info('TCPClientCommunicator started')
         self.sock.settimeout(0.5)
+        pinged = time.time()
+                
         try:
             self.sock.connect(( self.host, self.port))
         except socket.error as e:
@@ -36,6 +40,7 @@ class TCPClientCommunicator(Communicator):
                     break
                 try:
                     self.sock.send(bytearray(packet.build()))
+                    pinged = time.time()
                 except Exception as e:
                     self.logger.error('Exception occured while sending: ' + str(e))
                     self.stop()
@@ -47,7 +52,11 @@ class TCPClientCommunicator(Communicator):
                 time.sleep(0)
             except Exception as e:
                 self.logger.error('Exception occured while parsing: ' + str(e))
+                
             time.sleep(0)
-
+            if time.time() > pinged + 60:
+                self.send(Packet(PACKET.COMMON_COMMAND, data=[0x08]))
+                pinged = time.time()
+          
         self.sock.close()
         self.logger.info('TCPClientCommunicator stopped')
