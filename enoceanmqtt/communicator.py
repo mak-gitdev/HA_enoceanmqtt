@@ -541,11 +541,7 @@ class Communicator:
             # Loop to empty the queue...
             try:
                 # get next packet
-                if platform.system() == 'Windows':
-                    # only timeout on Windows for KeyboardInterrupt checking
-                    packet = self.enocean.receive.get(block=True, timeout=1)
-                else:
-                    packet = self.enocean.receive.get(block=True)
+                packet = self.enocean.receive.get(block=True, timeout=1)
 
                 # check packet type
                 if packet.packet_type == PACKET.RADIO:

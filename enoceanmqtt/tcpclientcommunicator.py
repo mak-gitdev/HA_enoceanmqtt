@@ -1,3 +1,4 @@
+
 # -*- encoding: utf-8 -*-
 from __future__ import print_function, unicode_literals, division, absolute_import
 import logging
@@ -50,6 +51,9 @@ class TCPClientCommunicator(Communicator):
                 self.parse()
             except socket.timeout:
                 time.sleep(0)
+            except ConnectionResetError as e:
+                self.logger.error('Exception occured while recv: ' + str(e))
+                self.stop()
             except Exception as e:
                 self.logger.error('Exception occured while parsing: ' + str(e))
                 
