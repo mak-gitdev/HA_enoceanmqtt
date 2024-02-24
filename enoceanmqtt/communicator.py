@@ -8,6 +8,7 @@ import json
 import platform
 
 from enocean.communicators.serialcommunicator import SerialCommunicator
+from enoceanmqtt.tcpclientcommunicator import TCPClientCommunicator
 from enocean.protocol.packet import RadioPacket
 from enocean.protocol.constants import PACKET, RETURN_CODE, RORG
 import enocean.utils
@@ -65,7 +66,15 @@ class Communicator:
         self.mqtt.loop_start()
 
         # setup enocean communication
-        self.enocean = SerialCommunicator(self.conf['enocean_port'])
+        eport  = self.conf['enocean_port']
+        seport = eport.split(':')
+        if seport[0] == "tcp":
+            logging.info("connecting TCPClient to %s port %d", seport[1],int(seport[2]))
+            self.enocean = TCPClientCommunicator(seport[1],int(seport[2]))
+        else:
+            logging.info("connecting Serial to %s", eport)
+            self.enocean = SerialCommunicator(eport)
+
         self.enocean.start()
         # sender will be automatically determined
         self.enocean_sender = None
@@ -532,11 +541,7 @@ class Communicator:
             # Loop to empty the queue...
             try:
                 # get next packet
-                if platform.system() == 'Windows':
-                    # only timeout on Windows for KeyboardInterrupt checking
-                    packet = self.enocean.receive.get(block=True, timeout=1)
-                else:
-                    packet = self.enocean.receive.get(block=True)
+                packet = self.enocean.receive.get(block=True, timeout=1)
 
                 # check packet type
                 if packet.packet_type == PACKET.RADIO:
