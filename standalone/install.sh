@@ -97,8 +97,6 @@ pip3 install --user --force-reinstall git+https://github.com/mak-gitdev/enocean.
 printf "\n==================================================\n"
 printf "Install enocean-mqtt\n\n"
 rm -rf enocean-mqtt
-# Quick Fix issue for issue mak-gitdev/HA_enoceanmqtt#122 (Force use of 1.6.1 as >=2.0.0 break enoceanmqtt)
-package_install paho-mqtt==1.6.1
 git clone -b master --single-branch --depth 1 https://github.com/embyt/enocean-mqtt.git
 cd enocean-mqtt && pip3 install --user -e . && cd ..
 

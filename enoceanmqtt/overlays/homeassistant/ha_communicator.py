@@ -81,9 +81,9 @@ class HACommunicator(Communicator):
     #=============================================================================================
     # MQTT CLIENT
     #=============================================================================================
-    def _on_connect(self, mqtt_client, _userdata, _flags, return_code):
+    def _on_connect(self, mqtt_client, _userdata, _flags, reason_code, properties):
         '''callback for when the client receives a CONNACK response from the MQTT server.'''
-        if return_code == 0:
+        if reason_code == 0:
             logging.info("Succesfully connected to MQTT broker.")
             # listen to enocean send requests
             for cur_sensor in self.sensors:
@@ -140,8 +140,8 @@ class HACommunicator(Communicator):
                 self._first_mqtt_connect = False
         else:
             logging.error("Error connecting to MQTT broker: %s",
-                          self.CONNECTION_RETURN_CODE[return_code]
-                          if return_code < len(self.CONNECTION_RETURN_CODE) else return_code)
+                          self.CONNECTION_RETURN_CODE[reason_code]
+                          if reason_code < len(self.CONNECTION_RETURN_CODE) else reason_code)
 
     def _on_mqtt_message(self, _mqtt_client, _userdata, msg):
         '''the callback for when a PUBLISH message is received from the MQTT server.'''
