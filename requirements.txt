@@ -1,0 +1,4 @@
+pyyaml
+tinydb
+git+https://github.com/mak-gitdev/enocean.git
+git+https://github.com/embyt/enocean-mqtt.git

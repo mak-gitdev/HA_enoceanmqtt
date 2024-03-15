@@ -1,0 +1,20 @@
+0xD2:
+  0x01:
+    0x01:
+      entities:
+        - component: "switch"
+          name: "switch2"
+          config:
+            state_topic: "CMD4"
+            state_on: "100"
+            state_off: "0"
+            value_template: "{{ value_json.OV }}"
+            command_topic: "req"
+            payload_on: >
+              {"CMD":"1","DV":"0","IO":"0","OV":"100","send":"clear"}
+            payload_off: >
+              {"CMD":"1","DV":"0","IO":"0","OV":"0","send":"clear"}
+            device_class: outlet
+        - component: "button"
+          name: "query_status"
+          action: "remove"
